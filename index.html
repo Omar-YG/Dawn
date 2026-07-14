@@ -14682,32 +14682,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     };
   }
-  //تأثير وترتيب الرسائل
-  {
-    function showAndMove(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-
-      if (el.style.display === 'block') return;
-
-      const indicator = document.getElementById('typing-indicator');
-      const container = document.getElementById('contentContainer');
-
-      if (indicator) {
-        container.appendChild(indicator);
-        indicator.style.display = 'block';
-      }
-
-      setTimeout(() => {
-        if (el.style.display !== 'block') {
-          container.appendChild(el);
-          el.style.display = 'block';
-          container.scrollTop = container.scrollHeight;
-        }
-        if (indicator) indicator.style.display = 'none';
-      }, 1500);
-    }
-  }
   //اعدادات جانبيه
   {
     function closeAllDropdowns() { document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active')); }
@@ -14785,6 +14759,31 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     document.getElementById('editor').addEventListener('keydown', (e) => { if (e.key === 'Enter') { document.getElementById('mybtn').click(); } });
     function readyallwork() { onerun('renderButtons'); onerun('linkbtn'); onerun('loadProjects'); onerun('readyfiles'); onerun('renderChips'); }
   }
+  //تأثير وترتيب الرسائل
+    function showAndMove(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      if (el.style.display === 'block') return;
+
+      const indicator = document.getElementById('typing-indicator');
+      const container = document.getElementById('contentContainer');
+
+      if (indicator) {
+        container.appendChild(indicator);
+        indicator.style.display = 'block';
+      }
+
+      setTimeout(() => {
+        if (el.style.display !== 'block') {
+          container.appendChild(el);
+          el.style.display = 'block';
+          container.scrollTop = container.scrollHeight;
+        }
+        if (indicator) indicator.style.display = 'none';
+      }, 1500);
+    }
+  
 
   var UI = {};
   function initUI() {
