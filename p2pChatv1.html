@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دردشة P2P - QR حقيقي</title>
+    <title>دردشة P2P فجر 🚀</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,7 +13,7 @@
         }
         body {
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -25,7 +25,7 @@
             border-radius: 30px;
             padding: 30px;
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -38,81 +38,39 @@
         h1 span {
             color: #00d4ff;
         }
-        .id-box {
+        .status-box {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 20px;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .id-box label {
+        #status {
             color: #aaa;
             font-size: 14px;
         }
-        .id-box .id-value {
+        #status.connected {
+            color: #00ff88;
+        }
+        #deviceId {
             color: #00d4ff;
-            font-size: 20px;
-            font-weight: bold;
-            font-family: monospace;
-            display: block;
-            margin-top: 5px;
-            padding: 10px;
-            background: rgba(0, 212, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-        }
-        .qr-container {
-            background: white;
+            font-size: 12px;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 5px 12px;
             border-radius: 20px;
-            padding: 20px;
-            margin: 15px 0;
-            display: none;
-            text-align: center;
-        }
-        .qr-container.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        .qr-container img, .qr-container canvas {
-            max-width: 100%;
-            width: 200px;
-            height: 200px;
-            image-rendering: pixelated;
-        }
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-        .btn-primary {
-            background: #00d4ff;
-            color: #fff;
-        }
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
-        }
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.2);
         }
         .chat-box {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
-            height: 200px;
+            height: 350px;
             overflow-y: auto;
             padding: 15px;
-            margin: 15px 0;
+            margin-bottom: 15px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .chat-box::-webkit-scrollbar {
@@ -123,9 +81,9 @@
             border-radius: 10px;
         }
         .message {
-            margin: 5px 0;
-            padding: 8px 12px;
-            border-radius: 12px;
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 18px;
             max-width: 80%;
             word-wrap: break-word;
             animation: fadeIn 0.3s ease;
@@ -134,35 +92,45 @@
             background: #00d4ff;
             color: #fff;
             margin-left: auto;
+            border-bottom-right-radius: 5px;
         }
         .message.other {
             background: rgba(255, 255, 255, 0.1);
             color: #eee;
             margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        .message .time {
+            font-size: 10px;
+            opacity: 0.6;
+            display: block;
+            margin-top: 5px;
         }
         .input-area {
             display: flex;
             gap: 10px;
         }
-        .input-area input {
+        #messageInput {
             flex: 1;
-            padding: 12px 15px;
-            border-radius: 15px;
+            padding: 15px 20px;
+            border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(0, 0, 0, 0.3);
             color: #fff;
-            font-size: 14px;
+            font-size: 16px;
             outline: none;
+            transition: 0.3s;
         }
-        .input-area input:focus {
+        #messageInput:focus {
             border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
         }
-        .input-area input::placeholder {
+        #messageInput::placeholder {
             color: #666;
         }
-        .input-area button {
-            padding: 12px 25px;
-            border-radius: 15px;
+        #sendBtn {
+            padding: 15px 30px;
+            border-radius: 25px;
             border: none;
             background: #00d4ff;
             color: #fff;
@@ -170,12 +138,35 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .input-area button:hover {
+        #sendBtn:hover {
             transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
         }
-        .input-area button:disabled {
+        #sendBtn:disabled {
             opacity: 0.3;
             cursor: not-allowed;
+            transform: none;
+        }
+        .share-area {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .share-area button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 13px;
+        }
+        .share-area button:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
         }
         @keyframes fadeIn {
             from {
@@ -187,27 +178,18 @@
                 transform: translateY(0);
             }
         }
-        .status {
-            color: #aaa;
-            font-size: 13px;
-            text-align: center;
-            margin: 10px 0;
-        }
-        .status.connected {
-            color: #00ff88;
-        }
-        .hint {
-            color: #888;
-            font-size: 12px;
-            text-align: center;
-            margin: 10px 0;
-        }
-        .flex-btns {
-            display: flex;
-            gap: 10px;
-        }
-        .flex-btns .btn {
-            flex: 1;
+        @media (max-width: 500px) {
+            .container {
+                padding: 15px;
+            }
+            #messageInput {
+                font-size: 14px;
+                padding: 12px 15px;
+            }
+            #sendBtn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -215,411 +197,341 @@
     <div class="container">
         <h1>🌟 <span>فجر</span> دردشة P2P</h1>
 
-        <div class="id-box">
-            <label>🆔 معرف جهازك:</label>
-            <span class="id-value" id="myId">جاري التحميل...</span>
+        <div class="status-box">
+            <span id="status">⏳ جاري التجهيز...</span>
+            <span id="deviceId">🆔 ...</span>
         </div>
-
-        <button class="btn btn-primary" onclick="showQR()">📱 عرض QR Code للاتصال</button>
-
-        <div class="qr-container" id="qrContainer">
-            <div id="qrPlaceholder"></div>
-            <p style="color: #333; margin-top: 10px; font-size: 13px;">
-                📸 امسح الكود بكاميرا الموبايل لفتح الصفحة
-            </p>
-            <button class="btn btn-secondary" onclick="hideQR()">إخفاء QR</button>
-        </div>
-
-        <div class="status" id="status">⏳ غير متصل</div>
 
         <div class="chat-box" id="chatBox"></div>
 
         <div class="input-area">
-            <input type="text" id="msgInput" placeholder="اكتب رسالتك..." disabled>
+            <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." disabled>
             <button id="sendBtn" disabled>إرسال</button>
         </div>
 
-        <div class="flex-btns">
-            <button class="btn btn-secondary" onclick="resetConnection()">🔄 إعادة تعيين</button>
-            <button class="btn btn-secondary" onclick="copyId()">📋 نسخ المعرف</button>
-        </div>
-
-        <div class="hint">
-            💡 امسح QR Code من جهاز تاني، أو انسخ المعرف وأدخله يدوياً
+        <div class="share-area">
+            <button id="copyIdBtn">📋 نسخ المعرف</button>
+            <button id="connectBtn">🔗 الاتصال بجهاز آخر</button>
+            <button id="resetBtn">🔄 إعادة تعيين</button>
         </div>
     </div>
 
-    <!-- مكتبة QR Code مصغرة (مدمجة) -->
     <script>
         // =============================================
-        //  مكتبة QR Code مصغرة (نسخة مبسطة لكنها حقيقية)
-        //  مصدرها: https://github.com/davidshimjs/qrcodejs
-        //  تم تصغيرها وتضمينها هنا
-        // =============================================
-        
-        // هذه نسخة مبسطة من مكتبة QR Code
-        // الحجم الكامل للمكتبة أكبر، لكننا نكتفي بالنسخة الأساسية
-        // اللي بتشتغل مع القارئ العادي
-        
-        var QRCode = (function() {
-            // نسخة مبسطة من QR Code
-            // تركز على توليد QR من النص بشكل صحيح
-            
-            function QRCode(container, options) {
-                this._container = container;
-                this._options = options || {};
-                this._text = this._options.text || '';
-                this._width = this._options.width || 200;
-                this._height = this._options.height || 200;
-                this._canvas = document.createElement('canvas');
-                this._canvas.width = this._width;
-                this._canvas.height = this._height;
-                this._container.appendChild(this._canvas);
-                this._ctx = this._canvas.getContext('2d');
-                
-                if (this._text) {
-                    this._generate();
-                }
-            }
-            
-            QRCode.prototype.clear = function() {
-                this._ctx.clearRect(0, 0, this._width, this._height);
-            };
-            
-            QRCode.prototype.makeCode = function(text) {
-                this._text = text;
-                this._generate();
-            };
-            
-            QRCode.prototype._generate = function() {
-                if (!this._text) return;
-                
-                // توليد QR باستخدام خوارزمية مبسطة
-                // هذه الخوارزمية تولد QR حقيقي لكن بحجم صغير
-                // وهي متوافقة مع معظم قارئات QR
-                
-                // استخدام خوارزمية مبسطة لتوليد QR
-                // (هذه مجرد محاكاة للـ QR، لكنها تشتغل مع القارئ)
-                
-                // في النسخة الكاملة، هنا بنستخدم خوارزمية معقدة
-                // لكننا سنستخدم خوارزمية مبسطة لتوليد QR حقيقي
-                
-                const size = 21; // حجم QR صغير
-                const matrix = [];
-                
-                // تعبئة المصفوفة
-                for (let i = 0; i < size; i++) {
-                    matrix[i] = [];
-                    for (let j = 0; j < size; j++) {
-                        matrix[i][j] = 0;
-                    }
-                }
-                
-                // وضع علامات التعريف
-                // Finder Pattern في الزوايا
-                const patterns = [
-                    [0, 0], [0, size-7], [size-7, 0]
-                ];
-                
-                patterns.forEach(([row, col]) => {
-                    for (let i = 0; i < 7; i++) {
-                        for (let j = 0; j < 7; j++) {
-                            if (
-                                i === 0 || i === 6 || 
-                                j === 0 || j === 6 || 
-                                (i >= 2 && i <= 4 && j >= 2 && j <= 4)
-                            ) {
-                                matrix[row + i][col + j] = 1;
-                            }
-                        }
-                    }
-                });
-                
-                // وضع البيانات
-                const data = this._encodeData(this._text);
-                let idx = 0;
-                
-                for (let col = size-1; col >= 0; col--) {
-                    for (let row = 0; row < size; row++) {
-                        // تخطي مناطق العلامات
-                        const isFinder1 = row < 7 && col < 7;
-                        const isFinder2 = row < 7 && col >= size-7;
-                        const isFinder3 = row >= size-7 && col < 7;
-                        
-                        if (!isFinder1 && !isFinder2 && !isFinder3 && idx < data.length) {
-                            matrix[row][col] = data[idx];
-                            idx++;
-                        }
-                    }
-                }
-                
-                // رسم الـ QR
-                const cellSize = this._width / size;
-                this._ctx.fillStyle = '#ffffff';
-                this._ctx.fillRect(0, 0, this._width, this._height);
-                
-                for (let row = 0; row < size; row++) {
-                    for (let col = 0; col < size; col++) {
-                        if (matrix[row][col] === 1) {
-                            this._ctx.fillStyle = '#000000';
-                            this._ctx.fillRect(
-                                col * cellSize,
-                                row * cellSize,
-                                cellSize,
-                                cellSize
-                            );
-                        }
-                    }
-                }
-            };
-            
-            QRCode.prototype._encodeData = function(text) {
-                // ترميز النص إلى بيانات QR
-                const bits = [];
-                
-                // تحويل النص إلى UTF-8
-                const bytes = [];
-                for (let i = 0; i < text.length; i++) {
-                    const code = text.charCodeAt(i);
-                    if (code < 128) {
-                        bytes.push(code);
-                    } else if (code < 2048) {
-                        bytes.push(0xC0 | (code >> 6), 0x80 | (code & 0x3F));
-                    } else {
-                        bytes.push(0xE0 | (code >> 12), 0x80 | ((code >> 6) & 0x3F), 0x80 | (code & 0x3F));
-                    }
-                }
-                
-                // تحويل البايتات إلى bits
-                bytes.forEach(byte => {
-                    for (let i = 7; i >= 0; i--) {
-                        bits.push((byte >> i) & 1);
-                    }
-                });
-                
-                // إضافة padding
-                const targetLength = 200;
-                while (bits.length < targetLength) {
-                    bits.push(0);
-                }
-                
-                // تطبيق XOR بسيط لتوزيع البيانات
-                const result = [];
-                for (let i = 0; i < bits.length; i++) {
-                    result[i] = bits[i] ^ (i % 2);
-                }
-                
-                return result;
-            };
-            
-            return QRCode;
-        })();
-    </script>
-
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
-
-    <script>
-        // =============================================
-        //  نظام الدردشة P2P
+        //  نظام الدردشة P2P باستخدام WebRTC
+        //  يعمل على نفس الشبكة (Wi-Fi) بدون سيرفرات
         // =============================================
 
-        const peer = new Peer();
-        let conn = null;
-        let myId = '';
-        let qrInstance = null;
+        // --- المتغيرات العامة ---
+        let peerConnection = null;
+        let dataChannel = null;
+        let isInitiator = false; // هل أنا اللي بدأت الاتصال؟
+        let localId = '';
+        let remoteId = '';
+        let pendingCandidates = [];
 
+        // عناصر الواجهة
         const chatBox = document.getElementById('chatBox');
-        const msgInput = document.getElementById('msgInput');
+        const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
         const statusEl = document.getElementById('status');
-        const myIdEl = document.getElementById('myId');
-        const qrContainer = document.getElementById('qrContainer');
-        const qrPlaceholder = document.getElementById('qrPlaceholder');
+        const deviceIdEl = document.getElementById('deviceId');
+        const copyIdBtn = document.getElementById('copyIdBtn');
+        const connectBtn = document.getElementById('connectBtn');
+        const resetBtn = document.getElementById('resetBtn');
 
+        // --- توليد معرف فريد للجهاز ---
+        function generateId() {
+            return Math.random().toString(36).substring(2, 8).toUpperCase();
+        }
+
+        // --- إضافة رسالة للشات ---
         function addMessage(text, type = 'self') {
             const div = document.createElement('div');
             div.className = `message ${type}`;
             const time = new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-            div.innerHTML = `${text} <span style="font-size:10px;opacity:0.6;display:block;margin-top:3px;">${time}</span>`;
+            div.innerHTML = `${text} <span class="time">${time}</span>`;
             chatBox.appendChild(div);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+        // --- تحديث حالة الاتصال ---
         function setStatus(text, isConnected = false) {
             statusEl.textContent = text;
             if (isConnected) {
-                statusEl.className = 'status connected';
-                msgInput.disabled = false;
+                statusEl.className = 'connected';
+                messageInput.disabled = false;
                 sendBtn.disabled = false;
             } else {
-                statusEl.className = 'status';
-                msgInput.disabled = true;
+                statusEl.className = '';
+                messageInput.disabled = true;
                 sendBtn.disabled = true;
             }
         }
 
+        // --- إنشاء اتصال WebRTC ---
+        function createPeerConnection() {
+            const config = {
+                iceServers: [
+                    // خوادم STUN مجانية لمساعدتهم في التعارف
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' }
+                ]
+            };
+
+            peerConnection = new RTCPeerConnection(config);
+
+            // التعامل مع المرشحات (candidates) القادمة
+            peerConnection.onicecandidate = (event) => {
+                if (event.candidate) {
+                    // إذا كنت البادئ، خزن الـ candidates لحد ما القناة تفتح
+                    if (isInitiator && dataChannel && dataChannel.readyState === 'open') {
+                        sendCandidate(event.candidate);
+                    } else if (isInitiator) {
+                        pendingCandidates.push(event.candidate);
+                    } else {
+                        // لو أنا المستقبل، ابعتهم فوراً عبر الـ offer
+                        sendCandidate(event.candidate);
+                    }
+                }
+            };
+
+            // عند استلام قناة بيانات من الطرف الآخر (لو أنا المستقبل)
+            peerConnection.ondatachannel = (event) => {
+                dataChannel = event.channel;
+                setupDataChannel();
+                setStatus('✅ متصل!', true);
+                addMessage('🔗 تم الاتصال بالجهاز الآخر!', 'other');
+            };
+
+            return peerConnection;
+        }
+
+        // --- إعداد قناة البيانات ---
+        function setupDataChannel() {
+            if (!dataChannel) return;
+
+            dataChannel.onopen = () => {
+                setStatus('✅ متصل!', true);
+                addMessage('🔗 تم فتح قناة الاتصال!', 'other');
+                // إرسال أي Candidates معلقة
+                while (pendingCandidates.length > 0) {
+                    const candidate = pendingCandidates.pop();
+                    sendCandidate(candidate);
+                }
+            };
+
+            dataChannel.onclose = () => {
+                setStatus('❌ تم قطع الاتصال', false);
+                addMessage('❌ انقطع الاتصال بالجهاز الآخر', 'other');
+            };
+
+            dataChannel.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'candidate') {
+                    // استقبال مرشح (candidate) من الطرف الآخر
+                    if (peerConnection) {
+                        const candidate = new RTCIceCandidate(data.candidate);
+                        peerConnection.addIceCandidate(candidate).catch(e => console.error(e));
+                    }
+                } else if (data.type === 'message') {
+                    // استقبال رسالة نصية
+                    addMessage(data.text, 'other');
+                }
+            };
+        }
+
+        // --- إرسال مرشح (candidate) ---
+        function sendCandidate(candidate) {
+            if (dataChannel && dataChannel.readyState === 'open') {
+                dataChannel.send(JSON.stringify({
+                    type: 'candidate',
+                    candidate: candidate
+                }));
+            } else {
+                // لو القناة لسه متفتحتش، خزنه مؤقتاً
+                pendingCandidates.push(candidate);
+            }
+        }
+
+        // --- إرسال رسالة نصية ---
+        function sendMessage(text) {
+            if (dataChannel && dataChannel.readyState === 'open') {
+                dataChannel.send(JSON.stringify({
+                    type: 'message',
+                    text: text
+                }));
+                addMessage(text, 'self');
+                messageInput.value = '';
+            } else {
+                addMessage('⚠️ مش متصل!', 'other');
+            }
+        }
+
+        // --- بدء الاتصال (كبادئ) ---
+        async function startConnection() {
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+                dataChannel = null;
+            }
+
+            isInitiator = true;
+            setStatus('🔄 جاري الاتصال...', false);
+            addMessage('📡 جاري إنشاء قناة اتصال...', 'other');
+
+            const pc = createPeerConnection();
+
+            // إنشاء قناة بيانات (هو اللي هيبدأ)
+            dataChannel = pc.createDataChannel('chat');
+            setupDataChannel();
+
+            try {
+                // إنشاء عرض (Offer)
+                const offer = await pc.createOffer();
+                await pc.setLocalDescription(offer);
+
+                // تحويل الـ Offer لنص عشان نشاركه
+                const offerText = JSON.stringify(pc.localDescription);
+                addMessage(`📤 نسخ الرابط التالي وأرسله للجهاز الآخر:\n${offerText}`, 'other');
+
+                // ننتظر الـ Answer من الطرف الآخر
+                // هنضطر نستخدم طريقة يدوية: المستخدم يلصق الـ Answer في الـ prompt
+                setTimeout(() => {
+                    const answerText = prompt('📥 الصق الـ Answer من الجهاز الآخر هنا:');
+                    if (answerText) {
+                        try {
+                            const answer = JSON.parse(answerText);
+                            pc.setRemoteDescription(answer);
+                            setStatus('✅ متصل!', true);
+                            addMessage('✅ تم الاتصال بنجاح!', 'other');
+                        } catch (e) {
+                            addMessage('❌ خطأ في الـ Answer!', 'other');
+                            setStatus('❌ فشل الاتصال', false);
+                        }
+                    }
+                }, 1000);
+
+            } catch (e) {
+                console.error(e);
+                addMessage('❌ فشل إنشاء الاتصال', 'other');
+                setStatus('❌ فشل الاتصال', false);
+            }
+        }
+
+        // --- استقبال اتصال (كمستقبل) ---
+        async function receiveConnection(offerText) {
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+                dataChannel = null;
+            }
+
+            isInitiator = false;
+            setStatus('🔄 جاري الاستقبال...', false);
+            addMessage('📥 جاري استقبال الاتصال...', 'other');
+
+            const pc = createPeerConnection();
+
+            try {
+                const offer = JSON.parse(offerText);
+                await pc.setRemoteDescription(offer);
+
+                // إنشاء رد (Answer)
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+
+                // عرض الـ Answer عشان ينسخه الطرف الآخر
+                const answerText = JSON.stringify(pc.localDescription);
+                addMessage(`📤 انسخ الـ Answer ده وأرسله للجهاز الأول:\n${answerText}`, 'other');
+
+                setStatus('✅ متصل!', true);
+                addMessage('✅ تم الاتصال بنجاح!', 'other');
+
+            } catch (e) {
+                console.error(e);
+                addMessage('❌ فشل استقبال الاتصال', 'other');
+                setStatus('❌ فشل الاتصال', false);
+            }
+        }
+
+        // --- نسخ المعرف ---
         function copyId() {
-            if (!myId) return;
-            navigator.clipboard.writeText(myId).then(() => {
-                addMessage(`📋 تم نسخ المعرف: ${myId}`, 'other');
+            navigator.clipboard.writeText(localId).then(() => {
+                addMessage(`📋 تم نسخ المعرف: ${localId}`, 'other');
             }).catch(() => {
+                // طريقة بديلة للنسخ
                 const textarea = document.createElement('textarea');
-                textarea.value = myId;
+                textarea.value = localId;
                 document.body.appendChild(textarea);
                 textarea.select();
                 document.execCommand('copy');
                 textarea.remove();
-                addMessage(`📋 تم نسخ المعرف: ${myId}`, 'other');
+                addMessage(`📋 تم نسخ المعرف: ${localId}`, 'other');
             });
         }
 
-        function showQR() {
-            if (!myId) {
-                alert('⚠️ انتظر حتى يظهر معرفك أولاً!');
-                return;
-            }
-
-            // الرابط اللي هيظهر في الـ QR
-            const url = window.location.href.split('?')[0] + '?peer=' + myId;
-
-            qrContainer.classList.add('active');
-            qrPlaceholder.innerHTML = '';
-
-            // إنشاء QR Code باستخدام المكتبة
-            qrInstance = new QRCode(qrPlaceholder, {
-                text: url,
-                width: 200,
-                height: 200,
-                colorDark: '#000000',
-                colorLight: '#ffffff'
-            });
-
-            addMessage(`📱 تم إنشاء QR Code للاتصال`, 'other');
-        }
-
-        function hideQR() {
-            qrContainer.classList.remove('active');
-            if (qrInstance) {
-                qrInstance.clear();
-                qrInstance = null;
+        // --- زر الاتصال ---
+        function handleConnect() {
+            if (!peerConnection || !dataChannel || dataChannel.readyState !== 'open') {
+                // لو مش متصلين، نبدأ اتصال جديد
+                const choice = confirm('هل تريد بدء اتصال جديد؟\nاضغط "موافق" إذا كنت تريد البدء (Initiator)\nاضغط "إلغاء" إذا كنت تريد الاستقبال (Receiver)');
+                if (choice) {
+                    startConnection();
+                } else {
+                    // المستخدم يلصق الـ Offer
+                    const offerText = prompt('📥 الصق الـ Offer من الجهاز البادئ هنا:');
+                    if (offerText) {
+                        receiveConnection(offerText);
+                    }
+                }
+            } else {
+                addMessage('⚠️ أنت متصل بالفعل!', 'other');
             }
         }
 
+        // --- إعادة التعيين ---
         function resetConnection() {
-            if (conn) {
-                conn.close();
-                conn = null;
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+                dataChannel = null;
             }
+            pendingCandidates = [];
+            isInitiator = false;
             setStatus('🔄 تم إعادة التعيين', false);
             addMessage('🔄 تم إعادة تعيين الاتصال', 'other');
+            chatBox.innerHTML = '';
         }
 
-        function connectToPeer(peerId) {
-            if (!peerId) {
-                peerId = prompt('📌 أدخل معرف الجهاز الآخر:');
-                if (!peerId) return;
-            }
-
-            if (conn) {
-                conn.close();
-                conn = null;
-            }
-
-            setStatus('🔄 جاري الاتصال...', false);
-            addMessage(`📡 محاولة الاتصال بـ ${peerId}...`, 'other');
-
-            conn = peer.connect(peerId);
-
-            conn.on('open', () => {
-                setStatus('✅ متصل!', true);
-                addMessage('🔗 تم الاتصال بالجهاز الآخر!', 'other');
-            });
-
-            conn.on('data', (data) => {
-                addMessage(data, 'other');
-            });
-
-            conn.on('close', () => {
-                setStatus('❌ تم قطع الاتصال', false);
-                addMessage('❌ انقطع الاتصال بالجهاز الآخر', 'other');
-            });
-
-            conn.on('error', (err) => {
-                setStatus('❌ فشل الاتصال', false);
-                addMessage(`❌ خطأ: ${err.message}`, 'other');
-            });
-        }
-
-        function sendMessage() {
-            const text = msgInput.value.trim();
-            if (!text) return;
-            if (!conn || conn.open === false) {
-                addMessage('⚠️ مش متصل!', 'other');
-                return;
-            }
-
-            conn.send(text);
-            addMessage(text, 'self');
-            msgInput.value = '';
-        }
-
+        // --- التهيئة ---
         function init() {
-            peer.on('open', (id) => {
-                myId = id;
-                myIdEl.textContent = id;
-                setStatus('⏳ غير متصل. امسح QR أو أدخل معرف الآخر', false);
-                addMessage(`🌟 مرحباً! معرفك: ${id}`, 'other');
-                addMessage('📱 اضغط "عرض QR Code" عشان تشارك مع جهاز تاني', 'other');
-            });
+            localId = generateId();
+            deviceIdEl.textContent = `🆔 ${localId}`;
+            setStatus('⏳ غير متصل. اضغط "اتصال" للبدء', false);
 
-            peer.on('connection', (connection) => {
-                if (conn) {
-                    conn.close();
-                }
+            // أحداث الأزرار
+            copyIdBtn.onclick = copyId;
+            connectBtn.onclick = handleConnect;
+            resetBtn.onclick = resetConnection;
 
-                conn = connection;
-                setStatus('✅ متصل!', true);
-                addMessage('🔗 تم الاتصال بالجهاز الآخر!', 'other');
-
-                conn.on('data', (data) => {
-                    addMessage(data, 'other');
-                });
-
-                conn.on('close', () => {
-                    setStatus('❌ تم قطع الاتصال', false);
-                    addMessage('❌ انقطع الاتصال بالجهاز الآخر', 'other');
-                });
-
-                conn.on('error', (err) => {
-                    setStatus('❌ فشل الاتصال', false);
-                    addMessage(`❌ خطأ: ${err.message}`, 'other');
-                });
-            });
-
-            peer.on('error', (err) => {
-                console.error('Peer error:', err);
-            });
-
-            sendBtn.onclick = sendMessage;
-            msgInput.onkeydown = (e) => {
-                if (e.key === 'Enter') sendMessage();
+            // إرسال الرسالة
+            sendBtn.onclick = () => {
+                const text = messageInput.value.trim();
+                if (text) sendMessage(text);
             };
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const peerId = urlParams.get('peer');
-            if (peerId && peerId !== myId) {
-                setTimeout(() => {
-                    connectToPeer(peerId);
-                }, 2000);
-            }
+            messageInput.onkeydown = (e) => {
+                if (e.key === 'Enter') sendBtn.click();
+            };
+
+            // رسالة ترحيب
+            addMessage(`🌟 مرحباً! معرفك: ${localId}`, 'other');
+            addMessage('📌 اضغط "اتصال" لبدء الدردشة مع جهاز آخر على نفس الشبكة', 'other');
         }
 
+        // --- بدء التشغيل ---
         init();
-
-        window.showQR = showQR;
-        window.hideQR = hideQR;
-        window.resetConnection = resetConnection;
-        window.copyId = copyId;
     </script>
 </body>
 </html>
