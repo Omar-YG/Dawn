@@ -843,13 +843,13 @@ document.addEventListener("DOMContentLoaded", () => {
     outline: 0;
   }
 
-  #recordPauseResumeButton {
+  #playlisticon {
     position: absolute;
     bottom: 0;
     top: 0;
     margin: auto;
     left: 120px;
-    width: 15px;
+    width: 25px;
     fill: #7575f0;
     cursor: pointer;
   }
@@ -3058,35 +3058,6 @@ document.addEventListener("DOMContentLoaded", () => {
     display: block;
   }
 
-  #Dawnplaylist {
-    background: var(--mainbg);
-    border: var(--cborder);
-    border-radius: var(--mainradius);
-    padding: 10px 50px 10px 10px;
-    position: absolute;
-    height: 60vh;
-    overflow: hidden;
-    width: calc(100vw - 20px);
-    max-width: 300px;
-    left: 10px; 
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    z-index: 2;
-    opacity: 0.05;
-    transition: 0.4s ease;
-    transform: translateX(-275px);
-  }
-
-  #Dawnplaylist:hover {
-    opacity: 0.7;
-  }
-
-  #Dawnplaylist:focus-within {
-    transform: translateX(0);
-    padding: var(--spacepadd);
-    opacity: 1;
-  }
 
   #Dawnplaylist .player-container {
     background: var(--secbg);
@@ -3094,6 +3065,8 @@ document.addEventListener("DOMContentLoaded", () => {
     overflow: auto;
     height: calc(60vh - 20px);
     padding: 5px 5px 40px;
+    max-width: 400px;
+    margin:0 auto;
   }
 
   #Dawnplaylist .track-item {
@@ -3161,20 +3134,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   #Dawnplaylist .add-btn {
-    display: none;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    margin: auto;
-    border-radius: 200% 200% 0 0;
-    line-height: 40px;
-    font-size: 18px;
-    box-shadow: var(--shadow);
-  }
-
-  #Dawnplaylist:focus-within .add-btn {
     display: block;
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    margin: auto;
+    height:50px;
+    width:50px;
+    border-radius: var(--roundradius);
+    font-size: 27px;
+    padding:0 0 3px;
+    box-shadow: var(--shadow);
   }
 
   .emptylist-state {
@@ -3552,7 +3522,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     #editor:focus~#add,
-    #editor:focus~#recordPauseResumeButton,
+    #editor:focus~#playlisticon,
     #editor:focus~#userProfilePic {
       display: none;
     }
@@ -3827,15 +3797,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <p style="color: var(--wcolor); margin: 10px 0 0 0;" id="videoTitle">لم يتم اختيار فيديو</p>
     </div>
   </div>
-  <div id="Dawnplaylist" tabindex="0" onclick="onerun('renderPlaylist');">
-    <div class="player-container">
-      <div class="playlist" id="playlist-container">
-      </div>
-      <button class="add-btn conf-btn" onclick="document.getElementById('file-input').click()">+</button>
-      <audio id="main-audio"></audio>
-    </div>
 
-  </div>
   <div id="settingsModal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation();closeAllDropdowns()">
       <div class="close-nav" onclick="document.getElementById('settingsModal').style.display='none'">
@@ -3973,7 +3935,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </svg>
                 <b>وسائط</b>
               </div>
-              <div data-id="13" id="recBtn" class="app">
+              <div data-id="1" id="recBtn" class="app">
                 <svg viewBox="0 0 512 512" width="100">
                   <path
                     d="M256 152a104 104 0 1 0 104 104 104 104 0 0 0-104-104zm0 128a24 24 0 1 1 24-24 24 24 0 0 1-24 24zm0-272C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 376a128 128 0 1 1 128-128 128 128 0 0 1-128 128z" />
@@ -3981,35 +3943,42 @@ document.addEventListener("DOMContentLoaded", () => {
                 <b>تسجيل شاشة</b>
               </div>
 
-              <div data-id="2" class="app" onclick="opentab('newdocument')">
+              <div data-id="2" class="app" onclick="handleRecordPauseResume()" ondblclick="stopRecording()">
+                <svg viewBox="0 0 352 512" id="recordPauseResumeButton" style="max-width: 18px;">
+        <path
+          d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z" />
+      </svg>
+                <b>مسجل صوت</b>
+              </div>
+              <div data-id="3" class="app" onclick="opentab('newdocument')">
                 <svg viewBox="0 0 512 512">
                   <path
                     d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z" />
                 </svg>
                 <b>مستند</b>
               </div>
-              <div data-id="5" class="app" onclick="opentab('generatedata')">
+              <div data-id="4" class="app" onclick="opentab('generatedata')">
                 <svg viewBox="0 0 640 512" title="dice">
                   <path
                     d="M592 192H473.26c12.69 29.59 7.12 65.2-17 89.32L320 417.58V464c0 26.51 21.49 48 48 48h224c26.51 0 48-21.49 48-48V240c0-26.51-21.49-48-48-48zM480 376c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm-46.37-186.7L258.7 14.37c-19.16-19.16-50.23-19.16-69.39 0L14.37 189.3c-19.16 19.16-19.16 50.23 0 69.39L189.3 433.63c19.16 19.16 50.23 19.16 69.39 0L433.63 258.7c19.16-19.17 19.16-50.24 0-69.4zM96 248c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm0-128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24zm128 128c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24s24 10.74 24 24c0 13.25-10.75 24-24 24z" />
                 </svg>
                 <b>توليد عشوائي</b>
               </div>
-              <div data-id="1" class="app" onclick="opentab('ocrtextmatch')">
+              <div data-id="5" class="app" onclick="opentab('ocrtextmatch')">
                 <svg viewBox="0 0 512 512" width="100" title="camera">
                   <path
                     d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z" />
                 </svg>
                 <b>استخراج نص</b>
               </div>
-              <div data-id="3" class="app" onclick="onerun('knowdraw');onerun('drawings');switchTab('drawtab')">
+              <div data-id="6" class="app" onclick="onerun('knowdraw');onerun('drawings');switchTab('drawtab')">
                 <svg viewBox="0 0 512 512">
                   <path
                     d="M167.02 309.34c-40.12 2.58-76.53 17.86-97.19 72.3-2.35 6.21-8 9.98-14.59 9.98-11.11 0-45.46-27.67-55.25-34.35C0 439.62 37.93 512 128 512c75.86 0 128-43.77 128-120.19 0-3.11-.65-6.08-.97-9.13l-88.01-73.34zM457.89 0c-15.16 0-29.37 6.71-40.21 16.45C213.27 199.05 192 203.34 192 257.09c0 13.7 3.25 26.76 8.73 38.7l63.82 53.18c7.21 1.8 14.64 3.03 22.39 3.03 62.11 0 98.11-45.47 211.16-256.46 7.38-14.35 13.9-29.85 13.9-45.99C512 20.64 486 0 457.89 0z" />
                 </svg>
                 <b>الرسم</b>
               </div>
-              <div data-id="4" class="app" onclick="opentab('newform')">
+              <div data-id="7" class="app" onclick="opentab('newform')">
                 <svg viewBox="0 0 512 512">
                   <path
                     d="M496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zM464 96H160c-8.84 0-16 7.16-16 16v192c0 8.84 7.16 16 16 16h304c8.84 0 16-7.16 16-16V112c0-8.84-7.16-16-16-16z" />
@@ -4023,29 +3992,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 </svg>
                 <b>ضغط النص</b>
               </div>
-              <div data-id="6" class="app" onclick="switchTab('treeviewtab')">
+              <div data-id="9" class="app" onclick="switchTab('treeviewtab')">
                 <svg viewBox="0 0 640 512">
                   <path
                     d="M128 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32zm-24-80h192v48h48v-48h192v48h48v-57.59c0-21.17-17.23-38.41-38.41-38.41H344v-64h40c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32H256c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h40v64H94.41C73.23 224 56 241.23 56 262.41V320h48v-48zm264 80h-96c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32zm240 0h-96c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32z" />
                 </svg>
                 <b>مخطط قرار</b>
               </div>
-              <div data-id="7" class="app" onclick="switchTab('Musicer')">
+              <div data-id="10" class="app" onclick="switchTab('Musicer')">
                 <svg viewBox="0 0 512 512" title="music">
                   <path
                     d="M470.38 1.51L150.41 96A32 32 0 0 0 128 126.51v261.41A139 139 0 0 0 96 384c-53 0-96 28.66-96 64s43 64 96 64 96-28.66 96-64V214.32l256-75v184.61a138.4 138.4 0 0 0-32-3.93c-53 0-96 28.66-96 64s43 64 96 64 96-28.65 96-64V32a32 32 0 0 0-41.62-30.49z" />
                 </svg>
                 <b>صنع نغمة</b>
               </div>
-              <div data-id="9" class="app" onclick="onerun('loadDawnStatuTracker');opentab('STracker')">
+              <div data-id="11" class="app" onclick="onerun('loadDawnStatuTracker');opentab('STracker')">
                 <svg viewBox="0 0 384 512" title="file-invoice">
                   <path
                     d="M288 256H96v64h192v-64zm89-151L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm256 304c0 4.42-3.58 8-8 8h-80c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16zm0-200v96c0 8.84-7.16 16-16 16H80c-8.84 0-16-7.16-16-16v-96c0-8.84 7.16-16 16-16h224c8.84 0 16 7.16 16 16z" />
                 </svg>
                 <b>إنشاء تقرير</b>
               </div>
-              <div data-id="10" class="app"
-                onclick="onerun('Trackerrender');onerun('projradarrender');switchTab('ProgressTracker')">
+              <div data-id="12" class="app" onclick="onerun('Trackerrender');onerun('projradarrender');switchTab('ProgressTracker')">
                 <svg viewBox="0 0 544 512" title="chart-pie">
                   <path
                     d="M527.79 288H290.5l158.03 158.03c6.04 6.04 15.98 6.53 22.19.68 38.7-36.46 65.32-85.61 73.13-140.86 1.34-9.46-6.51-17.85-16.06-17.85zm-15.83-64.8C503.72 103.74 408.26 8.28 288.8.04 279.68-.59 272 7.1 272 16.24V240h223.77c9.14 0 16.82-7.68 16.19-16.8zM224 288V50.71c0-9.55-8.39-17.4-17.84-16.06C86.99 51.49-4.1 155.6.14 280.37 4.5 408.51 114.83 513.59 243.03 511.98c50.4-.63 96.97-16.87 135.26-44.03 7.9-5.6 8.42-17.23 1.57-24.08L224 288z" />
@@ -4149,6 +4117,16 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
 
+      <div id="Dawnplaylist" class="modaltab">
+      <h2>قائمه التشغيل</h2>
+        <div class="player-container">
+      <div class="playlist" id="playlist-container">
+      </div>
+      <button class="add-btn conf-btn flex-center" onclick="document.getElementById('file-input').click()">+</button>
+      <audio id="main-audio"></audio>
+    </div>
+
+      </div>
       <div id="STracker" class="modaltab">
         <h2>متتبع تقارير</h2>
 
@@ -5374,11 +5352,11 @@ document.addEventListener("DOMContentLoaded", () => {
           d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
           style="transform: scale(0.5); transform-origin: center;" />
       </svg>
-      <svg viewBox="0 0 352 512" id="recordPauseResumeButton" onclick="handleRecordPauseResume()"
-        ondblclick="stopRecording()">
-        <path
-          d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z" />
+
+      <svg viewBox="0 0 512 512" title="headphones-alt" id="playlisticon" onclick="opentab('Dawnplaylist');onerun('renderPlaylist');">
+        <path d="M160 288h-16c-35.35 0-64 28.7-64 64.12v63.76c0 35.41 28.65 64.12 64 64.12h16c17.67 0 32-14.36 32-32.06V320.06c0-17.71-14.33-32.06-32-32.06zm208 0h-16c-17.67 0-32 14.35-32 32.06v127.88c0 17.7 14.33 32.06 32 32.06h16c35.35 0 64-28.71 64-64.12v-63.76c0-35.41-28.65-64.12-64-64.12zM256 32C112.91 32 4.57 151.13 0 288v112c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16V288c0-114.67 93.33-207.8 208-207.82 114.67.02 208 93.15 208 207.82v112c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16V288C507.43 151.13 399.09 32 256 32z" />
       </svg>
+      
       <div id="connect"></div>
       <div class="face" id="mybtnd">
         <button id="mybtn" style="display: none;">حقيقي</button>
@@ -14830,7 +14808,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   window.onload = initUI;
 
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==74||e.keyCode==67))||(e.ctrlKey&&e.keyCode==85))return false};setInterval(()=>{if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){document.body.innerHTML='<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>';eval('debugger');}},500);})();
+  //(function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==74||e.keyCode==67))||(e.ctrlKey&&e.keyCode==85))return false};setInterval(()=>{if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){document.body.innerHTML='<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>';eval('debugger');}},500);})();
 </script>
 
 </html>
