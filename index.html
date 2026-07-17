@@ -323,12 +323,12 @@
     transition: none;
   }
 
-  .context-menu .morelist:hover {
+  .context-menu .morelist:focus,.context-menu .morelist:focus-within {
     border-right: 2px solid #ccc;
     padding: 3px;
   }
 
-  .context-menu .morelist:hover .detmore {
+  .context-menu .morelist:focus .detmore,.context-menu .morelist:focus-within .detmore {
     display: block;
   }
 
@@ -349,7 +349,7 @@
     transition: transform 0.3s ease;
   }
 
-  .context-menu .morelist:hover .menubtn::after {
+  .context-menu .morelist:focus .menubtn::after,.context-menu .morelist:focus-within .menubtn::after {
     transform: translateY(-20%) rotate(-135deg);
   }
 
@@ -5404,7 +5404,7 @@
     <div class="context-menu-item" onclick="handleAction('selectAll')">تحديد الكل</div>
     <button class="context-menu-item" id="search-btn" onclick="search()">بحث بـ جوجل</button>
     <button class="context-menu-item" onclick="processAndSpeak()">سماع النص</button>
-    <div class="morelist">
+    <div class="morelist" tabindex="0">
       <button class="context-menu-item menubtn">تعلم</button>
       <button class="context-menu-item detmore" onclick="addToDict()">كلمة في القاموس</button>
       <button class="context-menu-item detmore" onclick="addLaw()"> قانون رياضي</button>
@@ -5412,7 +5412,7 @@
       <button class="context-menu-item detmore" onclick="trainAndClearInput()"> تدريب ماركوف </button>
     </div>
 
-    <div class="morelist">
+    <div class="morelist" tabindex="0">
       <button class="context-menu-item menubtn">بيانات</button>
       <button class="context-menu-item detmore" onclick="showAndMove('datasorting');handleSort()">ترتيب
         البيانات</button>
@@ -5793,9 +5793,15 @@
       menu.style.visibility = "visible";
     }
 
-    document.addEventListener("click", function () {
-      menu.style.display = "none";
-    });
+    document.addEventListener("click", function (e) {
+    if (e.target.closest('.morelist')) {
+        if (!e.target.classList.contains('detmore')) {
+            return; 
+        }
+    }
+    
+    menu.style.display = "none";
+});
 
     async function handleAction(type) {
       UI.editor.focus();
