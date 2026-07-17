@@ -323,12 +323,14 @@
     transition: none;
   }
 
-  .context-menu .morelist:focus,.context-menu .morelist:focus-within {
+  .context-menu .morelist:focus,
+  .context-menu .morelist:focus-within {
     border-right: 2px solid #ccc;
     padding: 3px;
   }
 
-  .context-menu .morelist:focus .detmore,.context-menu .morelist:focus-within .detmore {
+  .context-menu .morelist:focus .detmore,
+  .context-menu .morelist:focus-within .detmore {
     display: block;
   }
 
@@ -349,7 +351,8 @@
     transition: transform 0.3s ease;
   }
 
-  .context-menu .morelist:focus .menubtn::after,.context-menu .morelist:focus-within .menubtn::after {
+  .context-menu .morelist:focus .menubtn::after,
+  .context-menu .morelist:focus-within .menubtn::after {
     transform: translateY(-20%) rotate(-135deg);
   }
 
@@ -4849,7 +4852,7 @@
         <fieldset class="flex">
           <legend>بيانات المستند:</legend>
           <input type="text" id="newprojinput" placeholder="إسم المستند الجديد ؟">
-          <button class="conf-btn" onclick="createNewProject()">إنشاء</button>
+          <button class="conf-btn" onclick="createNewProject();switchTab('codeeditorrich');">إنشاء</button>
         </fieldset>
       </div>
       <div id="newform" class="modaltab">
@@ -5292,6 +5295,7 @@
         <button class="conf-btn" style="padding:12px 15px;border-radius:30px;margin:10px 0 0;"
           onclick="onerun('readymetro');opentab('metroplaces')">يلا نحدد المكان</button>
       </div>
+      <div id="memorySummary" class="replay" style="display: none;"></div>
       <div id="welcome-modal" class="replay" style="display:none;">
         أنا فجر! 👋
         <br>
@@ -5794,14 +5798,14 @@
     }
 
     document.addEventListener("click", function (e) {
-    if (e.target.closest('.morelist')) {
+      if (e.target.closest('.morelist')) {
         if (!e.target.classList.contains('detmore')) {
-            return; 
+          return;
         }
-    }
-    
-    menu.style.display = "none";
-});
+      }
+
+      menu.style.display = "none";
+    });
 
     async function handleAction(type) {
       UI.editor.focus();
@@ -6726,6 +6730,7 @@
       userFormData: "البيانات الشخصيه",
       fajr_attendance: "سجل الحضور والانصراف",
       last_played_index: "اخر الموسيقى المشغله",
+      illdata: "سجل اماكن الألم",
     };
 
     function getStorageDetails() {
@@ -8816,7 +8821,6 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
         openBraces += (line.match(/{/g) || []).length;
         closeBraces += (line.match(/}/g) || []).length;
 
-        // 3. فحص الـ break (بشكل مبسط داخل السطر)
         if (line.includes("case ") && !line.includes("break")) {
           errors.push(`سطر ${lineNum}: الـ case دي ناقصها break!`);
         }
@@ -9305,7 +9309,7 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
         y: d.dataset.y,
         info: d.dataset.info
       }));
-      localStorage.setItem("ill-data", JSON.stringify(data));
+      localStorage.setItem("illdata", JSON.stringify(data));
     };
 
     const updateUIStatus = () => {
@@ -9406,7 +9410,7 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
     };
 
     const loadData = () => {
-      const saved = JSON.parse(localStorage.getItem("ill-data") || "[]");
+      const saved = JSON.parse(localStorage.getItem("illdata") || "[]");
       saved.forEach(p => createDot(p.x, p.y, p.info));
     };
     loadData();
@@ -9474,15 +9478,14 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
   }
   //ترتيب تصاعدي وتنازلي
   {
-    let states = { sort: 0 }; // حالة الزر (0: تصاعدي، 1: تنازلي، 2: عشوائي)
+    let states = { sort: 0 };
 
     function handleSort() {
       let input = document.getElementById("myInput").value;
-      let type = document.getElementById("sortTypeSelect").value; // حروف، ارقام، او رموز
+      let type = document.getElementById("sortTypeSelect").value;
 
       if (!input) return showToast("دخل بيانات يا هندسة! 😉");
 
-      // دعم فواصل متعددة: | أو - أو ، أو , أو مسافات
       let data = input.split(/[|,\-،\s]+/).filter(w => w.length > 0).map((item) => {
         return {
           val: item.trim(),
@@ -9492,13 +9495,13 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
 
       let state = states.sort;
 
-      if (state === 0) { // تصاعدي
+      if (state === 0) {
         data.sort((a, b) => type === "numbers" ? a.num - b.num : a.val.localeCompare(b.val));
         states.sort = 1;
-      } else if (state === 1) { // تنازلي
+      } else if (state === 1) {
         data.sort((a, b) => type === "numbers" ? b.num - a.num : b.val.localeCompare(a.val));
         states.sort = 2;
-      } else { // عشوائي
+      } else {
         data.sort(() => Math.random() - 0.5);
         states.sort = 0;
       }
@@ -9638,6 +9641,27 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
         }
       });
 
+      Object.keys(localStorage).forEach((key) => {
+        if (key.startsWith("founder_")) {
+          const docName = key.replace("founder_", "");
+          const content = localStorage.getItem(key) || "";
+
+          content.split(/(?<=[.؟!])\s+/).forEach((s) => {
+            const sentence = s.trim();
+            if (sentence.toLowerCase().includes(q)) {
+              results.push({
+                id: `doc-${docName}-${Date.now()}`,
+                text: sentence.substring(0, 100),
+                fullText: sentence,
+                isImportant: false,
+                timestamp: `من مستند: ${docName}`,
+                type: "document"
+              });
+            }
+          });
+        }
+      });
+
       getMessages().forEach((msg) => {
         msg.text.split(/(?<=[.؟!])\s+/).forEach((s) => {
           const sentence = s.trim();
@@ -9679,19 +9703,145 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
         return b.id - a.id;
       });
 
-      displayResults(results);
+      displaySummary(results, q);
+      displayResults(results, q);
       updateCounter(results.length, q);
     };
 
-    const displayResults = (results) => {
+    const displaySummary = (results, query) => {
+      const summaryDiv = document.getElementById('memorySummary');
+      if (!summaryDiv) return;
+
+      if (!query) {
+        summaryDiv.style.display = 'none';
+        return;
+      }
+
+      const count = results.length;
+      if (count === 0) {
+        summaryDiv.innerHTML = `🔍 مش لاقي حاجة عن "<strong>${query}</strong>"`;
+        summaryDiv.style.display = 'block';
+        return;
+      }
+
+      const types = {
+        session: results.filter(r => r.type === 'session').length,
+        memory: results.filter(r => r.type === 'memory').length,
+        document: results.filter(r => r.type === 'document').length,
+        file: results.filter(r => r.type === 'file').length
+      };
+
+      let details = [];
+      if (types.memory > 0) details.push(`${types.memory} رسالة محفوظة`);
+      if (types.session > 0) details.push(`${types.session} رسالة مؤقتة`);
+      if (types.document > 0) details.push(`${types.document} مستند`);
+      if (types.file > 0) details.push(`${types.file} ملف`);
+
+      window._lastSearchResults = results;
+      window._lastSearchQuery = query;
+
+      summaryDiv.innerHTML = `
+        🧠 أنا فاكره إننا اتكلمنا عن "<strong>${query}</strong>" 
+        <strong>${count}</strong> مره تقريباً قبل كدا 
+        <span style="font-size:12px; color:var(--gcolor); display:block; margin-top:4px;">
+            📊 ${details.join(' | ')}
+        </span>
+        <button class="conf-btn" style="margin-top:10px; padding:6px 14px; font-size:12px; border-radius:20px;" onclick="showSearchResults()">أقولهم الـ (${count})؟</button>
+    `;
+      summaryDiv.style.display = 'block';
+    };
+
+    function showSearchResults() {
+      const results = window._lastSearchResults || [];
+      const query = window._lastSearchQuery || '';
+
+      if (results.length === 0) {
+        showToast("مفيش نتائج للعرض!");
+        return;
+      }
+
+      openuser(event, 'mymemory');
+
+      const details = document.querySelector('#mymemory details[open]');
+      if (details) {
+        details.removeAttribute('open');
+        setTimeout(() => {
+          details.setAttribute('open', '');
+        }, 50);
+      }
+
+      const memorySection = document.getElementById('memorysection');
+      if (memorySection) {
+        memorySection.style.display = 'block';
+      }
+
+      const memory = document.getElementById('memoryContent');
+      if (!memory) return;
+
+      memory.innerHTML = results
+        .map(
+          (item) => `
+<div class="memory-item ${item.isImportant ? "golden-frame" : ""}"
+data-id="${item.id}"
+data-text="${encodeURIComponent(item.text)}"
+data-full="${encodeURIComponent(item.fullText || item.text)}"
+style="cursor:pointer;padding:5px 12px;border-radius:8px;
+      background:${item.type === "session" ? "#e3f2fd" : item.type === "document" ? "#e0f7fa" : "#f9f9f9"};">
+<p>${item.text.substring(0, 120)}</p>
+<small style="font-size:13px;position:absolute;bottom:10px;left:10px;">(${item.timestamp})</small>
+<b style="font-size:13px;position:absolute;bottom:10px;">${item.type === "session" ? "(مؤقت)" : ""} ${item.isImportant ? "(هام)" : ""}</b>
+</div>
+`
+        )
+        .join("");
+
+      document.querySelectorAll("#memoryContent .memory-item").forEach((el) => {
+        el.onclick = function () {
+          const id = this.dataset.id;
+          const text = decodeURIComponent(this.dataset.text);
+          const fullText = decodeURIComponent(this.dataset.full);
+
+          opentab("fullmemo");
+          document.getElementById('fullmemo').style.display = 'block';
+          document.getElementById('fullMessageDisplay').textContent = fullText || text;
+          document.getElementById('displayFullButton').style.display = 'inline-block';
+
+          if (!String(id).startsWith("session-") && !String(id).startsWith("file-") && !String(id).startsWith("doc-")) {
+            document.getElementById('forgetButton').style.display = 'inline-block';
+          }
+
+          document.getElementById('forgetButton').onclick = function () {
+            handleForget(id);
+          };
+        };
+      });
+
+      updateCounter(results.length, query);
+      showToast(`✅ تم عرض ${results.length} نتيجة`);
+
+      const summaryDiv = document.getElementById('memorySummary');
+      if (summaryDiv) {
+        summaryDiv.style.display = 'none';
+      }
+    }
+
+    const displayResults = (results, query = "") => {
       forget.style.display = "none";
       displayFullButton.style.display = "none";
       full.textContent = "";
       currentId = null;
 
       if (!results.length) {
-        memory.innerHTML =
-          '<p style="text-align:center;color:#dc3545">مش لاقية حاجة 😢</p>';
+        if (query) {
+          memory.innerHTML = '<p style="text-align:center;color:#dc3545">مش لاقية حاجة 😢</p>';
+        } else {
+          memory.innerHTML = '<p style="text-align:center;color:#64748b;">مفيش حاجة محفوظة لسه 🤔</p>';
+        }
+        return;
+      }
+
+      if (query) {
+        memory.innerHTML = '';
         return;
       }
 
@@ -9703,7 +9853,7 @@ data-id="${item.id}"
 data-text="${encodeURIComponent(item.text)}"
 data-full="${encodeURIComponent(item.fullText || item.text)}"
 style="cursor:pointer;padding:5px 12px;border-radius:8px;
-background:${item.type === "session" ? "#e3f2fd" : "#f9f9f9"}">
+      background:${item.type === "session" ? "#e3f2fd" : item.type === "document" ? "#e0f7fa" : "#f9f9f9"};">
 <p>${item.text.substring(0, 120)}</p>
 <small style="font-size:13px;position:absolute;bottom:10px;left:10px;">(${item.timestamp})</small>
 <b style="font-size:13px;position:absolute;bottom:10px;">${item.type === "session" ? "(مؤقت)" : ""} ${item.isImportant ? "(هام)" : ""}</b>
@@ -9721,7 +9871,8 @@ background:${item.type === "session" ? "#e3f2fd" : "#f9f9f9"}">
           displayFullButton.style.display = "inline-block";
           if (
             !String(currentId).startsWith("session-") &&
-            !String(currentId).startsWith("file-")
+            !String(currentId).startsWith("file-") &&
+            !String(currentId).startsWith("doc-")
           ) {
             forget.style.display = "inline-block";
           }
@@ -14109,7 +14260,15 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       reader.onloadend = () => {
         let base64Result = reader.result.split(',')[1];
         document.getElementById('compressinput').value = base64Result;
-        document.getElementById('outputcompress').innerHTML = `<p>الحجم الأصلي: ${new Blob([text]).size} بايت | الحجم المضغوط: ${blob.size} بايت</p>`;
+
+        const originalSize = new Blob([text]).size;
+        const compressedSize = blob.size;
+
+        document.getElementById('outputcompress').innerHTML = `
+            <p>📊 الحجم الأصلي: <strong>${formatFileSize(originalSize)}</strong></p>
+            <p>📦 الحجم المضغوط: <strong>${formatFileSize(compressedSize)}</strong></p>
+            <p>📉 نسبة الضغط: <strong>${((1 - compressedSize / originalSize) * 100).toFixed(1)}%</strong></p>
+        `;
         showToast("تم التحويل بنجاح");
       };
     };
@@ -14131,6 +14290,17 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         showToast("النص مش مضغوط لازم الشفره");
       }
     };
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 بايت';
+
+      const units = ['بايت', 'KB', 'MB', 'GB', 'TB'];
+      const k = 1024;
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+      const size = (bytes / Math.pow(k, i)).toFixed(2);
+      return `${size} ${units[i]}`;
+    }
 
     window.downloadAsDawn = function () {
       let text = document.getElementById('compressinput').value;
@@ -14883,6 +15053,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   window.onload = initUI;
 
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==74||e.keyCode==67))||(e.ctrlKey&&e.keyCode==85))return false};setInterval(()=>{if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){document.body.innerHTML='<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>';eval('debugger');}},500);})();
+  (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
 </script>
+
 </html>
