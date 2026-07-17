@@ -3454,9 +3454,9 @@ document.addEventListener("DOMContentLoaded", () => {
     #nav {
       width: 100vw;
       left: -100vw;
-      top: auto;
+      top: 0;
       bottom: 0;
-      height: 100vh;
+      height: 100%;
       border-radius: 0;
     }
 
@@ -3465,9 +3465,11 @@ document.addEventListener("DOMContentLoaded", () => {
       width: 100vw;
       min-width: auto;
       border-radius: var(--mainradius) var(--mainradius) 0 0;
-      max-height: 90vh;
+      max-height: 95vh;
       position: absolute;
     }
+
+    .modaltab{padding: var(--secpadd);}
 
     .rgbprofile {
       flex-direction: column;
@@ -3484,7 +3486,7 @@ document.addEventListener("DOMContentLoaded", () => {
       width: calc(100vw - 50px);
       margin: 0 10px;
       bottom: 80px;
-      padding: 0 0 5px 20px;
+      padding: 0 0 5px 5px;
     }
 
     #input {
@@ -4007,7 +4009,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <b>صنع نغمة</b>
               </div>
               <div data-id="11" class="app" onclick="onerun('loadDawnStatuTracker');opentab('STracker')">
-                <svg viewBox="0 0 384 512" title="file-invoice">
+                <svg viewBox="0 0 384 512" style="max-width: 18px;" title="file-invoice">
                   <path
                     d="M288 256H96v64h192v-64zm89-151L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm256 304c0 4.42-3.58 8-8 8h-80c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16zm0-200v96c0 8.84-7.16 16-16 16H80c-8.84 0-16-7.16-16-16v-96c0-8.84 7.16-16 16-16h224c8.84 0 16 7.16 16 16z" />
                 </svg>
@@ -13636,6 +13638,23 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     });
 
+    input.addEventListener('click', function(e) {
+    if (container.style.display === 'block' || DawnRunGo.style.display === 'block') {
+        
+        if (!isRunning && !isGameOver) {
+            startGame();
+            onerun('startanimation');
+        }
+        else if (isRunning && !isGameOver) {
+            jump();
+        }
+        else if (isGameOver) {
+            resetGameState();
+            startGame();
+        }
+    }
+});
+    
     input.addEventListener('blur', () => {
       container.style.display = 'none';
       DawnRunGo.style.display = 'none';
@@ -14010,7 +14029,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const selectedText = engine.options[engine.selectedIndex].text;
       btn.innerText = "بحث بـ " + selectedText;
     }
-
     function search() {
       let query = document.getElementById('editor').value;
       const engine = document.getElementById('engine').value;
@@ -14784,7 +14802,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     const url = window.location.origin + window.location.pathname;
     const randomVersion = new Date().getTime();
     window.location.href = `${url}?v=${randomVersion}`;
-    }
+}
   }
 
   var UI = {};
@@ -14814,7 +14832,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   window.onload = initUI;
 
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==74||e.keyCode==67))||(e.ctrlKey&&e.keyCode==85))return false};setInterval(()=>{if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){document.body.innerHTML='<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>';eval('debugger');}},500);})();
+  //(function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==74||e.keyCode==67))||(e.ctrlKey&&e.keyCode==85))return false};setInterval(()=>{if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){document.body.innerHTML='<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>';eval('debugger');}},500);})();
 </script>
 
 </html>
