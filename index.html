@@ -32,7 +32,8 @@
   <meta property="og:url" content="https://dawn-green.vercel.app/">
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='none'/%3E%3Ccircle cx='50' cy='50' r='32' stroke='%23007bff' stroke-width='10' fill='none'/%3E%3C/svg%3E">
-  <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebApplication", "name": "فَجْر", "description": "نظام تشغيل خفيف الوزن ومفتوح المصدر يعتمد على الويب", "applicationCategory": "Operating System", "operatingSystem": "Web Browser" } </script>
+  <script
+    type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebApplication", "name": "فَجْر", "description": "نظام تشغيل خفيف الوزن ومفتوح المصدر يعتمد على الويب", "applicationCategory": "Operating System", "operatingSystem": "Web Browser" } </script>
 </head>
 <script>
   window.addEventListener('load', () => {
@@ -45,22 +46,22 @@
       setTimeout(() => loader.style.display = 'none', 500);
     }, 500);
   });
-document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('input').forEach(input => {
-        input.setAttribute('autocomplete', 'off');
-        input.setAttribute('autocorrect', 'off');
-        input.setAttribute('spellcheck', 'false');
-        input.setAttribute('readonly', 'true');
-        
-        input.addEventListener('focus', function() {
-            this.removeAttribute('readonly');
-        });
-        
-        input.addEventListener('blur', function() {
-            this.setAttribute('readonly', 'true');
-        });
+      input.setAttribute('autocomplete', 'off');
+      input.setAttribute('autocorrect', 'off');
+      input.setAttribute('spellcheck', 'false');
+      input.setAttribute('readonly', 'true');
+
+      input.addEventListener('focus', function () {
+        this.removeAttribute('readonly');
+      });
+
+      input.addEventListener('blur', function () {
+        this.setAttribute('readonly', 'true');
+      });
     });
-});
+  });
 </script>
 <style>
   * {
@@ -841,6 +842,7 @@ document.addEventListener("DOMContentLoaded", () => {
     background: none;
     border: 0;
     outline: 0;
+    transition: opacity 0.5s ease-in-out;
   }
 
   #playlisticon {
@@ -883,11 +885,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   #contentContainer {
     position: relative;
-    display: inline-grid;
+    display: flex;
+    /* تغيير من inline-grid لـ flex */
+    flex-direction: column;
+    /* رص العناصر تحت بعض */
+    align-items: flex-end;
+    /* دايماً الرسائل على اليمين */
     padding: 0 0 3px 35px;
     width: 100%;
-    justify-content: flex-end;
-    overflow: auto;
+    overflow-y: auto;
+    /* تغيير لـ overflow-y فقط */
     max-height: 53vh;
     margin: 0 0 3px;
   }
@@ -897,7 +904,7 @@ document.addEventListener("DOMContentLoaded", () => {
   .replay {
     position: relative;
     max-width: 350px;
-    padding: 15px 25px;
+    padding: 12px 20px;
     z-index: 1;
     background: var(--mainbg);
     backdrop-filter: blur(12px) saturate(180%);
@@ -912,20 +919,16 @@ document.addEventListener("DOMContentLoaded", () => {
     border-radius: 30px 30px 30px 5px !important;
   }
 
-  #contentContainer:has(.replay:not([style*="display: none"])) #replay {
-    border-radius: 30px 30px 0 0 !important;
-  }
-
   .replay {
     border-radius: 0;
   }
 
   .replay:not([style*="display: none"]) {
-    border-radius: 0 0 0 0 !important;
+    border-radius: 5px 30px 30px 5px !important;
   }
 
   .replay:not([style*="display: none"]):not(:has(~ .replay:not([style*="display: none"]))) {
-    border-radius: 0 0 30px 5px !important;
+    border-radius: 5px 30px 30px 30px !important;
   }
 
   #replay:empty,
@@ -1696,12 +1699,11 @@ document.addEventListener("DOMContentLoaded", () => {
   #body-sim {
     overflow: hidden;
     position: relative;
-    height: 250px;
-    width: 100vw;
-    max-width: 250px;
-    margin: 10px 0 0;
+    height: 270px;
+    max-width: 200px;
+    margin: 10px auto auto;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23555" stroke-width="1" viewBox="0 -1 200 208"><g><g><path d="M104.265,117.959c-0.304,3.58,2.126,22.529,3.38,29.959c0.597,3.52,2.234,9.255,1.645,12.3c-0.841,4.244-1.084,9.736-0.621,12.934c0.292,1.942,1.211,10.899-0.104,14.175c-0.688,1.718-1.949,10.522-1.949,10.522c-3.285,8.294-1.431,7.886-1.431,7.886c1.017,1.248,2.759,0.098,2.759,0.098c1.327,0.846,2.246-0.201,2.246-0.201c1.139,0.943,2.467-0.116,2.467-0.116c1.431,0.743,2.758-0.627,2.758-0.627c0.822,0.414,1.023-0.109,1.023-0.109c2.466-0.158-1.376-8.05-1.376-8.05c-0.92-7.088,0.913-11.033,0.913-11.033c6.004-17.805,6.309-22.53,3.909-29.24c-0.676-1.937-0.847-2.704-0.536-3.545c0.719-1.941,0.195-9.748,1.072-12.848c1.692-5.979,3.361-21.142,4.231-28.217c1.169-9.53-4.141-22.308-4.141-22.308c-1.163-5.2,0.542-23.727,0.542-23.727c2.381,3.705,2.29,10.245,2.29,10.245c-0.378,6.859,5.541,17.342,5.541,17.342c2.844,4.332,3.921,8.442,3.921,8.747c0,1.248-0.273,4.269-0.273,4.269l0.109,2.631c0.049,0.67,0.426,2.977,0.365,4.092c-0.444,6.862,0.646,5.571,0.646,5.571c0.92,0,1.931-5.522,1.931-5.522c0,1.424-0.348,5.687,0.42,7.295c0.919,1.918,1.595-0.329,1.607-0.78c0.243-8.737,0.768-6.448,0.768-6.448c0.511,7.088,1.139,8.689,2.265,8.135c0.853-0.407,0.073-8.506,0.073-8.506c1.461,4.811,2.569,5.577,2.569,5.577c2.411,1.693,0.92-2.983,0.585-3.909c-1.784-4.92-1.839-6.625-1.839-6.625c2.229,4.421,3.909,4.257,3.909,4.257c2.174-0.694-1.9-6.954-4.287-9.953c-1.218-1.528-2.789-3.574-3.245-4.789c-0.743-2.058-1.304-8.674-1.304-8.674c-0.225-7.807-2.155-11.198-2.155-11.198c-3.3-5.282-3.921-15.135-3.921-15.135l-0.146-16.635c-1.157-11.347-9.518-11.429-9.518-11.429c-8.451-1.258-9.627-3.988-9.627-3.988c-1.79-2.576-0.767-7.514-0.767-7.514c1.485-1.208,2.058-4.415,2.058-4.415c2.466-1.891,2.345-4.658,1.206-4.628c-0.914,0.024-0.707-0.733-0.707-0.733C115.068,0.636,104.01,0,104.01,0h-1.688c0,0-11.063,0.636-9.523,13.089c0,0,0.207,0.758-0.715,0.733c-1.136-0.03-1.242,2.737,1.215,4.628c0,0,0.572,3.206,2.058,4.415c0,0,1.023,4.938-0.767,7.514c0,0-1.172,2.73-9.627,3.988c0,0-8.375,0.082-9.514,11.429l-0.158,16.635c0,0-0.609,9.853-3.922,15.135c0,0-1.921,3.392-2.143,11.198c0,0-0.563,6.616-1.303,8.674c-0.451,1.209-2.021,3.255-3.249,4.789c-2.408,2.993-6.455,9.24-4.29,9.953c0,0,1.689,0.164,3.909-4.257c0,0-0.046,1.693-1.827,6.625c-0.35,0.914-1.839,5.59,0.573,3.909c0,0,1.117-0.767,2.569-5.577c0,0-0.779,8.099,0.088,8.506c1.133,0.555,1.751-1.047,2.262-8.135c0,0,0.524-2.289,0.767,6.448c0.012,0.451,0.673,2.698,1.596,0.78c0.779-1.608,0.429-5.864,0.429-7.295c0,0,0.999,5.522,1.933,5.522c0,0,1.099,1.291,0.648-5.571c-0.073-1.121,0.32-3.422,0.369-4.092l0.106-2.631c0,0-0.274-3.014-0.274-4.269c0-0.311,1.078-4.415,3.921-8.747c0,0,5.913-10.488,5.532-17.342c0,0-0.082-6.54,2.299-10.245c0,0,1.69,18.526,0.545,23.727c0,0-5.319,12.778-4.146,22.308c0.864,7.094,2.53,22.237,4.226,28.217c0.886,3.094,0.362,10.899,1.072,12.848c0.32,0.847,0.152,1.627-0.536,3.545c-2.387,6.71-2.083,11.436,3.921,29.24c0,0,1.848,3.945,0.914,11.033c0,0-3.836,7.892-1.379,8.05c0,0,0.192,0.523,1.023,0.109c0,0,1.327,1.37,2.761,0.627c0,0,1.328,1.06,2.463,0.116c0,0,0.91,1.047,2.237,0.201c0,0,1.742,1.175,2.777-0.098c0,0,1.839,0.408-1.435-7.886c0,0-1.254-8.793-1.945-10.522c-1.318-3.275-0.387-12.251-0.106-14.175c0.453-3.216,0.21-8.695-0.618-12.934c-0.606-3.038,1.035-8.774,1.641-12.3c1.245-7.423,3.685-26.373,3.38-29.959l1.008,0.354C103.809,118.312,104.265,117.959,104.265,117.959z"/></g></g></svg>');
-    background-size: contain;
+    background-size: 140%;
     background-repeat: no-repeat;
     background-position: center;
   }
@@ -1729,12 +1731,11 @@ document.addEventListener("DOMContentLoaded", () => {
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
     transition: transform 0.2s;
     z-index: 10;
-
+    transform: translate(-50%, -50%);
   }
 
   .reddot:hover,
   .reddot.active {
-    transform: scale(1.3);
     box-shadow: 0 0 15px rgba(255, 0, 0, 1);
   }
 
@@ -2721,12 +2722,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   #DawnRunGo #game-container {
     position: relative;
-    width: 100%;
-    max-width: 800px;
+    width: calc(100vw - 80px);
+    height: 160px;
+    max-width: 300px;
     background: var(--secbg);
     border-radius: var(--secradius);
     overflow: hidden;
     display: none;
+    margin: auto;
     border: var(--dborder);
     transition: none;
   }
@@ -2925,7 +2928,6 @@ document.addEventListener("DOMContentLoaded", () => {
     max-width: 350px;
     width: calc(100vw - 20px);
     overflow: auto;
-    max-height: 300px;
     z-index: 2;
   }
 
@@ -3066,7 +3068,7 @@ document.addEventListener("DOMContentLoaded", () => {
     height: calc(60vh - 20px);
     padding: 5px 5px 40px;
     max-width: 400px;
-    margin:0 auto;
+    margin: 0 auto;
   }
 
   #Dawnplaylist .track-item {
@@ -3139,11 +3141,11 @@ document.addEventListener("DOMContentLoaded", () => {
     bottom: 25px;
     left: 25px;
     margin: auto;
-    height:50px;
-    width:50px;
+    height: 50px;
+    width: 50px;
     border-radius: var(--roundradius);
     font-size: 27px;
-    padding:0 0 3px;
+    padding: 0 0 3px;
     box-shadow: var(--shadow);
   }
 
@@ -3419,17 +3421,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   #loader {
-    position: fixed; 
-    inset:0;
-    margin:auto;
-    background: rgba(255, 255, 255, 0.2); 
-    backdrop-filter: blur(20px); 
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    z-index: 999999; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+  }
+
+  #GeoGabragraph {
+    width: 100%;
+    max-width: 350px;
+    max-height: 300px;
+    border-radius: 8px;
+    background: var(--secbg);
   }
 
   @media screen and (max-width: 1024px) and (min-width: 601px) {
@@ -3469,7 +3479,9 @@ document.addEventListener("DOMContentLoaded", () => {
       position: absolute;
     }
 
-    .modaltab{padding: var(--secpadd);}
+    .modaltab {
+      padding: var(--secpadd);
+    }
 
     .rgbprofile {
       flex-direction: column;
@@ -3486,6 +3498,7 @@ document.addEventListener("DOMContentLoaded", () => {
       width: calc(100vw - 50px);
       margin: 0 10px;
       bottom: 80px;
+      max-height: 72vh;
       padding: 0 0 5px 5px;
     }
 
@@ -3947,9 +3960,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
               <div data-id="2" class="app" onclick="handleRecordPauseResume()" ondblclick="stopRecording()">
                 <svg viewBox="0 0 352 512" id="recordPauseResumeButton" style="max-width: 18px;">
-        <path
-          d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z" />
-      </svg>
+                  <path
+                    d="M176 352c53.02 0 96-42.98 96-96V96c0-53.02-42.98-96-96-96S80 42.98 80 96v160c0 53.02 42.98 96 96 96zm160-160h-16c-8.84 0-16 7.16-16 16v48c0 74.8-64.49 134.82-140.79 127.38C96.71 376.89 48 317.11 48 250.3V208c0-8.84-7.16-16-16-16H16c-8.84 0-16 7.16-16 16v40.16c0 89.64 63.97 169.55 152 181.69V464H96c-8.84 0-16 7.16-16 16v16c0 8.84 7.16 16 16 16h160c8.84 0 16-7.16 16-16v-16c0-8.84-7.16-16-16-16h-56v-33.77C285.71 418.47 352 344.9 352 256v-48c0-8.84-7.16-16-16-16z" />
+                </svg>
                 <b>مسجل صوت</b>
               </div>
               <div data-id="3" class="app" onclick="opentab('newdocument')">
@@ -4015,7 +4028,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 </svg>
                 <b>إنشاء تقرير</b>
               </div>
-              <div data-id="12" class="app" onclick="onerun('Trackerrender');onerun('projradarrender');switchTab('ProgressTracker')">
+              <div data-id="12" class="app"
+                onclick="onerun('Trackerrender');onerun('projradarrender');switchTab('ProgressTracker')">
                 <svg viewBox="0 0 544 512" title="chart-pie">
                   <path
                     d="M527.79 288H290.5l158.03 158.03c6.04 6.04 15.98 6.53 22.19.68 38.7-36.46 65.32-85.61 73.13-140.86 1.34-9.46-6.51-17.85-16.06-17.85zm-15.83-64.8C503.72 103.74 408.26 8.28 288.8.04 279.68-.59 272 7.1 272 16.24V240h223.77c9.14 0 16.82-7.68 16.19-16.8zM224 288V50.71c0-9.55-8.39-17.4-17.84-16.06C86.99 51.49-4.1 155.6.14 280.37 4.5 408.51 114.83 513.59 243.03 511.98c50.4-.63 96.97-16.87 135.26-44.03 7.9-5.6 8.42-17.23 1.57-24.08L224 288z" />
@@ -4061,13 +4075,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div id="modesContainer">
 
                   <div style="overflow:auto;white-space:nowrap;">
-                    <label><input type="radio" checked name="mode" data-ordername="@| الوضع الهادئ | للمحادثات السريعه والخفيفة " value="processMessage,handleInput,handleCorrection,sendMessagedelayedAnalyze,analyzelab,processInput">هادئ</label>
-                    <label><input type="radio" name="mode" data-ordername="@| وضع العناية الشخصيه | للرعايه والاهتمام اليومي " value="processMessage,handleInput,handleCorrection,sendMessagedelayedAnalyze,analyzelab">عناية شخصية</label>
-                    <label><input type="radio" name="mode" data-ordername="@| وضع التحليل | للتعمق في البيانات " value="processMessage,sendMessage,handleCorrection,delayedAnalyze,analyzelab,processInput,processText,extanalyze,lawsradarSearch,searchAcrossForms,executeJustice">تحليل</label>
-                    <label><input type="radio" name="mode" data-ordername="@| وضع الدراسه | دعم دراسي اكثر " value="processMessage,handleInput,handleCorrection,sendMessage,processInput,processText,superAnalyze,extanalyze,checkResult,lawsradarSearch,searchAcrossForms">دراسه</label>
-                    <label><input type="radio" name="mode" data-ordername="@| الوضع الشامل | جميع القدرات الذهنيه للنظام" value="processMessage,handleInput,handleCorrection,sendMessage,delayedAnalyze,analyzelab,processInput,processText,superAnalyze,extanalyze,checkResult,lawsradarSearch,searchAcrossForms,executeJustice">شامل</label>
-                    
-                  <font id="savedModes"></font>
+                    <label><input type="radio" checked name="mode"
+                        data-ordername="@| الوضع الهادئ | للمحادثات السريعه والخفيفة "
+                        value="processMessage,handleInput,handleCorrection,sendMessagedelayedAnalyze,analyzelab,processInput">هادئ</label>
+                    <label><input type="radio" name="mode"
+                        data-ordername="@| وضع العناية الشخصيه | للرعايه والاهتمام اليومي "
+                        value="processMessage,handleInput,handleCorrection,sendMessagedelayedAnalyze,analyzelab">عناية
+                      شخصية</label>
+                    <label><input type="radio" name="mode" data-ordername="@| وضع التحليل | للتعمق في البيانات "
+                        value="processMessage,sendMessage,handleCorrection,delayedAnalyze,analyzelab,processInput,processText,extanalyze,lawsradarSearch,searchAcrossForms,executeJustice">تحليل</label>
+                    <label><input type="radio" name="mode" data-ordername="@| وضع الدراسه | دعم دراسي اكثر "
+                        value="processMessage,handleInput,handleCorrection,sendMessage,processInput,processText,superAnalyze,extanalyze,checkResult,lawsradarSearch,searchAcrossForms">دراسه</label>
+                    <label><input type="radio" name="mode"
+                        data-ordername="@| الوضع الشامل | جميع القدرات الذهنيه للنظام"
+                        value="processMessage,handleInput,handleCorrection,sendMessage,delayedAnalyze,analyzelab,processInput,processText,superAnalyze,extanalyze,checkResult,lawsradarSearch,searchAcrossForms,executeJustice">شامل</label>
+
+                    <font id="savedModes"></font>
                     <button id="saveCustomBtn">حفظ كوضع جديد</button>
                   </div>
 
@@ -4120,13 +4143,14 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
 
       <div id="Dawnplaylist" class="modaltab">
-      <h2>قائمه التشغيل</h2>
+        <h2>قائمه التشغيل</h2>
         <div class="player-container">
-      <div class="playlist" id="playlist-container">
-      </div>
-      <button class="add-btn conf-btn flex-center" onclick="document.getElementById('file-input').click()">+</button>
-      <audio id="main-audio"></audio>
-    </div>
+          <div class="playlist" id="playlist-container">
+          </div>
+          <button class="add-btn conf-btn flex-center"
+            onclick="document.getElementById('file-input').click()">+</button>
+          <audio id="main-audio"></audio>
+        </div>
 
       </div>
       <div id="STracker" class="modaltab">
@@ -4320,7 +4344,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <div id="smartAlert"><span id="alertText"></span></div>
         <div class="flex">
           <div style="min-width:70%;">
-            <input list="locations" id="locationInput" oninput="checkInput()" placeholder="ابحث عن دولة أو مدينة...">
+            <input list="locations" id="locationInput" value="مصر 🇪🇬" oninput="checkInput()"
+              placeholder="ابحث عن دولة أو مدينة...">
 
             <datalist id="locations"></datalist>
           </div>
@@ -4341,7 +4366,6 @@ document.addEventListener("DOMContentLoaded", () => {
         </details>
         <p>تنظيم فترات الراحه والعمل</p>
         <select id="pomodoro_select_config">
-          <option value="1:1">1 تركيز : 1 راحة</option>
           <option value="20:5">20 تركيز : 5 راحة</option>
           <option value="30:10">30 تركيز : 10 راحة</option>
           <option value="45:15">45 تركيز : 15 راحة</option>
@@ -5115,11 +5139,12 @@ document.addEventListener("DOMContentLoaded", () => {
   </div>
 
   <main id="main">
-    <div id="timedisplay" tabindex="0" onclick="onerun('loadpray');onerun('displayFajrDetails');"></div>
+    <div id="timedisplay" tabindex="0"
+      onclick="onerun('loadpray');onerun('displayFajrDetails');onerun('runCalculation');"></div>
     <div id="timefull" tabindex="0">
       <div id="clocktext">جاري المزامنة...</div>
       <div id="preyresults"></div>
-      <div onclick="onerun('pomodoro_init');opentab('timesetting')" class="settingbtn">إعدادات الوقت</div>
+      <div onclick="opentab('timesetting')" class="settingbtn">إعدادات الوقت</div>
       <div onclick="onerun('renderDawnroutin');switchTab('tasksandroutin')" class="settingbtn">عرض الروتين والمهمات
       </div>
 
@@ -5167,7 +5192,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <div id="totalQuestions" onclick="opentab('questionmanagmenttab');showManage()"></div>
         </div>
       </div>
-      <div id="checkpain" class="replay" style="display: none;height:320px;width:100vw;">
+      <div id="checkpain" class="replay" style="display: none;">
         <p style="text-align:center;">فين مكان الشكوى بالظبط ؟</p>
         <div id="body-sim">
           <div id="scanner"></div>
@@ -5226,18 +5251,17 @@ document.addEventListener("DOMContentLoaded", () => {
         وأعرضلك باقي الدرجات؟
       </div>
       <div id="geogbra" class="replay" style="display: none;">
-        <canvas id="GeoGabragraph" width="300" height="200"
-          style="border: 1px solid #444;border-radius:8px; background: #000;"></canvas>
+        <canvas id="GeoGabragraph"></canvas>
       </div>
-      <div id="DawnRunGo" class="replay" style="display: none;width:100vw;max-width:350px;">
+      <div id="DawnRunGo" class="replay" style="display: none;padding:10px;">
 
-        <div id="game-container" style="width:100%;height:160px;">
+        <div id="game-container" style="display:block;">
 
           <div id="ui">السرعة: <span id="speedVal" class="stat">7.0</span> المسافة: <span id="dist"
               class="stat">0</span> متر</div>
 
           <div id="overlay">
-            <div id="msg">نظام فجر جاهز</div>
+            <div id="msg">أنا جاهزه للإنطلاق</div>
             <div style="color: #aaa; font-size: 0.8rem;">اضغط مسافة للبدء والنط</div>
           </div>
 
@@ -5268,15 +5292,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="conf-btn" style="padding:12px 15px;border-radius:30px;margin:10px 0 0;"
           onclick="onerun('readymetro');opentab('metroplaces')">يلا نحدد المكان</button>
       </div>
-      <div id="welcome-modal" class="replay" style="display: none;">
-        أهلاً أنا فجر! 👋
+      <div id="welcome-modal" class="replay" style="display:none;">
+        أنا فجر! 👋
         <br>
         نظام ذكاء رمزي عربي مصري وخفيفة جداً بقدر أشتغل أوفلاين تماماً ومن غير أي سيرفرات. يعني خصوصيتك محمية 100% لأن
         كل بياناتك بتفضل عندك وبس. 🔒
 
-        مصممة عشان أكون قلعتك الرقمية بـ +90 قدرة في واجهة واحدة سلسة ومجانية مدى الحياة. جاهز نجرب؟ 🚀
-        <button class="conf-btn" style="padding:12px 15px;border-radius:30px;margin:10px 0 0;"
-          onclick="hideWelcomeModal()">فهمت، يلا نبدا</button>
+        مصممة عشان أكون قلعتك الرقمية بـ +90 قدرة في واجهة واحدة سلسة ومجانية مدى الحياة، يلا بينا 🤫 ضغطتين على رسالتي
+        علشان نبدء 😉.
       </div>
       <div id="faraohres" class="replay" style="display: none;"></div>
       <div class="replay" id="codelabelsContainer" style="display: none;"></div>
@@ -5355,10 +5378,12 @@ document.addEventListener("DOMContentLoaded", () => {
           style="transform: scale(0.5); transform-origin: center;" />
       </svg>
 
-      <svg viewBox="0 0 512 512" title="headphones-alt" id="playlisticon" onclick="opentab('Dawnplaylist');onerun('renderPlaylist');">
-        <path d="M160 288h-16c-35.35 0-64 28.7-64 64.12v63.76c0 35.41 28.65 64.12 64 64.12h16c17.67 0 32-14.36 32-32.06V320.06c0-17.71-14.33-32.06-32-32.06zm208 0h-16c-17.67 0-32 14.35-32 32.06v127.88c0 17.7 14.33 32.06 32 32.06h16c35.35 0 64-28.71 64-64.12v-63.76c0-35.41-28.65-64.12-64-64.12zM256 32C112.91 32 4.57 151.13 0 288v112c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16V288c0-114.67 93.33-207.8 208-207.82 114.67.02 208 93.15 208 207.82v112c0 8.84 7.16 16 16 16h16c8.84 0 16-7.16 16-16V288C507.43 151.13 399.09 32 256 32z" />
+      <svg id="playlisticon" onclick="opentab('Dawnplaylist');onerun('renderPlaylist');" viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd"
+          d="M21,14 L19,14 L19,10 L21,10 L21,14 Z M17,16 L15,16 L15,8 L17,8 L17,16 Z M13,19 L11,19 L11,5 L13,5 L13,19 Z M9,16 L7,16 L7,8 L9,8 L9,16 Z M5,14 L3,14 L3,10 L5,10 L5,14 Z" />
       </svg>
-      
+
       <div id="connect"></div>
       <div class="face" id="mybtnd">
         <button id="mybtn" style="display: none;">حقيقي</button>
@@ -9338,9 +9363,8 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
       if (e.target.classList.contains("reddot")) {
         openDetailPanel(e.target);
       } else if (e.target === bodyDiv) {
-        const rect = bodyDiv.getBoundingClientRect();
-        const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
-        const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
+        const xPercent = (e.offsetX / bodyDiv.clientWidth) * 100;
+        const yPercent = (e.offsetY / bodyDiv.clientHeight) * 100;
         const dot = createDot(xPercent, yPercent);
         openDetailPanel(dot);
       }
@@ -9355,6 +9379,7 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
       });
       currentDot.dataset.info = JSON.stringify(history);
       saveToLocal();
+      updateUIStatus();
       renderHistory(history);
       descInput.value = "";
     };
@@ -9362,11 +9387,10 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
     document.getElementById("delete-dot-btn").onclick = () => {
       if (!currentDot) return;
       currentDot.remove();
-      opentab('usertab');
-      openuser(event, 'humancheck')
       currentDot = null;
       saveToLocal();
       updateUIStatus();
+      closemodal();
     };
 
     document.getElementById("close-panel").onclick = () => {
@@ -10928,7 +10952,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "رسالة طارئة", d: "رساله طارئة الى اقرب جهاز", run: "opentab('SOSCHat')" },
       ],
       "!": [
-        
+
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
         { n: "تعديل ملف", d: "تغيير اسم وصيغه الملف", run: "opentab('FileNameChange')" },
         { n: "ميتا فجر", d: "إنشاء وصف صفحه الويب", run: "opentab('DawnMeta')" },
@@ -13632,23 +13656,23 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     });
 
-    input.addEventListener('click', function(e) {
-    if (container.style.display === 'block' || DawnRunGo.style.display === 'block') {
-        
+    input.addEventListener('click', function (e) {
+      if (container.style.display === 'block' || DawnRunGo.style.display === 'block') {
+
         if (!isRunning && !isGameOver) {
-            startGame();
-            onerun('startanimation');
+          startGame();
+          onerun('startanimation');
         }
         else if (isRunning && !isGameOver) {
-            jump();
+          jump();
         }
         else if (isGameOver) {
-            resetGameState();
-            startGame();
+          resetGameState();
+          startGame();
         }
-    }
-});
-    
+      }
+    });
+
     input.addEventListener('blur', () => {
       container.style.display = 'none';
       DawnRunGo.style.display = 'none';
@@ -13670,7 +13694,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       p.x = 150; p.y = 335; p.vy = 0; p.jumping = false;
       isRunning = false; isGameOver = false;
       overlay.style.display = 'flex';
-      msg.innerText = "نظام فجر جاهز";
+      msg.innerText = "أنا جاهزه للإنطلاق";
     }
 
     function gameOver() {
@@ -14791,12 +14815,38 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     const channel = new BroadcastChannel('fgr_os_channel'); channel.postMessage('hello'); channel.onmessage = (event) => { if (event.data === 'hello') { window.close(); } };
     document.getElementById('editor').addEventListener('keydown', (e) => { if (e.key === 'Enter') { document.getElementById('mybtn').click(); } });
     function readyallwork() { onerun('renderButtons'); onerun('linkbtn'); onerun('loadProjects'); onerun('readyfiles'); onerun('renderChips'); }
-    
+
     function refreshApp() {
-    const url = window.location.origin + window.location.pathname;
-    const randomVersion = new Date().getTime();
-    window.location.href = `${url}?v=${randomVersion}`;
-}
+      const url = window.location.origin + window.location.pathname;
+      const randomVersion = new Date().getTime();
+      window.location.href = `${url}?v=${randomVersion}`;
+    }
+  }
+  //تعليمات للمستخدم داخل حقل الكتابه
+  {
+    const tips = [
+      "نكتب ! علشان الأوامر",
+      "نكتب @ للأفراد والأوضاع",
+      "نستخدم # للأدوات",
+      "يلا ندردش...",
+    ];
+
+    let currentTipIndex = 0;
+    const editor = document.getElementById('editor');
+
+    if (editor) {
+      setInterval(() => {
+
+        editor.style.opacity = 0;
+
+        setTimeout(() => {
+          editor.placeholder = tips[currentTipIndex];
+          currentTipIndex = (currentTipIndex + 1) % tips.length;
+          editor.style.opacity = 1;
+        }, 500);
+
+      }, 6000);
+    }
   }
 
   var UI = {};
@@ -14822,11 +14872,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     convertToFajrUI();
     updateCursor();
     loadpagetime();
+    pomodoro_init();
   }
   window.onload = initUI;
 
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  //(function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==74||e.keyCode==67))||(e.ctrlKey&&e.keyCode==85))return false};setInterval(()=>{if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){document.body.innerHTML='<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>';eval('debugger');}},500);})();
+  (function(){document.addEventListener('contextmenu',e=>e.preventDefault());document.onkeydown=e=>{if(e.keyCode==123||(e.ctrlKey&&e.shiftKey&&(e.keyCode==73||e.keyCode==74||e.keyCode==67))||(e.ctrlKey&&e.keyCode==85))return false};setInterval(()=>{if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){document.body.innerHTML='<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>';eval('debugger');}},500);})();
 </script>
-
 </html>
