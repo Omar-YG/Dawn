@@ -3994,7 +3994,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </svg>
                 <b>ضغط النص</b>
               </div>
-              <div data-id="9" class="app" onclick="switchTab('treeviewtab')">
+              <div data-id="9" class="app" onclick="switchTab('treeviewtab');">
                 <svg viewBox="0 0 640 512">
                   <path
                     d="M128 352H32c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32zm-24-80h192v48h48v-48h192v48h48v-57.59c0-21.17-17.23-38.41-38.41-38.41H344v-64h40c17.67 0 32-14.33 32-32V32c0-17.67-14.33-32-32-32H256c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h40v64H94.41C73.23 224 56 241.23 56 262.41V320h48v-48zm264 80h-96c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32zm240 0h-96c-17.67 0-32 14.33-32 32v96c0 17.67 14.33 32 32 32h96c17.67 0 32-14.33 32-32v-96c0-17.67-14.33-32-32-32z" />
@@ -6058,13 +6058,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".tab-content").forEach((tab) => (tab.style.display = "none"));
       document.getElementById(tabId).style.display = "block";
       openNav();
-    }
-    function switchTab(tabId) {
-      document
-        .querySelectorAll(".tab-content")
-        .forEach((tab) => (tab.style.display = "none"));
-      document.getElementById(tabId).style.display = "block";
-      openNav();
+      closemodal()
     }
     let modalHistory = [];
     function opentab(tabId) {
@@ -6077,6 +6071,7 @@ document.addEventListener("DOMContentLoaded", () => {
       openmodal();
     }
     function openmodal() { document.getElementById('settingsModal').style.display = "flex" }
+    function closemodal() { document.getElementById('settingsModal').style.display = "none" }
     function reverseModal() {
       if (modalHistory.length > 0) {
         const previousTabId = modalHistory.pop();
@@ -6105,7 +6100,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function mediaoverlayon() { document.getElementById("mediaoverlay").style.display = "flex"; }
     function mediaoverlayoff() { document.getElementById("mediaoverlay").style.display = "none"; }
-
   }
   //الترحيب
   {
@@ -6404,7 +6398,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   //وضع الطورائ
   {
-    let stopTimer, escalationTimer, flashInterval;
+    let stopTimer, escalationTimer, flashInterval, alarmInstance;
     let clicks = 0,
       isLocked = false;
     let snackbarVisible = false;
