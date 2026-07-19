@@ -930,6 +930,11 @@
 
   #sys {
     display: none;
+    position: absolute;
+    bottom: 90px;
+    right: 20px;
+    height: 200px;
+    overflow: auto;
   }
 
   #fileviewercontainer {
@@ -5151,11 +5156,13 @@
     <div class="logo"><span>فَجْر</span></div>
     <div id="contentContainer">
       <div id="replay" tabindex="0"></div>
+
       <div id="typing-indicator2" class="typing-indicator">
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
       </div>
+      <div id="heavystatus" class="replay" style="display: none;">جاهز للعمل...</div>
       <div id="resultsdisplayarea" class="replay" style="display: none;"></div>
       <div id="memoryresultCount" class="replay" style="display: none;"></div>
       <div id="fajrGuard" class="replay" style="display: none; flex-direction: column;">
@@ -5291,6 +5298,7 @@
       </div>
     </div>
     <div id="input" tabindex="0">
+
       <div class="chips-wrapper" id="resultsBox"></div>
       <div id="sys">
         <textarea id="myInput"></textarea>
@@ -5310,7 +5318,7 @@
         </div>
         <input hidden id="coords">
       </div>
-      <input id="editor" autocomplete="off" oncontextmenu="openMyMenu(event)" onkeyup="input()" type="search"
+      <input id="editor" autocomplete="off" oncontextmenu="openMyMenu(event)" onkeyup="input()" type="text"
         spellcheck="false" autocorrect="off" enterkeyhint="done" autocapitalize="off" inputmode="url"
         placeholder="يلا ندردش .." />
       <div class="Uimg" id="userProfilePic">
@@ -7944,7 +7952,7 @@ value="${options}" style="display:${type === "select" ? "block" : "none"};">
         .replace(/ؤ/g, "و");
       proctext = normalizeDate(proctext);
       proctext = proctext.replace(
-        /(^|\s)([وفبلك]*ال|لل)(?=[\u0600-\u06FF])/g,
+        /(^|\s)(?=[\u0600-\u06FF])/g,
         "$1"
       );
       proctext = proctext
@@ -14044,6 +14052,51 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       });
     }
   }
+  //معالجه النصوص الضخمه
+  {
+    const editor = document.getElementById('editor');
+    const myInput = document.getElementById('myInput');
+    const status = document.getElementById('heavystatus');
+    let rawDataBuffer = "";
+    let currentLimit = 10000;
+    const step = 10000;
+    let isAutoLoading = false;
+    function renderEditor() {
+      const totalLength = rawDataBuffer.length;
+      const hasMore = currentLimit < totalLength;
+      editor.disabled = hasMore;
+      editor.value = rawDataBuffer.slice(0, currentLimit) + (hasMore ? " ..." : "");
+      if (hasMore) {
+        const percent = Math.round((currentLimit / totalLength) * 100);
+        status.innerText = `جاري المعالجة: ${percent}%`;
+        isAutoLoading = true;
+        currentLimit += step;
+        showAndMove('heavystatus')
+        setTimeout(renderEditor, 10);
+      } else {
+        isAutoLoading = false;
+        editor.disabled = false;
+        status.innerText = "اكتمل التحميل: 100% ✅";
+        TextProcessing();
+      }
+      myInput.value = rawDataBuffer;
+      TextProcessing();
+    }
+    editor.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pastedText = e.clipboardData.getData('text');
+      rawDataBuffer = editor.value.replace(" ...", "") + pastedText;
+      currentLimit = 10000;
+      renderEditor();
+    });
+    editor.addEventListener('input', () => {
+      if (!isAutoLoading) {
+        rawDataBuffer = editor.value.replace(" ...", "");
+        myInput.value = rawDataBuffer;
+      }
+    });
+  }
+
   var UI = {};
   function initUI() {
     var bodyContainer = document.body || document.getElementsByTagName("body")[0];
