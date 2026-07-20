@@ -11,8 +11,9 @@
   <meta http-equiv="Permissions-Policy"
     content="microphone=(self), camera=(), geolocation=(), sync-xhr=(), display-capture=()">
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; worker-src 'self' blob:; media-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob: data: https://cdn.jsdelivr.net; frame-src 'self' blob:; object-src 'none'; upgrade-insecure-requests;">
+    content="default-src 'self'; worker-src 'self' blob:; media-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src * data: blob:; connect-src 'self' blob: data: https://cdn.jsdelivr.net; frame-src 'self' blob:; object-src 'none'; upgrade-insecure-requests;">
   <link rel="canonical" href="https://dawn-green.vercel.app/">
+  <link rel="manifest" href="manifest.json">
   <meta name="author" content="المؤسس">
   <meta name="theme-color" content="#3498db">
   <meta name="mobile-web-app-capable" content="yes">
@@ -30,7 +31,8 @@
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='none'/%3E%3Ccircle cx='50' cy='50' r='32' stroke='%23007bff' stroke-width='10' fill='none'/%3E%3C/svg%3E">
   <script
     type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebApplication", "name": "فَجْر", "description": "نظام تشغيل خفيف الوزن ومفتوح المصدر يعتمد على الويب", "applicationCategory": "Operating System", "operatingSystem": "Web Browser" } </script>
-</head>
+
+  </head>
 <script>
   window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
@@ -3423,6 +3425,35 @@
     border-radius: 8px;
     background: var(--secbg);
   }
+  
+  .canvas-container {
+            position: relative;
+            display: none;
+            border: var(--cborder);
+            margin:var(--secpadd);
+            border-radius:var(--secradius);
+            cursor: crosshair;
+            min-height:200px;
+            width:calc(100% - 20px);
+            overflow:hidden;
+  }
+
+  #mainImage {
+            width:100%;
+            display: block;
+  }
+
+  .hotspot {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: rgba(0, 255, 0, 0.5);
+    border-radius: 50%;
+    border: 2px solid white;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+  }
 
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
@@ -3974,13 +4005,18 @@
                 </svg>
                 <b>إنشاء تقرير</b>
               </div>
-              <div data-id="12" class="app"
-                onclick="onerun('Trackerrender');onerun('projradarrender');switchTab('ProgressTracker')">
+              <div data-id="12" class="app" onclick="onerun('Trackerrender');onerun('projradarrender');switchTab('ProgressTracker')">
                 <svg viewBox="0 0 544 512" title="chart-pie">
                   <path
                     d="M527.79 288H290.5l158.03 158.03c6.04 6.04 15.98 6.53 22.19.68 38.7-36.46 65.32-85.61 73.13-140.86 1.34-9.46-6.51-17.85-16.06-17.85zm-15.83-64.8C503.72 103.74 408.26 8.28 288.8.04 279.68-.59 272 7.1 272 16.24V240h223.77c9.14 0 16.82-7.68 16.19-16.8zM224 288V50.71c0-9.55-8.39-17.4-17.84-16.06C86.99 51.49-4.1 155.6.14 280.37 4.5 408.51 114.83 513.59 243.03 511.98c50.4-.63 96.97-16.87 135.26-44.03 7.9-5.6 8.42-17.23 1.57-24.08L224 288z" />
                 </svg>
                 <b>تتبع المشروعات</b>
+              </div>
+              <div data-id="13" class="app" onclick="opentab('tourmakerapptab')">
+                <svg viewBox="0 0 288 512" style="max-width:15px" title="map-pin">
+  <path d="M112 316.94v156.69l22.02 33.02c4.75 7.12 15.22 7.12 19.97 0L176 473.63V316.94c-10.39 1.92-21.06 3.06-32 3.06s-21.61-1.14-32-3.06zM144 0C64.47 0 0 64.47 0 144s64.47 144 144 144 144-64.47 144-144S223.53 0 144 0zm0 76c-37.5 0-68 30.5-68 68 0 6.62-5.38 12-12 12s-12-5.38-12-12c0-50.73 41.28-92 92-92 6.62 0 12 5.38 12 12s-5.38 12-12 12z" />
+</svg>
+                <b>الجولات</b>
               </div>
             </div>
             <div class="divider"></div>
@@ -4083,6 +4119,22 @@
             </details>
           </div>
         </div>
+      </div>
+      <div id="tourmakerapptab" class="modaltab">
+        <h2>إنشاء جولة</h2>
+        <fieldset> <legend>إنشاء \ اختيار جوله</legend>
+        <div class="flex">
+            <input id="tourName" placeholder="اسم جولة جديدة">
+            <button class="conf-btn" onclick="createNewTour()">إنشاء</button>
+          <button onclick="importTour()"> استيراد </button>
+
+          </div>
+          <br><div class="flex">
+            <select id="tourSelector" onchange="loadTour()"></select>
+            
+    <button onclick="exportTour()" style="background:#27ae60; color:white; padding:8px 16px; border-radius:6px; border:none; cursor:pointer;"> تصدير </button>
+    </div>
+ </fieldset>
       </div>
       <div id="mypersonalinfo" class="modaltab">
         <h2>تعديل بياناتي</h2>
@@ -5607,6 +5659,29 @@
           </div>
         </div>
       </div>
+    </section>
+    <section id="tourmakerapp" class="tab-content">
+      <h2>الجولات الإفتراضية</h2>
+      <div class="app-container" style="overflow:auto;">
+    
+<fieldset style="min-height:100px;max-width: 800px;margin:0 auto;"> <legend>عرض الجوله</legend> 
+        <div id="tourcanvas" class="canvas-container">
+            <img id="mainImage" src="#" alt="اختر صورة">
+            <div id="hotspotsArea"></div>
+        </div>
+</fieldset>
+        <details> <summary>إعداد وتحرير</summary>
+          <fieldset class="flex"> <legend>إضافه مكان</legend>  
+            <input id="imgName" placeholder="اسم الصورة">
+            <input id="imgUrl" placeholder="رابط الصورة">
+            <button class="conf-btn" onclick="saveScene()">حفظ</button>
+            </fieldset>
+            <div class="flex">
+            <select id="sceneSelector" onchange="renderScene()"></select>
+            <button id="modeBtn" class="red-btn" onclick="toggleMode()">وضع التحرير</button>
+        </div>
+        </details>
+    </div>
     </section>
   </div>
   <div id="snackbar"></div>
@@ -12401,117 +12476,164 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       renderChat();
     })();
   }
-  //المؤشر والقوائم المنسدله
+  // المؤشر والقوائم المنسدله
   {
     function convertToFajrUI() {
-      const inputs = document.querySelectorAll('select, input[list]');
-      inputs.forEach((sel, index) => {
-        const options = sel.tagName === 'SELECT'
-          ? Array.from(sel.options)
-          : Array.from(document.getElementById(sel.getAttribute('list'))?.options || []);
-        let container = sel.previousElementSibling;
-        if (!container || !container.classList.contains('fajr-dropdown-container')) {
-          container = document.createElement('div');
-          container.className = 'fajr-dropdown-container';
-          sel.style.display = 'none';
-          sel.parentNode.insertBefore(container, sel);
-          const initialText = (sel.tagName === 'SELECT' && sel.selectedIndex !== -1)
-            ? sel.options[sel.selectedIndex].text
-            : (sel.value || 'إختيار...');
-          container.innerHTML = `
-    <div class="dropdown-trigger" id="trigger-${index}">
-        <span>${initialText}</span>
-        <small>▼</small>
-    </div>
-`;
-        }
-        let menu = document.getElementById(`menu-${index}`);
-        if (menu) {
-          menu.remove();
-        }
-        menu = document.createElement('ul');
-        menu.className = 'dropdown-menu';
-        menu.id = `menu-${index}`;
-        if (options.length > 5) {
-          const filterInput = document.createElement('input');
-          filterInput.type = 'text';
-          filterInput.placeholder = 'صفّي الخيارات...';
-          filterInput.className = 'filter-input';
-          filterInput.id = `filter-${sel.id || index}`;
-          filterInput.name = `filter-${sel.name || 'field-' + index}`;
-          filterInput.onclick = (e) => e.stopPropagation();
-          filterInput.oninput = (e) => {
-            const val = e.target.value.toLowerCase();
-            menu.querySelectorAll('li').forEach(li => {
-              li.style.display = li.innerText.toLowerCase().includes(val) ? '' : 'none';
-            });
-          };
-          menu.appendChild(filterInput);
-        }
-        document.body.appendChild(menu);
-        let itemsContainer = menu.querySelector('.items-container');
-        if (!itemsContainer) {
-          itemsContainer = document.createElement('div');
-          itemsContainer.className = 'items-container';
-          menu.appendChild(itemsContainer);
-        }
-        itemsContainer.innerHTML = options.map(opt => {
-          const displayValue = (sel.tagName === 'SELECT') ? opt.text : (opt.text || opt.value);
-          return `<li data-value="${opt.value}">${displayValue}</li>`;
-        }).join('');
-        const trigger = container.querySelector('.dropdown-trigger');
-        trigger.onclick = (e) => {
-          e.stopPropagation();
-          document.querySelectorAll('.dropdown-menu').forEach(m => m !== menu && m.classList.remove('active'));
-          menu.classList.add('active');
-          const rect = trigger.getBoundingClientRect();
-          menu.style.position = 'fixed';
-          menu.style.left = `${rect.left}px`;
-          menu.style.width = `${rect.width}px`;
-          menu.style.top = `${rect.bottom + 5}px`;
-        };
-        const originalOnChange = sel.getAttribute('onchange');
-        if (originalOnChange) {
-          sel.removeAttribute('onchange');
-          sel.dataset.onchange = originalOnChange;
-        }
-        itemsContainer.querySelectorAll('li').forEach(li => {
-          li.onclick = (e) => {
-            e.stopPropagation();
-            sel.value = li.dataset.value;
-            trigger.querySelector('span').innerText = li.innerText;
-            menu.classList.remove('active');
-            if (sel.dataset.onchange) {
-              try {
-                new Function('sel', sel.dataset.onchange.replace('this', 'sel'))(sel);
-              } catch (err) {
-                console.error("خطأ في تنفيذ الـ onchange المستخرج:", err);
-              }
+        const inputs = document.querySelectorAll('select, input[list]');
+        inputs.forEach((sel, index) => {
+            const options = sel.tagName === 'SELECT'
+                ? Array.from(sel.options)
+                : Array.from(document.getElementById(sel.getAttribute('list'))?.options || []);
+
+            let container = sel.previousElementSibling;
+            if (!container || !container.classList.contains('fajr-dropdown-container')) {
+                container = document.createElement('div');
+                container.className = 'fajr-dropdown-container';
+                sel.style.display = 'none';
+                sel.parentNode.insertBefore(container, sel);
+
+                const initialText = (sel.tagName === 'SELECT' && sel.selectedIndex !== -1)
+                    ? sel.options[sel.selectedIndex].text
+                    : (sel.value || 'إختيار...');
+
+                container.innerHTML = `
+                    <div class="dropdown-trigger" id="trigger-${index}">
+                        <span>${initialText}</span>
+                        <small>▼</small>
+                    </div>
+                `;
             }
-            sel.dispatchEvent(new Event('change', { bubbles: true }));
-          };
+
+            let menu = document.getElementById(`menu-${index}`);
+            if (menu) {
+                menu.remove();
+            }
+
+            menu = document.createElement('ul');
+            menu.className = 'dropdown-menu';
+            menu.id = `menu-${index}`;
+
+            // أضف max-height ثابت للقائمة (200px)
+            menu.style.maxHeight = '200px';
+            menu.style.overflowY = 'auto';
+
+            if (options.length > 5) {
+                const filterInput = document.createElement('input');
+                filterInput.type = 'text';
+                filterInput.placeholder = 'صفّي الخيارات...';
+                filterInput.className = 'filter-input';
+                filterInput.id = `filter-${sel.id || index}`;
+                filterInput.name = `filter-${sel.name || 'field-' + index}`;
+                filterInput.onclick = (e) => e.stopPropagation();
+                filterInput.oninput = (e) => {
+                    const val = e.target.value.toLowerCase();
+                    menu.querySelectorAll('li').forEach(li => {
+                        li.style.display = li.innerText.toLowerCase().includes(val) ? '' : 'none';
+                    });
+                };
+                menu.appendChild(filterInput);
+            }
+
+            document.body.appendChild(menu);
+
+            let itemsContainer = menu.querySelector('.items-container');
+            if (!itemsContainer) {
+                itemsContainer = document.createElement('div');
+                itemsContainer.className = 'items-container';
+                menu.appendChild(itemsContainer);
+            }
+
+            itemsContainer.innerHTML = options.map(opt => {
+                const displayValue = (sel.tagName === 'SELECT') ? opt.text : (opt.text || opt.value);
+                return `<li data-value="${opt.value}">${displayValue}</li>`;
+            }).join('');
+
+            const trigger = container.querySelector('.dropdown-trigger');
+
+            trigger.onclick = (e) => {
+                e.stopPropagation();
+
+                // إخفاء القوائم الأخرى
+                document.querySelectorAll('.dropdown-menu').forEach(m => m !== menu && m.classList.remove('active'));
+
+                // تبديل حالة القائمة
+                const isActive = menu.classList.toggle('active');
+
+                if (isActive) {
+    const rect = trigger.getBoundingClientRect();
+    const menuHeight = 200; // نفس max-height
+    const spaceBelow = window.innerHeight - rect.bottom - 10; // المساحة تحت العنصر
+    const spaceAbove = rect.top - 10; // المساحة فوق العنصر
+
+    menu.style.position = 'fixed';
+    menu.style.left = `${rect.left}px`;
+    menu.style.width = `${rect.width}px`;
+
+    if (spaceBelow < menuHeight && spaceAbove > menuHeight) {
+        // ✅ اعرض فوق: نحسب المسافة من أسفل الشاشة بحيث تكون القائمة فوق الزر
+        const distanceFromBottom = window.innerHeight - rect.top + 5; // 5 بكسل مسافة بسيطة
+        menu.style.bottom = `${distanceFromBottom}px`;
+        menu.style.maxHeight = `${Math.min(menuHeight, spaceAbove)}px`;
+    } else {
+        // اعرض تحت (الوضع الطبيعي)
+        menu.style.top = `${rect.bottom + 5}px`;
+        menu.style.maxHeight = `${Math.min(menuHeight, spaceBelow)}px`;
+    }
+}
+            };
+
+            const originalOnChange = sel.getAttribute('onchange');
+            if (originalOnChange) {
+                sel.removeAttribute('onchange');
+                sel.dataset.onchange = originalOnChange;
+            }
+
+            itemsContainer.querySelectorAll('li').forEach(li => {
+                li.onclick = (e) => {
+                    e.stopPropagation();
+                    sel.value = li.dataset.value;
+                    trigger.querySelector('span').innerText = li.innerText;
+                    menu.classList.remove('active');
+
+                    if (sel.dataset.onchange) {
+                        try {
+                            new Function('sel', sel.dataset.onchange.replace('this', 'sel'))(sel);
+                        } catch (err) {
+                            console.error("خطأ في تنفيذ الـ onchange المستخرج:", err);
+                        }
+                    }
+                    sel.dispatchEvent(new Event('change', { bubbles: true }));
+                };
+            });
         });
-      });
     }
+
     document.addEventListener('click', () => {
-      document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
+        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active'));
     });
+
     const cursor = document.getElementById('fajr-cursor');
-    let mX = 0, mY = 0, cX = 0, cY = 0;
+    let mX = 0,
+        mY = 0,
+        cX = 0,
+        cY = 0;
+
     window.addEventListener('mousemove', e => {
-      mX = e.clientX;
-      mY = e.clientY;
+        mX = e.clientX;
+        mY = e.clientY;
     });
+
     function updateCursor() {
-      cX += (mX - cX) * 1;
-      cY += (mY - cY) * 1;
-      cursor.style.left = cX + 'px';
-      cursor.style.top = cY + 'px';
-      requestAnimationFrame(updateCursor);
+        cX += (mX - cX) * 1;
+        cY += (mY - cY) * 1;
+        cursor.style.left = cX + 'px';
+        cursor.style.top = cY + 'px';
+        requestAnimationFrame(updateCursor);
     }
+
     document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
     document.addEventListener('mouseenter', () => cursor.style.opacity = '1');
-  }
+}
   //سجل الحضور والانصراف
   {
     let attendanceData = JSON.parse(localStorage.getItem('fajr_attendance')) || [];
@@ -14096,6 +14218,233 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     });
   }
+  //صانع الجولات الإفتراضيه
+  {
+            let library = JSON.parse(localStorage.getItem('tourLib')) || { tours: {} };
+            let currentTourName = "";
+            let isEditMode = true;
+
+            function createNewTour() {
+                let name = document.getElementById('tourName').value;
+                if (!name) return;
+                library.tours[name] = {};
+                saveLib();
+                updateTourSelector();
+            }
+
+            function saveScene() {
+                let name = document.getElementById('imgName').value;
+                let url = document.getElementById('imgUrl').value;
+                if (!currentTourName) return showToast("اختر جولة أولاً");
+                library.tours[currentTourName][name] = { url: url, hotspots: [] };
+                saveLib();
+                updateSceneSelector();
+                convertToFajrUI();
+            }
+
+            function renderScene() {
+    let sceneName = document.getElementById('sceneSelector').value;
+    if (!sceneName) return;
+
+    let scene = library.tours[currentTourName][sceneName];
+    let canvas = document.getElementById('tourcanvas');
+    let img = document.getElementById('mainImage');
+
+    img.src = scene.url;
+    canvas.style.display = 'inline-block';
+
+    let area = document.getElementById('hotspotsArea');
+    area.innerHTML = '';
+    
+    // نستنى الصورة تتحمل عشان نعرف حجمها الفعلي
+    img.onload = function() {
+        scene.hotspots.forEach((h, index) => {
+            let div = document.createElement('div');
+            div.className = 'hotspot';
+            
+            // تحويل النسبة المئوية لبيكسل حسب حجم الصورة الفعلي
+            const xPx = (h.x / 100) * img.naturalWidth;
+            const yPx = (h.y / 100) * img.naturalHeight;
+            
+            // لكن نستخدم النسبة مع canvas عشان تظبط مع العرض
+            div.style.left = h.x + '%';
+            div.style.top = h.y + '%';
+            div.style.position = 'absolute';
+            div.style.transform = 'translate(-50%, -50%)'; // توسيط النقطة
+            
+            div.onclick = () => { if (!isEditMode) loadScene(h.target); };
+            div.oncontextmenu = (e) => {
+                e.preventDefault();
+                if (isEditMode) { scene.hotspots.splice(index, 1); saveLib(); renderScene(); }
+            };
+            area.appendChild(div);
+        });
+    };
+    
+    // لو الصورة محملة بالفعل
+    if (img.complete) {
+        img.onload();
+    }
+}
+
+            document.getElementById('tourcanvas').onclick = (e) => {
+    if (!isEditMode) return;
+    let sceneName = document.getElementById('sceneSelector').value;
+    
+    // استخدام openSystemPrompt بدل prompt
+    openSystemPrompt(
+        "🎯 اسم الغرفة الهدف",
+        "اكتب اسم المشهد اللي تريد الانتقال إليه...",
+        (target) => {
+            if (target && library.tours[currentTourName][target]) {
+                const rect = e.target.getBoundingClientRect();
+                const xPercent = ((e.clientX - rect.left) / rect.width) * 100;
+                const yPercent = ((e.clientY - rect.top) / rect.height) * 100;
+                
+                library.tours[currentTourName][sceneName].hotspots.push({ 
+                    x: xPercent, 
+                    y: yPercent, 
+                    target: target 
+                });
+                saveLib();
+                renderScene();
+                showToast(`✅ تم إضافة نقطة إلى "${target}"`);
+            } else if (target) {
+                showToast(`❌ المشهد "${target}" غير موجود!`);
+            }
+        }
+    );
+};
+
+            function loadScene(name) {
+                document.getElementById('sceneSelector').value = name;
+                renderScene();
+            }
+
+            function saveLib() { localStorage.setItem('tourLib', JSON.stringify(library)); }
+            function toggleMode() { isEditMode = !isEditMode; document.getElementById('modeBtn').innerText = isEditMode ? "وضع التحرير" : "وضع الجولة"; }
+            function updateTourSelector() {
+                let sel = document.getElementById('tourSelector');
+                sel.innerHTML = '<option value="">اختر جولة</option>';
+                Object.keys(library.tours).forEach(t => {
+                    let opt = document.createElement('option');
+                    opt.value = t; opt.innerHTML = t;
+                    sel.appendChild(opt);
+                });
+                convertToFajrUI();
+            }
+
+            function loadTour() {
+                currentTourName = document.getElementById('tourSelector').value;
+                if (!currentTourName) return;
+                updateSceneSelector();
+                convertToFajrUI();
+                switchTab('tourmakerapp');
+            }
+
+            function updateSceneSelector() {
+                let sel = document.getElementById('sceneSelector');
+                sel.innerHTML = '';
+                let scenes = library.tours[currentTourName];
+                Object.keys(scenes).forEach(s => {
+                    let opt = document.createElement('option');
+                    opt.value = s; opt.innerHTML = s;
+                    sel.appendChild(opt);
+                });
+                if (Object.keys(scenes).length > 0) {
+                    renderScene();
+                    convertToFajrUI();
+                }
+                convertToFajrUI();
+            }
+            // تصدير الجولة المفتوحة حالياً
+function exportTour() {
+    if (!currentTourName) {
+        showToast("افتح جولة أولاً!");
+        return;
+    }
+
+    const tourData = library.tours[currentTourName];
+    if (!tourData || Object.keys(tourData).length === 0) {
+        showToast("الجولة دي فاضية! مفيش مشاهد لحفظها.");
+        return;
+    }
+
+    // تحويل البيانات لـ JSON
+    const json = JSON.stringify({
+        tourName: currentTourName,
+        scenes: tourData,
+        exportedAt: new Date().toISOString()
+    }, null, 2);
+
+    // تحميل الملف
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${currentTourName}.tour.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast(`✅ تم تصدير جولة "${currentTourName}" بنجاح!`);
+}
+
+// استيراد جولة من ملف JSON
+function importTour() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const data = JSON.parse(event.target.result);
+
+                // التحقق من صحة البيانات
+                if (!data.scenes || typeof data.scenes !== 'object') {
+                    showToast("الملف مش متوافق! تأكد من إنه ملف جولة فجر.");
+                    return;
+                }
+
+                // تحديد اسم الجولة
+                let tourName = data.tourName || file.name.replace('.json', '');
+
+                // لو في جولة بنفس الاسم، نضيف رقم
+                if (library.tours[tourName]) {
+                    let counter = 1;
+                    while (library.tours[`${tourName} (${counter})`]) {
+                        counter++;
+                    }
+                    tourName = `${tourName} (${counter})`;
+                }
+
+                // حفظ الجولة
+                library.tours[tourName] = data.scenes;
+                saveLib();
+                updateTourSelector();
+
+                // اختيار الجولة المستوردة
+                document.getElementById('tourSelector').value = tourName;
+                loadTour();
+
+                showToast(`✅ تم استيراد جولة "${tourName}" بنجاح!`);
+            } catch (err) {
+                showToast("الملف مش صحيح! تأكد من إنه ملف JSON صالح.");
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    input.click();
+}
+        }
 
   var UI = {};
   function initUI() {
@@ -14121,10 +14470,22 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     updateCursor();
     loadpagetime();
     pomodoro_init();
+    updateTourSelector();
   }
   window.onload = initUI;
+  // تسجيل Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+        .then(registration => {
+            console.log('✅ فجر: Service Worker مسجل بنجاح');
+        })
+        .catch(error => {
+            console.error('❌ فجر: فشل تسجيل Service Worker', error);
+        });
+}
+
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
+  //(function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
 </script>
 
 </html>
