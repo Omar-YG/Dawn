@@ -2,7 +2,7 @@
   "name": "فجر - غرفتك الآمنة",
   "short_name": "فجر",
   "description": "نظام تشغيل خفيف وآمن يعمل في المتصفح",
-  "start_url": "Dawn_v.1.6.8.2.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3498db",
