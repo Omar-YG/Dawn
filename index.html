@@ -3617,6 +3617,7 @@
           </div>
         </div>
       </div>
+      <div id="contentinforepor" class="modaltab"></div>
       <div id="tourmakerapptab" class="modaltab">
         <h2>إنشاء جولة</h2>
         <fieldset>
@@ -4933,6 +4934,7 @@
     <div class="context-menu-item" onclick="handleAction('selectAll')">تحديد الكل</div>
     <button class="context-menu-item" id="search-btn" onclick="search()">بحث بـ جوجل</button>
     <button class="context-menu-item" onclick="processAndSpeak()">سماع النص</button>
+    <button class="context-menu-item" onclick="analyzeText()">تحليل النص</button>
     <div class="morelist" tabindex="0">
       <button class="context-menu-item menubtn">تعلم</button>
       <button class="context-menu-item detmore" onclick="addToDict()">كلمة في القاموس</button>
@@ -5243,20 +5245,113 @@
   { }
   //محرك المدخلات الرئيسية
   {
+    let typingTimer;
     function input() {
-      TextProcessing();
-      calculateExpression(event);
-      sostime();
-      getform();
-      checkSuggestion();
-      processfeel();
-      detectmetro();
-      checkPainwords();
-      UI.colorview.style.backgroundColor = UI.editor.value;
-      if (UI.colorview.style.backgroundColor !== "") { showAndMove("btncolorbox"); }
-      else { UI.btncolorbox.style.display = "none"; };
-      onerun('startBrainSystem');
-      onerun('renderAllmemory');
+      updateTypingSpeed();
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(() => {
+        TextProcessing();
+        calculateExpression(event);
+        sostime();
+        getform();
+        checkSuggestion();
+        processfeel();
+        detectmetro();
+        checkPainwords();
+        UI.colorview.style.backgroundColor = UI.editor.value;
+        if (UI.colorview.style.backgroundColor !== "") { showAndMove("btncolorbox"); }
+        else { UI.btncolorbox.style.display = "none"; };
+        onerun('startBrainSystem');
+        onerun('renderAllmemory');
+      }, 500);
+    }
+  }
+  //حساب النص وتحليله
+  {
+    let typingStartTime = 0;
+    let isTyping = false;
+    let totalTypedWords = 0;
+    let totalTypingTime = 0;
+    let lastWordCount = 0;
+    function analyzeText() {
+      const text = UI.editor.value.trim();
+      if (!text) { showToast("اكتب حاجة الأول!"); return; }
+      const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
+      const charCount = text.replace(/\s/g, '').length;
+      const charWithSpace = text.length;
+      const spaceCount = (text.match(/\s/g) || []).length;
+      const sentenceCount = (text.match(/[.!?؟]+/g) || []).length;
+      const paragraphCount = text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length;
+      const textSizeKB = (new Blob([text]).size / 1024).toFixed(2);
+      const readingTimeSeconds = Math.round((wordCount / 200) * 60);
+      const readingTimeMin = Math.floor(readingTimeSeconds / 60);
+      const readingTimeSec = readingTimeSeconds % 60;
+      let wpm = 0;
+      let typingTimeDisplay = '--';
+      if (isTyping && totalTypingTime > 0) {
+        const minutes = totalTypingTime / 60;
+        wpm = Math.round(totalTypedWords / minutes);
+        typingTimeDisplay = `${Math.round(totalTypingTime)} ثانية`;
+      } else if (totalTypingTime > 0) {
+        const minutes = totalTypingTime / 60;
+        wpm = Math.round(totalTypedWords / minutes);
+        typingTimeDisplay = `${Math.round(totalTypingTime)} ثانية`;
+      }
+      const reportDiv = document.getElementById('contentinforepor');
+      if (!reportDiv) return;
+      reportDiv.innerHTML = `
+    <h2>تحليل النص</h2>
+        <div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; font-size: 14px;marin: 10px 5px;">
+                <div><span style="color: var(--gcolor);">📝 الكلمات:</span> <strong>${wordCount}</strong></div>
+                <div><span style="color: var(--gcolor);">🔤 الحروف (بدون مسافات):</span> <strong>${charCount}</strong></div>
+                <div><span style="color: var(--gcolor);">🔡 الحروف (مع مسافات):</span> <strong>${charWithSpace}</strong></div>
+                <div><span style="color: var(--gcolor);">🔡 المسافات:</span> <strong>${spaceCount}</strong></div>
+                <div><span style="color: var(--gcolor);">📄 الجمل:</span> <strong>${sentenceCount}</strong></div>
+                <div><span style="color: var(--gcolor);">📑 الفقرات:</span> <strong>${paragraphCount}</strong></div>
+                <div><span style="color: var(--gcolor);">📏 حجم النص:</span> <strong>${textSizeKB} كيلوبايت</strong></div>
+                <div><span style="color: var(--gcolor);">⏱️ زمن القراءة:</span> <strong>${readingTimeMin} دقيقة و ${readingTimeSec} ثانية</strong></div>
+                <div><span style="color: var(--gcolor);">⌨️ سرعة الكتابة:</span> <strong>${wpm > 0 ? wpm + ' كلمة/دقيقة' : 'جاري الكتابة...'}</strong></div>
+                <div><span style="color: var(--gcolor);">⏱️ وقت الكتابة:</span> <strong>${typingTimeDisplay}</strong></div>
+            </div>
+            <div style="margin-top: 10px; font-size: 12px; color: var(--gcolor); border-top: 1px solid #ddd; padding-top: 8px;">
+                ⚡ سرعة قراءة افتراضية: 200 كلمة/دقيقة | 💡 سرعة الكتابة تحسب من أول حرف
+            </div>
+        </div>
+    `;
+      opentab('contentinforepor');
+    }
+    function updateTypingSpeed() {
+      const text = UI.editor.value.trim();
+      if (!text) {
+        isTyping = false;
+        totalTypedWords = 0;
+        totalTypingTime = 0;
+        lastWordCount = 0;
+        return;
+      }
+      const currentWordCount = text.split(/\s+/).filter(w => w.length > 0).length;
+      const newWords = currentWordCount - lastWordCount;
+      if (!isTyping && currentWordCount > 0) {
+        isTyping = true;
+        typingStartTime = Date.now();
+        totalTypedWords = currentWordCount;
+        totalTypingTime = 0;
+      } else if (isTyping && newWords > 0) {
+        totalTypedWords = currentWordCount;
+        totalTypingTime = (Date.now() - typingStartTime) / 1000;
+      } else if (isTyping) {
+        totalTypingTime = (Date.now() - typingStartTime) / 1000;
+      }
+      lastWordCount = currentWordCount;
+    }
+    function resetTypingSpeed() {
+      isTyping = false;
+      totalTypedWords = 0;
+      totalTypingTime = 0;
+      lastWordCount = 0;
+      typingStartTime = 0;
+      showToast("🔄 تم إعادة تعيين سرعة الكتابة");
     }
   }
   //حفظ نموذج معلومات المستخدم
@@ -13895,6 +13990,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   }
   window.onload = initUI;
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  //(function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
+  (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
 </script>
 </html>
