@@ -7,10 +7,8 @@
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Permissions-Policy"
-    content="microphone=(self), camera=(), geolocation=(), sync-xhr=(), display-capture=()">
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; worker-src 'self' blob:; media-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src * data: blob:; connect-src 'self' blob: data: https://cdn.jsdelivr.net; frame-src 'self' blob:; object-src 'none'; upgrade-insecure-requests;">
+  <meta http-equiv="Permissions-Policy" content="microphone=(self), camera=(), geolocation=(), sync-xhr=(), display-capture=(), usb=(), serial=(), payment=(), hid=()">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; worker-src 'self' blob:; media-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src * data: blob:; connect-src 'self' blob: data: https://cdn.jsdelivr.net; frame-src 'self' blob:; object-src 'none'; upgrade-insecure-requests;">
   <link rel="canonical" href="https://dawn-green.vercel.app/">
   <meta name="author" content="المؤسس">
   <meta name="theme-color" content="#3498db">
@@ -22,23 +20,17 @@
   <meta property="og:locale" content="ar_AR">
   <meta property="og:type" content="website">
   <meta property="og:title" content="نظام تشغيل فجر | مستقبل الأنظمة العربية على الويب">
-  <meta property="og:description"
-    content="فجر: نظام تشغيل خفيف، سريع، ومفتوح المصدر. تجربة ويب سلسة تجمع بين البساطة والأداء الفائق.">
+  <meta property="og:description" content="فجر: نظام تشغيل خفيف، سريع، ومفتوح المصدر. تجربة ويب سلسة تجمع بين البساطة والأداء الفائق.">
   <meta property="og:url" content="https://dawn-green.vercel.app/">
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='none'/%3E%3Ccircle cx='50' cy='50' r='32' stroke='%23007bff' stroke-width='10' fill='none'/%3E%3C/svg%3E">
-  <script
-    type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebApplication", "name": "فَجْر", "description": "نظام تشغيل خفيف الوزن ومفتوح المصدر يعتمد على الويب", "applicationCategory": "Operating System", "operatingSystem": "Web Browser" } </script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='none'/%3E%3Ccircle cx='50' cy='50' r='32' stroke='%23007bff' stroke-width='10' fill='none'/%3E%3C/svg%3E">
+  <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "WebApplication", "name": "فَجْر", "description": "نظام تشغيل خفيف الوزن ومفتوح المصدر يعتمد على الويب", "applicationCategory": "Operating System", "operatingSystem": "Web Browser" } </script>
 </head>
 <script>
   window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     const bar = document.getElementById('progress-bar');
     bar.style.width = '100%';
-    setTimeout(() => {
-      loader.style.opacity = '0';
-      setTimeout(() => loader.style.display = 'none', 500);
-    }, 500);
+    setTimeout(() => { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); }, 500);
   });
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('input').forEach(input => {
@@ -46,12 +38,8 @@
       input.setAttribute('autocorrect', 'off');
       input.setAttribute('spellcheck', 'false');
       input.setAttribute('readonly', 'true');
-      input.addEventListener('focus', function () {
-        this.removeAttribute('readonly');
-      });
-      input.addEventListener('blur', function () {
-        this.setAttribute('readonly', 'true');
-      });
+      input.addEventListener('focus', function () { this.removeAttribute('readonly'); });
+      input.addEventListener('blur', function () { this.setAttribute('readonly', 'true'); });
     });
   });
 </script>
@@ -227,6 +215,10 @@
   .red-btn {
     color: var(--wcolor);
     background-color: var(--rcolor);
+  }
+  .red-btn-sec {
+    color: var(--rcolor);
+    background-color: var(--wcolor);
   }
   fieldset {
     border: var(--cborder);
@@ -3015,6 +3007,10 @@
     transform: translate(-50%, -50%);
     pointer-events: auto;
   }
+  #sosOverlay {display: none; position: fixed; inset:0;margin:auto; z-index: 9999; justify-content: center; align-items: center; font-size: 2rem;}
+
+  #mainVideo {width: 100vw; height: auto;max-width: 600px;max-height:70vh;border-radius:18px;box-shadow:0 0 5px 0 lightgrey;}
+
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
       width: 80vw;
@@ -3306,16 +3302,11 @@
     </div>
   </div>
   <div id="fajr-cursor"></div>
-  <div id="sosOverlay"
-    style="display: none; position: fixed; inset:0;margin:auto; z-index: 9999; justify-content: center; align-items: center; font-size: 2rem;">
-    تم تفعيل وضع طوارئ! هحتاج الضغط هنا 5 مرات للإلغاء
-  </div>
+  <div id="sosOverlay"> تم تفعيل وضع طوارئ! هحتاج الضغط هنا 5 مرات للإلغاء </div>
   <div id="mediaoverlay">
     <span class="overlayclosebn" onclick="mediaoverlayoff()">×</span>
     <div id="mainPlayerContainer">
-      <video
-        style="width: 100vw; height: auto;max-width: 600px;max-height:70vh;border-radius:18px;box-shadow:0 0 5px 0 lightgrey;"
-        id="mainVideo" controls></video>
+      <video id="mainVideo" controls></video>
       <p style="color: var(--wcolor); margin: 10px 0 0 0;" id="videoTitle">لم يتم اختيار فيديو</p>
     </div>
   </div>
@@ -3388,7 +3379,7 @@
               <summary>
                 ذاكرة المحادثات
               </summary>
-              <p id="memoryInfo" style="display:none;">لسىة مش فاكرة حاجة من تدريبنا...</p>
+              <p id="memoryInfo" style="display:none;">لسة مش فاكرة حاجة من تدريبنا...</p>
               <div id="dawnmemoriestab">
                 <h5>هنا كل كلامك معايا، المهم بحفظه علطول، ولو عادي بفتكره في دماغي لغاية خروجك</h5>
                 <div id="memorysection" style="display:none">
@@ -3594,18 +3585,16 @@
                 مصادر البحث
               </summary>
               <select id="engine" onchange="updateButton()">
+                <option value="https://duckduckgo.com/?q=">داك داك جو</option>
                 <option value="https://www.google.com/search?q=">جوجل</option>
                 <option value="https://www.bing.com/search?q=">بينج</option>
-                <option value="https://duckduckgo.com/?q=">داك داك جو</option>
-                <option value="https://hcms.rf.gd/search_results.php?q=">جريده الحكايه</option>
                 <option value="https://besraha.com/search/term?search=">بصراحه الإخباري</option>
               </select>
               <fieldset>
                 <legend>إضافه محرك جدبد</legend>
                 <div class="flex">
                   <input type="text" id="new-name" placeholder="اسم المحرك... ">
-                  <input type="text" id="new-url"
-                    placeholder="الرابط (مثلاً: https://www.youtube.com/results?search_query=)">
+                  <input type="text" id="new-url" placeholder="الرابط (مثلاً: https://www.youtube.com/results?search_query=)">
                 </div><br>
                 <button onclick="addEngine()" class="conf-btn">إضافة محرك جديد</button>
               </fieldset>
@@ -3616,6 +3605,10 @@
             </details>
           </div>
         </div>
+      </div>
+      <div id="founderwordtab" class="modaltab">
+        <h2>كلمة المؤسس</h2>
+        <p id="founderWord"></p>
       </div>
       <div id="contentinforepor" class="modaltab"></div>
       <div id="tourmakerapptab" class="modaltab">
@@ -3890,8 +3883,8 @@
             </center>
             <ul class="data-section flex">
               <li>الإصدار : سكون</li>
-              <li> النواه : 1.6.7</li>
-              <li>القدرات : 94</li>
+              <li> النواه : 1.6.8</li>
+              <li>القدرات : 101</li>
             </ul>
           </fieldset>
           <fieldset>
@@ -4423,11 +4416,18 @@
       </div>
       <div id="newdocument" class="modaltab">
         <h2>مستند جديد</h2>
-        <fieldset class="flex">
-          <legend>بيانات المستند:</legend>
+        <center><svg viewBox="0 0 512 512" style="width:70px;margin:20px 0 10px;fill:var(--gcolor);">
+                  <path
+                    d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z" />
+                </svg>
+              <p>إنشاء مستند نصي جديد</p>
+              <br>
+              </center>
+        <div class="flex">
+          
           <input type="text" id="newprojinput" placeholder="إسم المستند الجديد ؟">
           <button class="conf-btn" onclick="createNewProject();switchTab('codeeditorrich');">إنشاء</button>
-        </fieldset>
+        </div>
       </div>
       <div id="newform" class="modaltab">
         <h2>إنشاء نموذج</h2>
@@ -4837,8 +4837,8 @@
         <br>
         نظام ذكاء رمزي عربي مصري وخفيفة جداً بقدر أشتغل أوفلاين تماماً ومن غير أي سيرفرات. يعني خصوصيتك محمية 100% لأن
         كل بياناتك بتفضل عندك وبس. 🔒
-        مصممة عشان أكون قلعتك الرقمية بـ +90 قدرة في واجهة واحدة سلسة ومجانية مدى الحياة، يلا بينا 🤫 ضغطتين على رسالتي
-        علشان نبدء 😉.
+        مصممة عشان أكون قلعتك الرقمية بـ +90 قدرة في واجهة واحدة سلسة ومجانية مدى الحياة، وكمان بيحصل ليا كل يوم تحسينات وتحديثات تخليني اذكى وأسرع، يلا بينا 🤫 ضغطتين على رسالتي
+      علشان نبدء 😉، او ممكن كمان اقولك <button class="conf-btn" style="padding:var(--spaddd);border-radius:var(--mainradius);" onclick="typeWriter()">كلمه المؤسس</button>
       </div>
       <div id="faraohres" class="replay" style="display: none;"></div>
       <div class="replay" id="codelabelsContainer" style="display: none;"></div>
@@ -5054,12 +5054,6 @@
       <h2>المحرر | <span style="font: size 12px !important;" id="activeprojname">لا يوجد مشروع مفتوح</span></h2>
       <div class="app-container">
         <div class="richtoolbar">
-          <!--
-          <select id="richresizer" onchange="changeViewSize()" hidden>
-            <option value="0x0">مخفي</option>
-            <option value="400x300">400x300</option>
-            <option value="375x667">Mobile</option>
-          </select>-->
           <svg onclick="document.execCommand('bold')" viewBox="0 0 384 512" width="35">
             <path
               d="M333.49 238a122 122 0 0 0 27-65.21C367.87 96.49 308 32 233.42 32H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h31.87v288H34a16 16 0 0 0-16 16v48a16 16 0 0 0 16 16h209.32c70.8 0 134.14-51.75 141-122.4 4.74-48.45-16.39-92.06-50.83-119.6zM145.66 112h87.76a48 48 0 0 1 0 96h-87.76zm87.76 288h-87.76V288h87.76a56 56 0 0 1 0 112z" />
@@ -5153,8 +5147,8 @@
           <input type="text" id="toolInput" placeholder="بحث أو إضافة أداة جديدة (Enter)..." oninput="Trackerrender()">
           <div id="toolsList"></div>
           <div style="margin-top: 20px; display: flex; justify-content: space-between;">
-            <button onclick="exportprojData('standard')">📋 نسخ التوثيق الشجري</button>
-            <button onclick="exportprojData('compact')">⚡ نسخ المدمج (Compact)</button>
+            <button onclick="exportprojData('standard')" class="conf-btn">📋 نسخ بالتنسيق الشجري</button>
+            <button onclick="exportprojData('compact')">⚡ نسخ مدمج</button>
           </div>
         </div>
       </div>
@@ -5388,7 +5382,7 @@
             <div style="text-align:center; padding:20px; color: var(--gcolor);">
                 <div style="font-size: 48px; margin-bottom: 10px;">👀</div>
                 <p style="font-size: 16px; margin: 0;">لسه معرفش حاجه عنك!</p>
-                <p style="font-size: 14px; margin: 5px 0 15px 0;">يلا نضيف شوية بيانات عشان أعرفك كويس 😊</p>
+                <p style="font-size: 14px; margin: 5px 0 15px 0;">يلا نضيف شوية بيانات عشان أعرفك أكتر 😊</p>
                 <button onclick="opentab('mypersonalinfo');editProfile()" class="conf-btn" style="padding: 8px 25px; border-radius: 30px;">➕ أضف بياناتي</button>
             </div>
         `;
@@ -13963,6 +13957,37 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       input.click();
     }
   }
+  //كلمة المؤسس
+  {
+const demo = document.getElementById("founderWord");
+const txt =
+`السلام عليكم… في حالة قراءتك كلماتي فمرحباً بوجودك داخل نظام "فَجر" لدعم المستخدم العربي داخل بيئة عربية مصرية أصلية.<br><br>` +
+`# تم تأسيس هذا النظام على القواعد الأساسية: (شفافية - أمان - ثقة - تمكين). وبحسب الهدف والخطة، فهذا الإصدار الأول والمبدئي هو النسخة التي يثبت بها المشروع قدرته على العمل وتحقيق الخدمات المطلوبة، وهو الإصدار الأول من أصل خمس إصدارات مخطط لها.<br><br>` +
+`# الهدف: بناء بيئة ذكاء رمزي عربية أصيلة تحترم الخصوصية والأمان والقيم الثقافية بشكل لا يتغير حسب الأهواء.<br><br>` +
+`# البناء: تم استخدام أبسط وأنقى تقنيات الويب الأساسية فقط (HTML + CSS + JavaScript) لضمان الاستدامة المطلقة.<br><br>` +
+`# الإمكانيات: الحجم الكلي أقل من نصف ميجا بعد الضغط، يستمر بالعمل بكامل قوته دون اتصال بالإنترنت بعد الفتح، حفظ محلي 100%، ويمنحك إدارة الذاكرة يدويًا بالكامل.<br><br>` +
+`# الأداء: أثبت النظام قدرته خلال تجارب الضغط على معالجة نصوص تتراوح من ثلاثمائة ألف كلمة إلى مليون كلمة في أقل من ثانيتين على أجهزة متوسطة.<br><br>` +
+`# الإتاحة وحماية الحقوق: متاح مجانًا تمامًا مدى الحياة — بدون أي تمييز بين فرد أو شركة أو مؤسسة أو حتى حكومة. النظام متاح للاطلاع والتعلم والفهم العميق والتجربة، مع الاحتفاظ بحقوق الملكية الفكرية ونشر النسخة الرسمية عبر المؤسس فقط؛ لتبقى النسخة الأصلية غير قابلة للتعديل أو التفريغ العشوائي.<br><br>` +
+`# الاستقلالية: جميع القدرات الإضافية في المستقبل هي «إضافات وقشور» توضع تدريجيًا — النظام الأساسي نفسه مكتمل ومستقل، وقد حقق علامات متقدمة في مؤشرات الأداء والوصول والممارسات (Google PageSpeed Insights).<br><br>` +
+`# الهيكلة: المشروع مقسم إلى خمس مراحل تطوير متتالية (المرحلة الحالية هي الأولى وجاري الوصول للثانية).<br><br>` +
+`# واجهة المستخدم: معظم الأدوات المتقدمة تعمل بنظام تبديل النوافذ لضمان تجربة سلسة بدون تعقيد أو فوضى واجهة. كما أنه لا يتصل بأي سيرفر خارجي أو طرف ثالث، ولا يقوم نهائياً بـ: تجميع بيانات، تتبع، أو تحليل استخدام.<br><br>` +
+`# المراحل القادمة بدءاً من الأولى: <br>` +
+`* الأولى (سكون): إتاحة أكبر قدر ممكن من الأدوات الأساسية.<br>` +
+`* الثانية (فضاء): إتاحة التواصل الاجتماعي بين المستخدمين بقواعد اجتماعية عربية.<br>` +
+`* الثالثة (شعاع): إتاحة أدوات تساعد في إدارة مؤسسات ومشروعات صغيرة ومتوسطة فأعلى حسب الاحتياج.<br>` +
+`* الرابعة (كيان): دعم المستخدم في كل الجوانب وتحقيق مفهوم (العقل الثاني).<br>` +
+`* الخامسة (عالم): نشر المبدأ وتوسعة بيئة النظام بلغات عظمى أساسية ووضع معايير ثابتة.<br><br>` +
+`# التتابع والمنظومة:<br>` +
+`يتم دعم هذا النظام بواسطة مشروعات متفرعة تحمل نفس الاسم ومنها:<br>` +
+`* محرك البحث الداخلي Dawn Deep Dive: فهرس أسماء نطاقات يحتوي بحد أدنى على ثلاثين ألف عنوان نطاق.<br>` +
+`* محرك البحث الداخلي Dawn Hexa: مكتبة قواعد وقوانين رياضية ولغوية وأوامر برمجية.<br>` +
+`وغيرهما في انتظار الإصدار المناسب للنظام الأصلي حتى تتم إتاحة خدماتهما لخدمة المستخدمين.<br><br>` +
+`# شكرًا لاستخدامك نظام فَجر✨`
+;
+let i = 0;
+const speed = 45;
+function typeWriter(){ document.getElementById('welcome-modal').style.display="none";opentab('founderwordtab'); if (i <=txt.length){ let currentText=txt.slice(0, i); demo.innerHTML=currentText; if (txt.charAt(i)==='<'){ let closingIndex=txt.indexOf('>', i); if (closingIndex !==-1){ i=closingIndex;}} i++; setTimeout(typeWriter, speed);}}
+}
   var UI = {};
   function initUI() {
     var bodyContainer = document.body || document.getElementsByTagName("body")[0];
@@ -13990,6 +14015,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   }
   window.onload = initUI;
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
+  //(function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
 </script>
 </html>
