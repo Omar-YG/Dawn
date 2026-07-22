@@ -12606,7 +12606,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       });
     }
   }
-  //لعبه ركض فجر
+  //لعبه ركض فجر (نسخة محسنة الأداء)
   {
     const input = document.getElementById('editor');
     const container = document.getElementById('game-container');
@@ -12617,11 +12617,13 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     const overlay = document.getElementById('overlay');
     const msg = document.getElementById('msg');
     const DawnRunGo = document.getElementById('DawnRunGo');
+    
     let p = { x: 150, y: 335, vy: 0, r: 12, jumping: false };
     let gameSpeed = 7.0, distance = 0, frameCounter = 0, nextSpawnFrame = 0;
     let worldObjects = [];
     let isRunning = false;
-    let isGameOver = false;
+    let isGameOver = false;    
+    let lastTime = 0;
     input.addEventListener('input', () => {
       const val = input.value;
       const spaceCount = val.length;
@@ -12678,6 +12680,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       overlay.style.display = 'none';
       isRunning = true;
       isGameOver = false;
+      lastTime = performance.now();
+      requestAnimationFrame(downrunupdate);
     }
     function jump() {
       if (!p.jumping) { p.vy = -14; p.jumping = true; }
@@ -12693,11 +12697,9 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       isRunning = false;
       isGameOver = true;
       overlay.style.display = 'flex';
-      
       msg.innerHTML = `انتهت اللعبة!<br><span style="color:var(--rcolor); font-size:1rem;">المسافة: ${Math.floor(distance / 10)} متر</span>`;
     }
     function spawnLogic() {
-      onerun('startanimation');
       frameCounter++;
       if (frameCounter >= nextSpawnFrame) {
         let r = Math.random();
@@ -12710,38 +12712,53 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         frameCounter = 0;
       }
     }
-    function downrunupdate() {
-      if (isRunning) {
-        distance++;
-        distEl.innerText = Math.floor(distance / 10);
-        gameSpeed += 0.001;
-        speedEl.innerText = gameSpeed.toFixed(1);
-        p.vy += 0.85;
-        p.y += p.vy;
-        if (p.y > 338) { p.y = 338; p.vy = 0; p.jumping = false; }
-        spawnLogic();
-        let html = '';
-        for (let i = worldObjects.length - 1; i >= 0; i--) {
-          let obj = worldObjects[i];
-          obj.x -= gameSpeed;
-          if (obj.type === 'block') {
-            html += `<rect x="${obj.x}" y="${350 - obj.h}" width="${obj.w}" height="${obj.h}" fill="#333" rx="2"/>`;
-            if (p.x + p.r > obj.x && p.x - p.r < obj.x + obj.w && p.y + p.r > 350 - obj.h) {
-              if (p.vy > 0 && p.y < 350 - obj.h + 15) { p.y = 350 - obj.h - p.r; p.vy = 0; p.jumping = false; }
-              else { p.x = obj.x - p.r; }
+    function downrunupdate(currentTime) {
+      if (!isRunning) return;
+      const deltaTime = (currentTime - lastTime) / 16.66;
+      lastTime = currentTime;
+      const dt = isNaN(deltaTime) || deltaTime <= 0 ? 1 : Math.min(deltaTime, 2);
+      distance += dt;
+      distEl.innerText = Math.floor(distance / 10);
+      gameSpeed += 0.001 * dt;
+      speedEl.innerText = gameSpeed.toFixed(1);
+      p.vy += 0.85 * dt;
+      p.y += p.vy * dt;
+      if (p.y > 338) { p.y = 338; p.vy = 0; p.jumping = false; }
+
+      spawnLogic();
+
+      let html = '';
+      for (let i = worldObjects.length - 1; i >= 0; i--) {
+        let obj = worldObjects[i];
+        obj.x -= gameSpeed * dt;
+
+        if (obj.type === 'block') {
+          html += `<rect x="${obj.x}" y="${350 - obj.h}" width="${obj.w}" height="${obj.h}" fill="#333" rx="2"/>`;
+          if (p.x + p.r > obj.x && p.x - p.r < obj.x + obj.w && p.y + p.r > 350 - obj.h) {
+            if (p.vy > 0 && p.y < 350 - obj.h + 15) { 
+              p.y = 350 - obj.h - p.r; 
+              p.vy = 0; 
+              p.jumping = false; 
+            } else { 
+              p.x = obj.x - p.r; 
             }
-          } else if (obj.type === 'lava') {
-            html += `<rect x="${obj.x}" y="345" width="${obj.w}" height="${obj.h}" fill="var(--rcolor)" rx="3" />`;
-            if (p.x + p.r > obj.x && p.x - p.r < obj.x + obj.w && p.y + p.r > 345) gameOver();
+          }
+        } else if (obj.type === 'lava') {
+          html += `<rect x="${obj.x}" y="345" width="${obj.w}" height="${obj.h}" fill="var(--rcolor)" rx="3" />`;
+          if (p.x + p.r > obj.x && p.x - p.r < obj.x + obj.w && p.y + p.r > 345) {
+            gameOver();
           }
         }
-        if (p.x < -p.r) gameOver();
-        if (p.x < 150) p.x += 1.5;
-        worldObjects = worldObjects.filter(o => o.x > -250);
-        layer.innerHTML = html;
-        playerEl.setAttribute('cy', p.y);
-        playerEl.setAttribute('cx', p.x);
       }
+
+      if (p.x < -p.r) gameOver();
+      if (p.x < 150) p.x += 1.5 * dt;
+
+      worldObjects = worldObjects.filter(o => o.x > -250);      
+      layer.innerHTML = html;
+      playerEl.setAttribute('cy', p.y);
+      playerEl.setAttribute('cx', p.x);
+
       requestAnimationFrame(downrunupdate);
     }
   }
@@ -14012,6 +14029,6 @@ function typeWriter(){ document.getElementById('welcome-modal').style.display="n
   }
   window.onload = initUI;
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
-  (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
+  //(function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) return false }; setInterval(() => { if (window.outerWidth - window.innerWidth > 160 || window.outerHeight - window.innerHeight > 160) { document.body.innerHTML = '<h1 style="color:red;text-align:center;margin-top:20%;font-family:sans-serif;">[نظام فجر]: وصول غير مصرح</h1>'; eval('debugger'); } }, 500); })();
 </script>
 </html>
