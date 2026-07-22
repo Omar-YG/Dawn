@@ -201,7 +201,7 @@
     background-color: var(--rcolor);
   }
   .red-btn-sec {
-    color: var(--rcolor);
+    color: var(--rcolor) !important;
     background-color: var(--wcolor);
   }
   fieldset {
@@ -1396,7 +1396,8 @@
     justify-content: center;
     height: 50px;
     overflow: hidden;
-    min-width: 180px;
+    flex-shrink: 0;
+    min-width:120px;
     white-space: nowrap;
     color: var(--wcolor) !important;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -3371,8 +3372,7 @@
                 </div>
                 <div id="globalActions">
                   <button onclick="getallmemories()"
-                    style="position:absolute;top:10px;left:15px;background:var(--dcolor);color:var(--wcolor);">عرض
-                    الكل</button>
+                    style="position:absolute;top:5px;left:15px;background:var(--dcolor);color:var(--wcolor);">عرض الكل</button>
                 </div>
               </div>
             </details>
@@ -6278,6 +6278,7 @@
       fajr_attendance: "سجل الحضور والانصراف",
       last_played_index: "اخر الموسيقى المشغله",
       illdata: "سجل اماكن الألم",
+      fajr_projects_v2: "رادار إنجاز المشروعات",
     };
     function getStorageDetails() {
       let keys = [];
@@ -10251,13 +10252,12 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       ],
       "!": [
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
-        { n: "تعديل ملف", d: "تغيير اسم وصيغه الملف", run: "opentab('FileNameChange')" },
         { n: "ميتا فجر", d: "إنشاء وصف صفحه الويب", run: "opentab('DawnMeta')" },
         { n: "معلومات النظام", d: "عرض معلومات بيئه التشغيل", run: "onerun('drawFajrRadar');opentab('General')" },
         { n: "تعلم الرد", d: "تدريب فجر على الرد", run: "opentab('chattraining')" },
         { n: "تغيير إسم ملف", d: "تغيير اسم وصيغه ملف محلي", run: "opentab('FileNameChange')" },
         { n: "فتح تبويبات", d: "فتح تبويبات متعددة", run: "document.getElementById('htmlFiles').click()" },
-        { n: "الترحيب", d: "عرض ترحيب وتعريف فجر", run: "showAndMove('lightcoin')" },
+        { n: "الترحيب", d: "عرض ترحيب وتعريف فجر", run: "showAndMove('welcome-modal')" },
         { n: "نقاط النور", d: "شحن رصيد النقاط والتطور", run: "showAndMove('lightcoin')" },
         { n: "فحص اللغة", d: "كشف لغه الترميز بالنمط", run: "codeget()" },
         { n: "نسخ شخصيتي", d: "نسخ شخصيتي للكلام معاها بذكاء", run: "copyDawnPersonality()" }
