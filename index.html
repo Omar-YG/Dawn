@@ -141,25 +141,9 @@
     margin: 0 0 5px;
     padding: 0 0 15px;
   }
-  summary::-webkit-details-marker {
-    display: none;
-  }
-  summary::before {
-    content: '«';
-    position: absolute;
-    left: 14px;
-    top: 12px;
-    font-size: 20px;
-    color: var(--gcolor);
-    transform: rotate(-180deg);
-    transition: transform 0.3s ease;
-  }
-  details[open] summary::before {
-    transform: rotate(-270deg);
-    left: 16px;
-  }
   button {
     cursor: pointer;
+    background: #f0ecec;
   }
   table,
   th,
@@ -3371,7 +3355,7 @@
                 <div class="keys-section" id="keysList"></div>
                 <div class="btn-group">
                   <button class="conf-btn" onclick="renderAllmemory()">تحديث ذاكرتي</button>
-                  <button class="red-btn" onclick="clearAllmemory()">فقد الذاكرة</button>
+                  <button class="red-btn-sec" onclick="clearAllmemory()">فقد الذاكرة</button>
                 </div>
               </details>
             </div>
@@ -3869,7 +3853,7 @@
           <input type="text" id="prompt-input" placeholder="اكتب القيمة هنا...">
         </fieldset>
         <button class="conf-btn" id="prompt-confirm-btn">موافق</button>
-        <button class="red-btn" onclick="document.getElementById('settingsModal').style.display='none'">إلغاء</button>
+        <button class="red-btn-sec" onclick="document.getElementById('settingsModal').style.display='none'">إلغاء</button>
       </div>
       <div id="General" class="modaltab">
         <h2>معلومات النظام</h2>
@@ -3919,7 +3903,7 @@
           placeholder="هنا هنحط النص الطويل ..."></textarea><br><br>
         <button class="conf-btn" onclick="compressText()">ضغط النص</button>
         <button class="red-btn" onclick="handleDecompress()">استعادة النص</button>
-        <button onclick=" downloadAsDawn()">تنزيل النص</button>
+        <button onclick="downloadAsDawn()">تنزيل النص</button>
         <div id="outputcompress" style="margin-top: 20px;"></div>
       </div>
       <div id="ocrtextmatch" class="modaltab">
@@ -4008,7 +3992,7 @@
           <div class="msg-list" id="chatHistory"></div>
           <div class="flex-center">
             <button class="conf-btn" id="exportBtn" style="margin-bottom:0;">تصدير السجل </button>
-            <button class="red-btn" id="clearBtn" style="margin-bottom:0;"> مسح السجل</button>
+            <button class="red-btn-sec" id="clearBtn" style="margin-bottom:0;"> مسح السجل</button>
           </div>
         </details>
       </div>
@@ -4086,7 +4070,7 @@
             <input type="number" id="p-total-tasks" placeholder="إجمالي عدد المهمات">
           </div>
           <textarea id="p-notes" placeholder="ملاحظات سريعة..."></textarea>
-          <button class="conf-btn" onclick="addProject()">إضافه للمشروعات</button>
+          <button class="conf-btn" onclick="addProject();switchTab('ProgressTracker')">إضافه للمشروعات</button>
         </div>
       </div>
       <div id="salary-calc-app" class="modaltab">
@@ -4377,8 +4361,8 @@
           <div id="fullMessageDisplay"></div>
         </fieldset>
         <button onclick="openuser(event, 'mymemory');opentab('usertab')">رجوع</button>
-        <button id="displayFullButton" class="conf-btn">الرسالة الكاملو</button>
-        <button id="forgetButton" class="red-btn">نسيان الرساله</button>
+        <button id="displayFullButton" class="conf-btn">الرسالة الكاملة</button>
+        <button id="forgetButton" class="red-btn-sec">نسيان الرساله</button>
       </div>
       <div id="Lawsepector" class="modaltab">
         <h2>حساب القوانين</h2>
@@ -4455,7 +4439,7 @@
             <button onclick="showMemoryData()" class="conf-btn">عرض ما تعلمته</button>
             <button onclick="importlearnData()">استيراد</button>
             <button onclick="exportlearnData()">تصدير</button>
-            <button onclick="clearMemoryAll()" class="red-btn"> نسيان الكل</button>
+            <button onclick="clearMemoryAll()" class="red-btn-sec"> نسيان الكل</button>
           </div>
         </fieldset>
         <div id="memoryDisplay"></div>
@@ -5135,8 +5119,7 @@
       <h2>إداراه المشروعات</h2>
       <div class="app-container" style="overflow:auto;">
         <h3>رادار مشروعاتك </h3>
-        <div id="projects-container"
-          style="overflow: auto;white-space: nowrap;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;gap:0 10px;padding:10px;margin:0 0 20px;">
+        <div id="projects-container" style="overflow: auto;white-space: nowrap;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;gap:0 10px;padding:10px;margin:0 0 20px;">
         </div>
         <h3>قائمة تتبع الانجاز</h3>
         <div style="border:var(--cborder);padding:15px 10px 10px;border-radius:12px;margin:10px 0 0;">
@@ -12354,13 +12337,13 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     function projradarrender() {
       const container = document.getElementById('projects-container');
       if (!projects || projects.length === 0) {
-        container.innerHTML = '<div id="emptyradar-state" style="min-width:100%;text-align:center; padding:30px; color:#999;flex-direction:column;justify-content: center;align-items: center;"><svg viewBox="0 0 576 512" width="50" fill="#66BB6A" style="margin:0 0 20px;"><path d="M546.2 9.7c-5.6-12.5-21.6-13-28.3-1.2C486.9 62.4 431.4 96 368 96h-80C182 96 96 182 96 288c0 7 .8 13.7 1.5 20.5C161.3 262.8 253.4 224 384 224c8.8 0 16 7.2 16 16s-7.2 16-16 16C132.6 256 26 410.1 2.4 468c-6.6 16.3 1.2 34.9 17.5 41.6 16.4 6.8 35-1.1 41.8-17.3 1.5-3.6 20.9-47.9 71.9-90.6 32.4 43.9 94 85.8 174.9 77.2C465.5 467.5 576 326.7 576 154.3c0-50.2-10.8-102.2-29.8-144.6z" /></svg><p>مفيش مشاريع حالياً.. يلا نبدأ مشاريع جديدة"!</p></div>';
+        container.innerHTML = `<div id="emptyradar-state" onclick="opentab('projects-app')" style="min-width:100%;text-align:center; padding:30px; color:#999;flex-direction:column;justify-content: center;align-items: center;cursor:pointer;"><svg viewBox="0 0 576 512" width="50" fill="#66BB6A" style="margin:0 0 20px;"><path d="M546.2 9.7c-5.6-12.5-21.6-13-28.3-1.2C486.9 62.4 431.4 96 368 96h-80C182 96 96 182 96 288c0 7 .8 13.7 1.5 20.5C161.3 262.8 253.4 224 384 224c8.8 0 16 7.2 16 16s-7.2 16-16 16C132.6 256 26 410.1 2.4 468c-6.6 16.3 1.2 34.9 17.5 41.6 16.4 6.8 35-1.1 41.8-17.3 1.5-3.6 20.9-47.9 71.9-90.6 32.4 43.9 94 85.8 174.9 77.2C465.5 467.5 576 326.7 576 154.3c0-50.2-10.8-102.2-29.8-144.6z" /></svg><p>مفيش مشاريع حالياً.. يلا نبدأ مشاريع جديدة"!</p></div>`;
         return;
-      }
-      container.innerHTML = projects.map((p, index) => {
+      }      
+      let html = projects.map((p, index) => {
         const progress = p.totalTasks > 0 ? Math.round((p.doneTasks / p.totalTasks) * 100) : 0;
         return `
-                <details style="max-width:90%;min-width:300px;display:inline-block;overflow:hidden;">
+                <details style="width:90%;max-width:300px;min-width:300px;display:inline-block;overflow:hidden;">
                     <summary> ${p.name}
                         <span style="float: left;">(${p.doneTasks}/${p.totalTasks}) ${progress}%</span>
                         <progress value="${progress}" max="100" style="width: 100%; display: block; margin-top: 5px;color:blue;"></progress>
@@ -12372,10 +12355,17 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
                         <button onclick="updateTask(${index}, -1)" class="red-btn">تراجع - </button>
                         <button onclick="deleteProject(${index})" style="border:var(--cborder);" >حذف ×</button>
                     </div>
-                        <div>
                 </details>`;
       }).join('');
-    }
+
+      html += `
+        <div style="display:inline-flex; align-items:center; justify-content:center; min-width:150px; margin: 10px; vertical-align: top;">
+            <button onclick="opentab('projects-app')" class="conf-btn" style="width:100%; padding:15px; border-radius:8px; cursor:pointer;">+ إضافة مشروع جديد</button>
+        </div>
+      `;
+
+      container.innerHTML = html;
+}
     function addProject() {
       const name = document.getElementById('p-name').value.trim();
       const total = parseInt(document.getElementById('p-total-tasks').value) || 0;
@@ -12385,7 +12375,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         saveprojradar();
         ['p-name', 'p-total-tasks', 'p-notes'].forEach(id => document.getElementById(id).value = '');
       }
-    }
+}
     function updateTask(index, val) {
       const p = projects[index];
       const result = p.doneTasks + val;
@@ -12639,6 +12629,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       if (isOnlySpaces && spaceCount >= 3) {
         container.style.display = 'block';
         DawnRunGo.style.display = 'block';
+        onerun('startanimation');
         if (spaceCount >= 4 && !isRunning && !isGameOver) startGame();
       } else {
         container.style.display = 'none';
@@ -12662,6 +12653,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     });
     input.addEventListener('click', function (e) {
+      onerun('startanimation');
       if (container.style.display === 'block' || DawnRunGo.style.display === 'block') {
         if (!isRunning && !isGameOver) {
           startGame();
@@ -12682,6 +12674,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       isRunning = false;
     });
     function startGame() {
+      onerun('startanimation');
       overlay.style.display = 'none';
       isRunning = true;
       isGameOver = false;
@@ -12700,9 +12693,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       isRunning = false;
       isGameOver = true;
       overlay.style.display = 'flex';
+      
       msg.innerHTML = `انتهت اللعبة!<br><span style="color:var(--rcolor); font-size:1rem;">المسافة: ${Math.floor(distance / 10)} متر</span>`;
     }
     function spawnLogic() {
+      onerun('startanimation');
       frameCounter++;
       if (frameCounter >= nextSpawnFrame) {
         let r = Math.random();
@@ -13681,8 +13676,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   //تعليمات للمستخدم داخل حقل الكتابه
   {
     const tips = [
-      "نكتب ! علشان الأوامر",
-      "نكتب @ للأفراد والأوضاع",
+      "نكتب ! للأوامر",
+      "نكتب @ للجهات",
       "نستخدم # للأدوات",
       "يلا ندردش...",
     ];
@@ -13690,15 +13685,17 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     const editor = document.getElementById('editor');
     if (editor) {
       setInterval(() => {
-        editor.style.opacity = 0;
-        setTimeout(() => {
-          editor.placeholder = tips[currentTipIndex];
-          currentTipIndex = (currentTipIndex + 1) % tips.length;
-          editor.style.opacity = 1;
-        }, 500);
+        if (!editor.value) {
+          editor.style.opacity = 0;
+          setTimeout(() => {
+            editor.placeholder = tips[currentTipIndex];
+            currentTipIndex = (currentTipIndex + 1) % tips.length;
+            editor.style.opacity = 1;
+          }, 500);
+        }
       }, 6000);
     }
-  }
+}
   //شخصيه فجر للذكاء الاصطناعي
   {
     function copyDawnPersonality() {
