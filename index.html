@@ -84,7 +84,7 @@
     --line: #cbd5e1;
   }
   body.dark-mode {
-    --mainbg: rgba(15, 23, 42, 0.75);
+    --mainbg: rgba(15, 23, 42, 0.425);
     --secbg: rgba(30, 41, 59, 0.85);
     --focusbg: rgba(51, 65, 85, 0.9);
     --backfilter: blur(12px);
@@ -92,7 +92,7 @@
     --cborder: 1px solid rgba(255, 255, 255, 0.5);
     --wcolor: #0f172a;
     --bcolor: #f8fafc;
-    --gcolor: #38bdf8;
+    --gcolor: #f2f2f2;
   }
   ::-webkit-scrollbar {
     width: 6px;
@@ -382,6 +382,7 @@
     display: flex;
     flex-direction: column;
     padding: 15px 0;
+    border: var(--dborder);
     overflow: hidden;
     z-index: 2;
   }
@@ -719,7 +720,7 @@
     margin: auto;
     left: 120px;
     width: 25px;
-    fill: #7575f0;
+    fill: var(--dcolor);
     cursor: pointer;
   }
   #connect {
@@ -734,8 +735,8 @@
     bottom: 45px;
   }
   #add {
-    fill: #7575f0;
-    border: 2px solid #7575f0;
+    fill: var(--dcolor);
+    border: 2px solid var(--dcolor);
     border-radius: 50%;
     position: absolute;
     width: 35px;
@@ -750,17 +751,13 @@
   #contentContainer {
     position: relative;
     display: flex;
-    /* تغيير من inline-grid لـ flex */
     flex-direction: column;
-    /* رص العناصر تحت بعض */
     align-items: flex-end;
-    /* دايماً الرسائل على اليمين */
-    padding: 0 0 3px 35px;
-    width: 100%;
+    padding: 5px 5px 3px 15px;
+    width: calc(100% - 160px);
     overflow-y: auto;
-    /* تغيير لـ overflow-y فقط */
     max-height: 53vh;
-    margin: 0 0 3px;
+    margin: 0 135px 3px auto;
   }
   #replay,
   .typing-indicator,
@@ -1801,6 +1798,7 @@
     padding: var(--secpadd);
     flex-grow: 1;
     cursor: pointer;
+    fill:var(--bcolor);
     max-width: 50px;
   }
   #richeditor {
@@ -1824,10 +1822,19 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 10px;
+    right: -290px;
     margin: auto;
     display: none;
+    width:300px;
+    border:var(--dborder);
+    max-height:400px;
+    background: var(--focusbg);
+    border-radius:var(--secradius);
   }
+  #viewerwrapper:focus{right: 10px;}
+  .viewer-header{padding:var(--mainpadd);}
+  #richpreview{border:var(--dborder);
+    height:calc(100% - 62px);margin:5px;border-radius:var(--minradius);width:calc(100% - 10px);}
   #colorcontainer {
     max-width: 600px;
   }
@@ -1887,17 +1894,18 @@
     overflow: auto;
     max-height: 200px;
     z-index: 1000;
+    padding:5px;
   }
   #menu .t {
     display: grid;
     grid-template-columns: 40px 1fr;
-    border-bottom: 1px solid #eee;
     cursor: pointer;
     transition: background 0.2s;
-    padding: 5px 0;
+    padding: 10px 0;
+    border-radius: var(--minradius);
   }
   #menu .t:hover {
-    background: #f0faff;
+    background: var(--focusbg);
   }
   #menu .t:last-child {
     border-bottom: none;
@@ -2176,7 +2184,7 @@
     min-width: calc(100% - 10px)
   }
   .dropdown-menu {
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--focusbg);
     backdrop-filter: blur(10px);
     border-radius: var(--secradius);
     list-style: none;
@@ -2313,7 +2321,6 @@
     overflow: auto;
     flex-wrap: nowrap;
     gap: var(--spacepadd);
-    padding: 5px 5px 10px;
   }
   #list .link-item {
     display: flex;
@@ -2325,6 +2332,7 @@
     background: var(--focusbg);
     flex-shrink: 0;
     cursor: pointer;
+    margin: 5px 5px 10px;
   }
   #DawnRunGo *,
   #DawnRunGo #gameCanvas,
@@ -3090,11 +3098,13 @@
     }
     #contentContainer {
       position: fixed;
-      width: calc(100vw - 50px);
-      margin: 0 10px;
+      width: calc(100vw - 70px);
+      right:0;
+      left:0;
+      margin:auto;
       bottom: 80px;
       max-height: 72vh;
-      padding: 0 0 5px 5px;
+      padding: 5px 15px 5px;
     }
     #input {
       position: fixed;
@@ -3114,6 +3124,21 @@
     }
     .flex {
       flex-direction: column;
+    }
+    .logo {
+        position: absolute;
+        inset:0;
+        width: 100px;
+        height: 100px;
+        margin:auto;
+    }
+    .logo>span {
+      margin:auto;
+      inset: 0;
+      width:45px;
+      height:45px;
+      position: absolute;
+      color: #fff;
     }
   }
   @media screen and (max-width: 600px) {
@@ -3380,7 +3405,7 @@
               <div class="profile-card">
                 <div id="account-lvl"></div>
                 <div class="upgrade-btn"><span id="profgold-val">1000</span> \ <span id="cost-val"
-                    style="color:black;font-size:14px;">50</span></div>
+                    style="color:var(--gcolor);font-size:14px;">50</span></div>
                 <div>
                   <h3 id="current-biome" style="display:inline;margin: 5px 0;">أرض البداية</h3>
                   <div style="display:inline;font-size: 14px; opacity: 0.7;">قوة الحساب: <span id="total-power"
@@ -5145,7 +5170,7 @@
         </div>
         <div id="richeditor" contenteditable="true" placeholder=" كلمة تصنع التاريخ..." oninput="autoSaveAndRender()">
         </div>
-        <div id="viewerwrapper" style="width:0px; height:0px;">
+        <div id="viewerwrapper" tabindex="0">
           <div class="viewer-header">المعاينة الحية</div>
           <iframe id="richpreview"></iframe>
         </div>
@@ -10379,7 +10404,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "الترحيب", d: "عرض ترحيب وتعريف فجر", run: "showAndMove('welcome-modal')" },
         { n: "نقاط النور", d: "شحن رصيد النقاط والتطور", run: "showAndMove('lightcoin')" },
         { n: "فحص اللغة", d: "كشف لغه الترميز بالنمط", run: "codeget()" },
-        { n: "نسخ شخصيتي", d: "نسخ شخصيتي للكلام معاها بذكاء", run: "copyDawnPersonality()" }
+        { n: "نسخ شخصيتي", d: "نسخ شخصيتي للكلام معاها", run: "copyDawnPersonality()" }
       ]
     };
     function discoverAgents() {
