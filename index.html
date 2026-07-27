@@ -3401,7 +3401,7 @@
       <p style="color: var(--wcolor); margin: 10px 0 0 0;" id="videoTitle">لم يتم اختيار فيديو</p>
     </div>
   </div>
-  <div id="settingsModal" onclick="this.style.display='none'" style="display:flex;">
+  <div id="settingsModal" onclick="this.style.display='none'">
     <div class="modal-content" onclick="event.stopPropagation();closeAllDropdowns()">
       <div class="close-nav" onclick="document.getElementById('settingsModal').style.display='none'">
         <svg viewBox="0 0 24 24" width="30" fill="#64748b">
@@ -3414,7 +3414,7 @@
           <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z" />
         </svg>
       </div>
-      <div id="usertab" class="modaltab" style="display:block;">
+      <div id="usertab" class="modaltab">
         <div class="user-settings-container">
           <div id="Profile" class="usertabcontent">
             <h2>الملف الشخصي</h2>
@@ -3495,7 +3495,7 @@
               <div id="dict-preview"></div>
             </details>
           </div>
-          <div id="file_manager" class="usertabcontent" style="display:block;">
+          <div id="file_manager" class="usertabcontent">
             <h2>إدراه المحتوى</h2>
             <div id="apps">
               <div class="app upload-btn" onclick="UI.fileInput.click();">
