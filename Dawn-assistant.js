@@ -1,10 +1,11 @@
 /**
- * Fajr Reader & UI Assistant - Complete URL Routing & Smart Navigation Version
+ * Fajr Reader & UI Assistant - Final Polished Version
+ * Transparent Single-Ring SVG Logo + Chat Bubble UI + Horizontal Filterable Saved Bar + Right-Click Copy
  */
 (function() {
     'use strict';
 
-    // 1. حقن الـ CSS
+    // 1. حقن الـ CSS بالكامل
     const style = document.createElement('style');
     style.innerHTML = `
         body, a, button, input, textarea, [role="button"] {
@@ -43,17 +44,14 @@
             background: #007bff;
         }
 
+        /* شعار فَجر الشفاف (حلقة واحدة كبيرة) */
         #fajr-bubble {
             position: fixed;
             bottom: 25px;
             right: 25px;
             width: 50px;
             height: 50px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            border: 2px solid #007bff;
-            border-radius: 50%;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            background: transparent;
             cursor: none !important;
             z-index: 999999;
             display: flex;
@@ -61,27 +59,47 @@
             justify-content: center;
             transition: transform 0.3s ease;
         }
-        #fajr-bubble:hover { transform: scale(1.1); }
-        #fajr-bubble svg { width: 30px; height: 30px; pointer-events: none; }
+        #fajr-bubble:hover { transform: scale(1.15); }
+        #fajr-bubble svg { width: 45px; height: 45px; pointer-events: none; }
 
+        /* صندوق المحادثة بستايل Chat Bubble */
         #fajr-chat-box {
             position: fixed;
-            bottom: 85px;
+            bottom: 90px;
             right: 25px;
-            width: 330px;
-            height: 440px;
+            width: 340px;
+            height: 460px;
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
             z-index: 999999;
             display: none;
             flex-direction: column;
             overflow: hidden;
             font-family: 'Segoe UI', Tahoma, sans-serif;
             direction: rtl;
+            animation: fajrPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        @keyframes fajrPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* زاوية الـ Chat Bubble (الـ Tail في اليمين تحت) */
+        #fajr-chat-box::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 25px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(255, 255, 255, 0.98);
+        }
+
         #fajr-chat-header {
             background: #2c3e50;
             color: white;
@@ -92,22 +110,61 @@
             justify-content: space-between;
             align-items: center;
         }
-        #fajr-toggle-view {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 3px 9px;
-            border-radius: 4px;
-            cursor: none !important;
-            font-size: 8.5pt;
-        }
+        
         #fajr-chat-body {
             flex: 1;
             padding: 12px;
             overflow-y: auto;
             font-size: 10pt;
             color: #333;
+            display: flex;
+            flex-direction: column;
         }
+
+        /* شريط المحفوظات الأفقي فوق النتائج */
+        #fajr-saved-bar-container {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        #fajr-saved-input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 8.5pt;
+            outline: none;
+            margin-bottom: 6px;
+            background: #fff;
+        }
+        #fajr-saved-horizontal {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: thin;
+        }
+        .fajr-saved-chip {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 8.5pt;
+            white-space: nowrap;
+            cursor: none !important;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+        .fajr-saved-chip:hover {
+            background: #e2e8f0;
+            border-color: #007bff;
+        }
+        .fajr-chip-text { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
+        .fajr-chip-goto { color: #007bff; font-weight: bold; font-size: 8pt; }
+
         #fajr-chat-input {
             width: 100%;
             padding: 12px;
@@ -151,24 +208,27 @@
     `;
     document.head.appendChild(style);
 
-    // 2. بناء الواجهة
+    // 2. بناء الهيكل (شعار حلقة واحدة شفافة + Chat Bubble)
     const container = document.createElement('div');
     container.innerHTML = `
         <div id="fajr-cursor"></div>
         <div id="fajr-bubble" title="مساعد فَجر">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="48" fill="none"/>
-                <circle cx="50" cy="50" r="32" stroke="#007bff" stroke-width="10" fill="none"/>
+                <circle cx="50" cy="50" r="42" stroke="#007bff" stroke-width="12" fill="none"/>
             </svg>
         </div>
         <div id="fajr-chat-box">
             <div id="fajr-chat-header">
                 <span>فَجر - مساعد القراءة</span>
-                <button id="fajr-toggle-view">المحفوظات 📁</button>
             </div>
             <div id="fajr-chat-body">
-                <p style="color: #666; margin: 0 0 10px 0;">ابحث في كل محتوى الصفحة، واحفظ بضغطة زر (+).</p>
-                <div id="fajr-results"></div>
+                <!-- شريط المحفوظات الأفقي فوق النتائج -->
+                <div id="fajr-saved-bar-container">
+                    <input type="text" id="fajr-saved-input" placeholder="تصفية المحفوظات...">
+                    <div id="fajr-saved-horizontal"></div>
+                </div>
+                <p style="color: #666; margin: 0 0 10px 0; font-size: 9pt;">ابحث في محتوى الصفحة، واحفظ بضغطة (+).</p>
+                <div id="fajr-results" style="flex: 1; overflow-y: auto;"></div>
             </div>
             <input type="text" id="fajr-chat-input" placeholder="ابحث عن أي جملة أو كلمة...">
         </div>
@@ -184,11 +244,10 @@
 
     const bubble = document.getElementById('fajr-bubble');
     const chatBox = document.getElementById('fajr-chat-box');
-    const chatBody = document.getElementById('fajr-chat-body');
-    const toggleBtn = document.getElementById('fajr-toggle-view');
+    const savedHorizontal = document.getElementById('fajr-saved-horizontal');
+    const savedInput = document.getElementById('fajr-saved-input');
 
     let allPageTexts = [];
-    let isShowingSaved = false;
 
     function normalizeArabic(text) {
         if (!text) return "";
@@ -200,12 +259,91 @@
             .replace(/[\u064b-\u0652]/g, "");
     }
 
-    // سحب النصوص وقت فتح الشات
+    // دالة عرض المحفوظات أفقياً مع التصفية والضغطة اليمنى للنسخ
+    function renderSavedBar(filterText = "") {
+        savedHorizontal.innerHTML = '';
+        let savedItems = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
+
+        if (filterText) {
+            savedItems = savedItems.filter(item => normalizeArabic(item.text).includes(normalizeArabic(filterText)));
+        }
+
+        if (savedItems.length === 0) {
+            savedHorizontal.innerHTML = '<span style="color: #999; font-size: 8pt; padding: 4px;">لا توجد محفوظات مطابقة..</span>';
+            return;
+        }
+
+        savedItems.forEach((item) => {
+            const chip = document.createElement('div');
+            chip.className = 'fajr-saved-chip';
+            chip.innerHTML = `<span class="chip-text" title="${item.text}">${item.text}</span><span class="fajr-chip-goto">↗</span>`;
+
+            // الانتقال للجملة عند الضغط
+            chip.addEventListener('click', () => {
+                navigateToSavedItem(item);
+            });
+
+            // الضغطة اليمنى (Right Click) لنسخ النص فوراً ومنع القايمة الافتراضية
+            chip.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(item.text).then(() => {
+                    const originalText = chip.innerHTML;
+                    chip.innerHTML = `<span style="color: #28a745; font-weight: bold;">تم النسخ! ✓</span>`;
+                    setTimeout(() => { chip.innerHTML = originalText; }, 1200);
+                });
+            });
+
+            savedHorizontal.appendChild(chip);
+        });
+    }
+
+    // تصفية المحفوظات أناء الكتابة في شريطها
+    savedInput.addEventListener('input', (e) => {
+        renderSavedBar(e.target.value);
+    });
+
+    // دالة الانتقال الذكي للعنصر المحفوظ
+    function navigateToSavedItem(item) {
+        const currentUrl = window.location.href.split('#')[0];
+        const savedUrl = (item.url || '').split('#')[0];
+
+        if (savedUrl && currentUrl !== savedUrl) {
+            window.location.href = item.url;
+            return;
+        }
+
+        let targetObj = allPageTexts.find(p => p.text.includes(item.text) || item.text.includes(p.text));
+        if (targetObj && targetObj.element) {
+            targetObj.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            targetObj.element.classList.add('fajr-highlighted-text');
+            setTimeout(() => targetObj.element.classList.remove('fajr-highlighted-text'), 3000);
+            chatBox.style.display = 'none';
+        } else {
+            let foundEl = null;
+            document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, span, a').forEach(el => {
+                if (el.innerText && el.innerText.includes(item.text)) {
+                    foundEl = el;
+                }
+            });
+
+            if (foundEl) {
+                foundEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                foundEl.classList.add('fajr-highlighted-text');
+                setTimeout(() => foundEl.classList.remove('fajr-highlighted-text'), 3000);
+                chatBox.style.display = 'none';
+            } else {
+                alert('عذراً، تعذر العثور على الجملة في هذه الصفحة.');
+            }
+        }
+    }
+
+    // فتح وغلق الشات وسحب النصوص وتحديث شريط المحفوظات
     bubble.addEventListener('click', () => {
         const isOpen = chatBox.style.display === 'flex';
         chatBox.style.display = isOpen ? 'none' : 'flex';
         
-        if (!isOpen && !isShowingSaved) {
+        if (!isOpen) {
+            renderSavedBar();
             allPageTexts = [];
             const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
                 acceptNode: function(node) {
@@ -228,76 +366,7 @@
         }
     });
 
-    // عرض المحفوظات مع دعم التوجيه للرابط الأصلي والجملة
-    function renderSavedView() {
-        chatBody.innerHTML = '<div style="font-weight: bold; margin-bottom: 8px; color: #2c3e50;">نصوصك المحفوظة (اضغط للانتقال):</div>';
-        let savedItems = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
-        
-        if (savedItems.length === 0) {
-            chatBody.innerHTML += '<div style="color: #999; font-size: 9pt;">لم تقم بحفظ أي نص بعد.. ابحث واحفظ باستخدام زر (+) بجانب النتائج.</div>';
-        } else {
-            savedItems.forEach((item) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.style.cssText = "background: #f8fafc; padding: 8px; margin-bottom: 6px; border-radius: 6px; font-size: 9pt; border-right: 3px solid #007bff; cursor: none !important;";
-                itemDiv.innerHTML = `"${item.text}" <div style="font-size: 7.5pt; color: #888; margin-top: 4px;">${item.date}</div>`;
-                
-                itemDiv.addEventListener('click', () => {
-                    const currentUrl = window.location.href.split('#')[0];
-                    const savedUrl = (item.url || '').split('#')[0];
-
-                    // لو الرابط مختلف، انتقل للرابط الأصلي الأول
-                    if (savedUrl && currentUrl !== savedUrl) {
-                        window.location.href = item.url;
-                        return;
-                    }
-
-                    // لو في نفس الصفحة، دور على العنصر واعمل له Scroll
-                    let targetObj = allPageTexts.find(p => p.text.includes(item.text) || item.text.includes(p.text));
-                    if (targetObj && targetObj.element) {
-                        targetObj.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        targetObj.element.classList.add('fajr-highlighted-text');
-                        setTimeout(() => targetObj.element.classList.remove('fajr-highlighted-text'), 3000);
-                        chatBox.style.display = 'none';
-                    } else {
-                        // لو العناصر متسحبتش لسه في الصفحة الحالية، جرب البحث المباشر في الـ DOM
-                        let foundEl = null;
-                        document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, span, a').forEach(el => {
-                            if (el.innerText && el.innerText.includes(item.text)) {
-                                foundEl = el;
-                            }
-                        });
-
-                        if (foundEl) {
-                            foundEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            foundEl.classList.add('fajr-highlighted-text');
-                            setTimeout(() => foundEl.classList.remove('fajr-highlighted-text'), 3000);
-                            chatBox.style.display = 'none';
-                        } else {
-                            alert('عذراً، تعذر العثور على الجملة بدقة في هذه الصفحة.');
-                        }
-                    }
-                });
-
-                chatBody.appendChild(itemDiv);
-            });
-        }
-    }
-
-    toggleBtn.addEventListener('click', () => {
-        isShowingSaved = !isShowingSaved;
-        if (isShowingSaved) {
-            toggleBtn.innerText = 'بحث 🔍';
-            renderSavedView();
-        } else {
-            toggleBtn.innerText = 'المحفوظات 📁';
-            chatBody.innerHTML = `
-                <p style="color: #666; margin: 0 0 10px 0;">ابحث في كل محتوى الصفحة، واحفظ بضغطة زر (+).</p>
-                <div id="fajr-results"></div>
-            `;
-        }
-    });
-
-    // 4. محرك البحث وحفظ النص مع الرابط (`window.location.href`)
+    // 4. محرك البحث الشامل وحفظ النتائج بضغطة زر (+)
     document.addEventListener('input', (e) => {
         if (e.target && e.target.id === 'fajr-chat-input') {
             const rawQuery = e.target.value.trim();
@@ -313,7 +382,7 @@
             });
             
             if (matches.length === 0) {
-                resultsDiv.innerHTML = '<div style="color: #999; padding: 5px;">لا توجد نتائج مطابقة..</div>';
+                resultsDiv.innerHTML = '<div style="color: #999; padding: 5px; font-size: 9pt;">لا توجد نتائج مطابقة..</div>';
                 return;
             }
 
@@ -323,7 +392,7 @@
                 
                 const textSpan = document.createElement('span');
                 textSpan.className = 'fajr-result-text';
-                textSpan.innerText = match.text.substring(0, 60) + '...';
+                textSpan.innerText = match.text.substring(0, 55) + '...';
                 
                 textSpan.addEventListener('click', () => {
                     match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -338,7 +407,6 @@
                     ev.stopPropagation();
                     let saved = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
                     
-                    // حفظ النص مع الرابط الحالي للموقع
                     saved.push({ 
                         text: match.text, 
                         url: window.location.href, 
@@ -346,6 +414,7 @@
                     });
                     
                     localStorage.setItem('fajr_saved', JSON.stringify(saved));
+                    renderSavedBar(); // تحديث الشريط الأفقي فوراً
                     
                     saveBtn.innerText = 'تم ✓';
                     saveBtn.style.background = '#28a745';
