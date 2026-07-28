@@ -1,6 +1,5 @@
 /**
- * Fajr Reader & UI Assistant - Ultimate Version
- * Instant Cursor + Global Text Search + Direct (+) Save from Search + Clickable Saved Scroll
+ * Fajr Reader & UI Assistant - Complete URL Routing & Smart Navigation Version
  */
 (function() {
     'use strict';
@@ -152,7 +151,7 @@
     `;
     document.head.appendChild(style);
 
-    // 2. بناء الهيكل
+    // 2. بناء الواجهة
     const container = document.createElement('div');
     container.innerHTML = `
         <div id="fajr-cursor"></div>
@@ -201,14 +200,13 @@
             .replace(/[\u064b-\u0652]/g, "");
     }
 
-    // فتح الشات وسحب كل النصوص في الصفحة بلا استثناء
+    // سحب النصوص وقت فتح الشات
     bubble.addEventListener('click', () => {
         const isOpen = chatBox.style.display === 'flex';
         chatBox.style.display = isOpen ? 'none' : 'flex';
         
         if (!isOpen && !isShowingSaved) {
             allPageTexts = [];
-            // سحب كل العناصر التي تحتوي على نصوص داخل الصفحة بالكامل
             const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
                 acceptNode: function(node) {
                     if (node.parentNode.closest('#fajr-chat-box') || node.parentNode.closest('#fajr-cursor')) {
@@ -230,7 +228,7 @@
         }
     });
 
-    // دالة عرض المحفوظات مع إمكانية الانتقال إليها بضغطة زر
+    // عرض المحفوظات مع دعم التوجيه للرابط الأصلي والجملة
     function renderSavedView() {
         chatBody.innerHTML = '<div style="font-weight: bold; margin-bottom: 8px; color: #2c3e50;">نصوصك المحفوظة (اضغط للانتقال):</div>';
         let savedItems = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
@@ -238,22 +236,45 @@
         if (savedItems.length === 0) {
             chatBody.innerHTML += '<div style="color: #999; font-size: 9pt;">لم تقم بحفظ أي نص بعد.. ابحث واحفظ باستخدام زر (+) بجانب النتائج.</div>';
         } else {
-            savedItems.forEach((item, idx) => {
+            savedItems.forEach((item) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.style.cssText = "background: #f8fafc; padding: 8px; margin-bottom: 6px; border-radius: 6px; font-size: 9pt; border-right: 3px solid #007bff; cursor: none !important;";
                 itemDiv.innerHTML = `"${item.text}" <div style="font-size: 7.5pt; color: #888; margin-top: 4px;">${item.date}</div>`;
                 
-                // عند الضغط على النص المحفوظ، ينتقل إليه مباشرة في المقال
                 itemDiv.addEventListener('click', () => {
-                    // البحث عن العنصر المطابق للنص المحفوظ في الصفحة
+                    const currentUrl = window.location.href.split('#')[0];
+                    const savedUrl = (item.url || '').split('#')[0];
+
+                    // لو الرابط مختلف، انتقل للرابط الأصلي الأول
+                    if (savedUrl && currentUrl !== savedUrl) {
+                        window.location.href = item.url;
+                        return;
+                    }
+
+                    // لو في نفس الصفحة، دور على العنصر واعمل له Scroll
                     let targetObj = allPageTexts.find(p => p.text.includes(item.text) || item.text.includes(p.text));
                     if (targetObj && targetObj.element) {
                         targetObj.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         targetObj.element.classList.add('fajr-highlighted-text');
                         setTimeout(() => targetObj.element.classList.remove('fajr-highlighted-text'), 3000);
-                        chatBox.style.display = 'none'; // قفل الشات للتركيز
+                        chatBox.style.display = 'none';
                     } else {
-                        alert('عذراً، لم يعد العنصر موجوداً في الصفحة الحالية.');
+                        // لو العناصر متسحبتش لسه في الصفحة الحالية، جرب البحث المباشر في الـ DOM
+                        let foundEl = null;
+                        document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, span, a').forEach(el => {
+                            if (el.innerText && el.innerText.includes(item.text)) {
+                                foundEl = el;
+                            }
+                        });
+
+                        if (foundEl) {
+                            foundEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            foundEl.classList.add('fajr-highlighted-text');
+                            setTimeout(() => foundEl.classList.remove('fajr-highlighted-text'), 3000);
+                            chatBox.style.display = 'none';
+                        } else {
+                            alert('عذراً، تعذر العثور على الجملة بدقة في هذه الصفحة.');
+                        }
                     }
                 });
 
@@ -276,7 +297,7 @@
         }
     });
 
-    // 4. محرك البحث والزر المباشر للحفظ (+)
+    // 4. محرك البحث وحفظ النص مع الرابط (`window.location.href`)
     document.addEventListener('input', (e) => {
         if (e.target && e.target.id === 'fajr-chat-input') {
             const rawQuery = e.target.value.trim();
@@ -304,21 +325,26 @@
                 textSpan.className = 'fajr-result-text';
                 textSpan.innerText = match.text.substring(0, 60) + '...';
                 
-                // الانتقال للجملة عند الضغط عليها من نتائج البحث
                 textSpan.addEventListener('click', () => {
                     match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     match.element.classList.add('fajr-highlighted-text');
                     setTimeout(() => match.element.classList.remove('fajr-highlighted-text'), 2500);
                 });
 
-                // زر الحفظ المباشر (+) جنب الاقتراح
                 const saveBtn = document.createElement('button');
                 saveBtn.className = 'fajr-save-inline-btn';
                 saveBtn.innerText = '+ حفظ';
                 saveBtn.addEventListener('click', (ev) => {
                     ev.stopPropagation();
                     let saved = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
-                    saved.push({ text: match.text, date: new Date().toLocaleDateString() });
+                    
+                    // حفظ النص مع الرابط الحالي للموقع
+                    saved.push({ 
+                        text: match.text, 
+                        url: window.location.href, 
+                        date: new Date().toLocaleDateString() 
+                    });
+                    
                     localStorage.setItem('fajr_saved', JSON.stringify(saved));
                     
                     saveBtn.innerText = 'تم ✓';
