@@ -1,11 +1,10 @@
 /**
- * Fajr Reader & UI Assistant - Final Polished Version
- * Transparent Single-Ring SVG Logo + Chat Bubble UI + Horizontal Filterable Saved Bar + Right-Click Copy
+ * Fajr Reader & UI Assistant - Integrated Chips & Chat Bubble Design
  */
 (function() {
     'use strict';
 
-    // 1. حقن الـ CSS بالكامل
+    // 1. حقن الـ CSS بالكامل (متوافق مع متغيراتك والـ Chat Bubble)
     const style = document.createElement('style');
     style.innerHTML = `
         body, a, button, input, textarea, [role="button"] {
@@ -62,17 +61,19 @@
         #fajr-bubble:hover { transform: scale(1.15); }
         #fajr-bubble svg { width: 45px; height: 45px; pointer-events: none; }
 
-        /* صندوق المحادثة بستايل Chat Bubble */
+        /* صندوق المحادثة بستايل Chat Bubble وتصميمك المطلوب */
         #fajr-chat-box {
             position: fixed;
             bottom: 90px;
             right: 25px;
-            width: 340px;
+            width: 350px;
             height: 460px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            border-radius: 18px;
+            background: var(--mainbg, rgba(255, 255, 255, 0.95));
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: var(--dborder, 1px solid rgba(0, 0, 0, 0.1));
+            color: var(--bcolor, #333);
+            border-radius: 30px 30px 5px 30px;
             box-shadow: 0 12px 35px rgba(0,0,0,0.18);
             z-index: 999999;
             display: none;
@@ -87,120 +88,129 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* زاوية الـ Chat Bubble (الـ Tail في اليمين تحت) */
-        #fajr-chat-box::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            right: 25px;
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 10px solid rgba(255, 255, 255, 0.98);
-        }
-
         #fajr-chat-header {
-            background: #2c3e50;
+            background: rgba(44, 62, 80, 0.85);
             color: white;
-            padding: 12px 15px;
+            padding: 14px 18px;
             font-weight: bold;
-            font-size: 13pt;
+            font-size: 12pt;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: var(--dborder, 1px solid rgba(255,255,255,0.1));
         }
         
         #fajr-chat-body {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             overflow-y: auto;
-            font-size: 10pt;
-            color: #333;
+            font-size: 9.5pt;
             display: flex;
             flex-direction: column;
+            gap: 10px;
         }
 
-        /* شريط المحفوظات الأفقي فوق النتائج */
-        #fajr-saved-bar-container {
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 8px;
+        /* تنسيق المحفوظات كـ Chips بنفس الستايل مع Ellipsis */
+        .fajr-section-title {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #888;
+            margin-bottom: 4px;
+            text-transform: uppercase;
         }
-        #fajr-saved-input {
-            width: 100%;
-            padding: 6px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 8.5pt;
-            outline: none;
-            margin-bottom: 6px;
-            background: #fff;
-        }
-        #fajr-saved-horizontal {
+        
+        .fajr-chips-container {
             display: flex;
+            flex-direction: column;
             gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: thin;
         }
+
         .fajr-saved-chip {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 5px 10px;
-            font-size: 8.5pt;
-            white-space: nowrap;
+            position: relative;
+            max-width: 100%;
+            padding: 10px 16px;
+            z-index: 1;
+            background: var(--mainbg, rgba(240, 244, 248, 0.8));
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: var(--dborder, 1px solid rgba(0,0,0,0.08));
+            color: var(--bcolor, #333);
+            line-height: 1.5;
+            border-radius: 20px 20px 5px 20px !important;
             cursor: none !important;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-            transition: background 0.2s;
-        }
-        .fajr-saved-chip:hover {
-            background: #e2e8f0;
-            border-color: #007bff;
-        }
-        .fajr-chip-text { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
-        .fajr-chip-goto { color: #007bff; font-weight: bold; font-size: 8pt; }
-
-        #fajr-chat-input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-top: 1px solid #eee;
-            outline: none;
-            font-size: 10pt;
-            background: #f9f9f9;
-        }
-        .fajr-result-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #f1f5f9;
-            padding: 8px;
-            margin-bottom: 6px;
-            border-radius: 6px;
             font-size: 9pt;
-            border-right: 3px solid #007bff;
+            transition: transform 0.2s;
+        }
+        .fajr-saved-chip:hover {
+            transform: translateX(-3px);
+            border-color: #007bff;
+        }
+        .fajr-chip-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            margin-left: 10px;
+        }
+        .fajr-chip-goto {
+            color: #007bff;
+            font-weight: bold;
+            font-size: 8.5pt;
+            flex-shrink: 0;
+        }
+
+        /* نتائج البحث العادية بنفس الستايل */
+        .fajr-result-item {
+            position: relative;
+            max-width: 100%;
+            padding: 10px 16px;
+            z-index: 1;
+            background: var(--mainbg, rgba(245, 247, 250, 0.8));
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: var(--dborder, 1px solid rgba(0,0,0,0.08));
+            color: var(--bcolor, #333);
+            line-height: 1.5;
+            border-radius: 20px 20px 5px 20px !important;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9pt;
         }
         .fajr-result-text {
             flex: 1;
             cursor: none !important;
             margin-left: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .fajr-save-inline-btn {
             background: #2c3e50;
             color: white;
             border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 4px 10px;
+            border-radius: 12px;
             cursor: none !important;
-            font-size: 8pt;
+            font-size: 7.5pt;
             font-weight: bold;
+            flex-shrink: 0;
         }
         .fajr-save-inline-btn:hover { background: #007bff; }
+
+        #fajr-chat-input {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-top: var(--dborder, 1px solid rgba(0,0,0,0.1));
+            outline: none;
+            font-size: 9.5pt;
+            background: var(--mainbg, rgba(250, 250, 250, 0.9));
+            color: var(--bcolor, #333);
+        }
         .fajr-highlighted-text {
             background-color: rgba(0, 123, 255, 0.3) !important;
             transition: background 0.5s;
@@ -208,7 +218,7 @@
     `;
     document.head.appendChild(style);
 
-    // 2. بناء الهيكل (شعار حلقة واحدة شفافة + Chat Bubble)
+    // 2. بناء الهيكل (Chat Bubble)
     const container = document.createElement('div');
     container.innerHTML = `
         <div id="fajr-cursor"></div>
@@ -222,15 +232,11 @@
                 <span>فَجر - مساعد القراءة</span>
             </div>
             <div id="fajr-chat-body">
-                <!-- شريط المحفوظات الأفقي فوق النتائج -->
-                <div id="fajr-saved-bar-container">
-                    <input type="text" id="fajr-saved-input" placeholder="تصفية المحفوظات...">
-                    <div id="fajr-saved-horizontal"></div>
+                <div id="fajr-dynamic-content">
+                    <div style="color: #666; font-size: 9pt; text-align: center; margin-top: 20px;">ابحث أو استعرض محفوظاتك بذكاء.. 🔍</div>
                 </div>
-                <p style="color: #666; margin: 0 0 10px 0; font-size: 9pt;">ابحث في محتوى الصفحة، واحفظ بضغطة (+).</p>
-                <div id="fajr-results" style="flex: 1; overflow-y: auto;"></div>
             </div>
-            <input type="text" id="fajr-chat-input" placeholder="ابحث عن أي جملة أو كلمة...">
+            <input type="text" id="fajr-chat-input" placeholder="ابحث في المحفوظات أو في محتوى الصفحة...">
         </div>
     `;
     document.body.appendChild(container);
@@ -244,8 +250,8 @@
 
     const bubble = document.getElementById('fajr-bubble');
     const chatBox = document.getElementById('fajr-chat-box');
-    const savedHorizontal = document.getElementById('fajr-saved-horizontal');
-    const savedInput = document.getElementById('fajr-saved-input');
+    const chatBody = document.getElementById('fajr-chat-body');
+    const chatInput = document.getElementById('fajr-chat-input');
 
     let allPageTexts = [];
 
@@ -259,50 +265,110 @@
             .replace(/[\u064b-\u0652]/g, "");
     }
 
-    // دالة عرض المحفوظات أفقياً مع التصفية والضغطة اليمنى للنسخ
-    function renderSavedBar(filterText = "") {
-        savedHorizontal.innerHTML = '';
+    // دالة العرض الموحدة (المحفوظات كأولوية في الظهور فوق، ثم نتائج البحث تحتها)
+    function renderContent(searchQuery = "") {
+        const dynamicContent = document.getElementById('fajr-dynamic-content');
+        if (!dynamicContent) return;
+        
+        dynamicContent.innerHTML = '';
         let savedItems = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
 
-        if (filterText) {
-            savedItems = savedItems.filter(item => normalizeArabic(item.text).includes(normalizeArabic(filterText)));
+        // تصفية المحفوظات لو فيه نص بحث
+        if (searchQuery.trim()) {
+            const normQuery = normalizeArabic(searchQuery);
+            savedItems = savedItems.filter(item => normalizeArabic(item.text).includes(normQuery));
         }
 
-        if (savedItems.length === 0) {
-            savedHorizontal.innerHTML = '<span style="color: #999; font-size: 8pt; padding: 4px;">لا توجد محفوظات مطابقة..</span>';
-            return;
-        }
+        // 1. عرض المحفوظات أولاً (لو موجودة وتطابق البحث)
+        if (savedItems.length > 0) {
+            const title = document.createElement('div');
+            title.className = 'fajr-section-title';
+            title.innerText = 'المحفوظات المطابقة:';
+            dynamicContent.appendChild(title);
 
-        savedItems.forEach((item) => {
-            const chip = document.createElement('div');
-            chip.className = 'fajr-saved-chip';
-            chip.innerHTML = `<span class="chip-text" title="${item.text}">${item.text}</span><span class="fajr-chip-goto">↗</span>`;
+            const chipsWrapper = document.createElement('div');
+            chipsWrapper.className = 'fajr-chips-container';
 
-            // الانتقال للجملة عند الضغط
-            chip.addEventListener('click', () => {
-                navigateToSavedItem(item);
-            });
+            savedItems.forEach(item => {
+                const chip = document.createElement('div');
+                chip.className = 'fajr-saved-chip';
+                chip.innerHTML = `<span class="fajr-chip-text" title="${item.text}">${item.text}</span><span class="fajr-chip-goto">↗</span>`;
 
-            // الضغطة اليمنى (Right Click) لنسخ النص فوراً ومنع القايمة الافتراضية
-            chip.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                navigator.clipboard.writeText(item.text).then(() => {
-                    const originalText = chip.innerHTML;
-                    chip.innerHTML = `<span style="color: #28a745; font-weight: bold;">تم النسخ! ✓</span>`;
-                    setTimeout(() => { chip.innerHTML = originalText; }, 1200);
+                chip.addEventListener('click', () => navigateToSavedItem(item));
+                
+                // ضغطة يمنى للنسخ السريع
+                chip.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    navigator.clipboard.writeText(item.text).then(() => {
+                        const orig = chip.innerHTML;
+                        chip.innerHTML = `<span style="color: #28a745; font-weight: bold; width:100%; text-align:center;">تم النسخ! ✓</span>`;
+                        setTimeout(() => { chip.innerHTML = orig; }, 1200);
+                    });
                 });
-            });
 
-            savedHorizontal.appendChild(chip);
-        });
+                chipsWrapper.appendChild(chip);
+            });
+            dynamicContent.appendChild(chipsWrapper);
+        }
+
+        // 2. نتائج البحث في الصفحة (تظهر تحت المحفوظات)
+        if (searchQuery.trim().length >= 2) {
+            const queryTokens = normalizeArabic(searchQuery).split(/\s+/).filter(Boolean);
+            const matches = allPageTexts.filter(s => queryTokens.every(token => s.normalized.includes(token)));
+
+            if (matches.length > 0) {
+                const searchTitle = document.createElement('div');
+                searchTitle.className = 'fajr-section-title';
+                searchTitle.style.marginTop = savedItems.length > 0 ? '15px' : '0';
+                searchTitle.innerText = 'نتائج البحث في الصفحة:';
+                dynamicContent.appendChild(searchTitle);
+
+                matches.slice(0, 5).forEach(match => {
+                    const item = document.createElement('div');
+                    item.className = 'fajr-result-item';
+                    
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'fajr-result-text';
+                    textSpan.innerText = match.text;
+                    textSpan.title = match.text;
+                    
+                    textSpan.addEventListener('click', () => {
+                        match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        match.element.classList.add('fajr-highlighted-text');
+                        setTimeout(() => match.element.classList.remove('fajr-highlighted-text'), 2500);
+                    });
+
+                    const saveBtn = document.createElement('button');
+                    saveBtn.className = 'fajr-save-inline-btn';
+                    saveBtn.innerText = '+ حفظ';
+                    saveBtn.addEventListener('click', (ev) => {
+                        ev.stopPropagation();
+                        let saved = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
+                        saved.push({ text: match.text, url: window.location.href, date: new Date().toLocaleDateString() });
+                        localStorage.setItem('fajr_saved', JSON.stringify(saved));
+                        renderContent(chatInput.value);
+                        
+                        saveBtn.innerText = 'تم ✓';
+                        saveBtn.style.background = '#28a745';
+                        setTimeout(() => {
+                            saveBtn.innerText = '+ حفظ';
+                            saveBtn.style.background = '#2c3e50';
+                        }, 1500);
+                    });
+
+                    item.appendChild(textSpan);
+                    item.appendChild(saveBtn);
+                    dynamicContent.appendChild(item);
+                });
+            } else if (savedItems.length === 0) {
+                dynamicContent.innerHTML += '<div style="color: #888; font-size: 9pt; text-align: center; margin-top: 20px;">لا توجد أي نتائج مطابقة..</div>';
+            }
+        } else if (savedItems.length === 0) {
+            dynamicContent.innerHTML = '<div style="color: #888; font-size: 9pt; text-align: center; margin-top: 20px;">ابحث في المحفوظات أو اكتب للبحث في الصفحة.. 🔍</div>';
+        }
     }
 
-    // تصفية المحفوظات أناء الكتابة في شريطها
-    savedInput.addEventListener('input', (e) => {
-        renderSavedBar(e.target.value);
-    });
-
-    // دالة الانتقال الذكي للعنصر المحفوظ
+    // الانتقال الذكي للعنصر المحفوظ
     function navigateToSavedItem(item) {
         const currentUrl = window.location.href.split('#')[0];
         const savedUrl = (item.url || '').split('#')[0];
@@ -337,13 +403,13 @@
         }
     }
 
-    // فتح وغلق الشات وسحب النصوص وتحديث شريط المحفوظات
+    // فتح وغلق الشات وسحب النصوص
     bubble.addEventListener('click', () => {
         const isOpen = chatBox.style.display === 'flex';
         chatBox.style.display = isOpen ? 'none' : 'flex';
         
         if (!isOpen) {
-            renderSavedBar();
+            chatInput.value = '';
             allPageTexts = [];
             const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
                 acceptNode: function(node) {
@@ -363,72 +429,13 @@
                     element: node.parentNode
                 });
             }
+            renderContent("");
         }
     });
 
-    // 4. محرك البحث الشامل وحفظ النتائج بضغطة زر (+)
-    document.addEventListener('input', (e) => {
-        if (e.target && e.target.id === 'fajr-chat-input') {
-            const rawQuery = e.target.value.trim();
-            const resultsDiv = document.getElementById('fajr-results');
-            if(!resultsDiv) return;
-            
-            resultsDiv.innerHTML = '';
-            if(rawQuery.length < 2) return;
-
-            const queryTokens = normalizeArabic(rawQuery).split(/\s+/).filter(Boolean);
-            const matches = allPageTexts.filter(s => {
-                return queryTokens.every(token => s.normalized.includes(token));
-            });
-            
-            if (matches.length === 0) {
-                resultsDiv.innerHTML = '<div style="color: #999; padding: 5px; font-size: 9pt;">لا توجد نتائج مطابقة..</div>';
-                return;
-            }
-
-            matches.slice(0, 6).forEach(match => {
-                const item = document.createElement('div');
-                item.className = 'fajr-result-item';
-                
-                const textSpan = document.createElement('span');
-                textSpan.className = 'fajr-result-text';
-                textSpan.innerText = match.text.substring(0, 55) + '...';
-                
-                textSpan.addEventListener('click', () => {
-                    match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    match.element.classList.add('fajr-highlighted-text');
-                    setTimeout(() => match.element.classList.remove('fajr-highlighted-text'), 2500);
-                });
-
-                const saveBtn = document.createElement('button');
-                saveBtn.className = 'fajr-save-inline-btn';
-                saveBtn.innerText = '+ حفظ';
-                saveBtn.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
-                    let saved = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
-                    
-                    saved.push({ 
-                        text: match.text, 
-                        url: window.location.href, 
-                        date: new Date().toLocaleDateString() 
-                    });
-                    
-                    localStorage.setItem('fajr_saved', JSON.stringify(saved));
-                    renderSavedBar(); // تحديث الشريط الأفقي فوراً
-                    
-                    saveBtn.innerText = 'تم ✓';
-                    saveBtn.style.background = '#28a745';
-                    setTimeout(() => {
-                        saveBtn.innerText = '+ حفظ';
-                        saveBtn.style.background = '#2c3e50';
-                    }, 1500);
-                });
-
-                item.appendChild(textSpan);
-                item.appendChild(saveBtn);
-                resultsDiv.appendChild(item);
-            });
-        }
+    // تفاعل حقل البحث الموحد لتصفية المحفوظات ونتائج الصفحة معاً
+    chatInput.addEventListener('input', (e) => {
+        renderContent(e.target.value);
     });
 
 })();
