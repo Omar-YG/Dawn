@@ -1,14 +1,19 @@
 /**
- * Fajr Reader & UI Assistant (Dawn Assistant)
- * Complete Single-File Script: Custom Cursor + Smart Search + Local Bookmarks
+ * Fajr Reader & UI Assistant - Final Version
+ * Custom Cursor (No Lag + Hidden Default) + Smart Tokenized Search + Local Memory
  */
 (function() {
     'use strict';
 
-    // 1. حقن الـ CSS بالكامل (مؤشر فَجر، الشات، الأزرار، والـ Glassmorphism)
+    // 1. حقن الـ CSS بالكامل (إخفاء المؤشر الأصلي + مؤشر فَجر الفوري)
     const style = document.createElement('style');
     style.innerHTML = `
-        /* مؤشر فَجر التفاعلي */
+        /* إخفاء المؤشر الأصلي للمتصفح */
+        body, a, button, input, textarea, [role="button"] {
+            cursor: none !important;
+        }
+
+        /* مؤشر فَجر الفوري (بدون تأخير) */
         #fajr-cursor {
             position: fixed;
             top: 0;
@@ -19,18 +24,18 @@
             border-radius: 50%;
             pointer-events: none;
             z-index: 10000000;
-            translate: -50% -50%;
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(4px);
-            transition: width 0.2s, height 0.2s, transform 0.2s, background 0.3s, border-radius 0.2s, border-style 0.2s;
+            transform: translate(-50%, -50%);
+            transition: width 0.15s, height 0.15s, background 0.2s, border-radius 0.15s, border-style 0.15s;
         }
         body:active #fajr-cursor {
-            transform: scale(0.7);
+            transform: translate(-50%, -50%) scale(0.7);
             background: #28a745;
             border-color: #fff;
         }
         body:has(a:hover, button:hover, .dropdown-trigger:hover, #fajr-bubble:hover) #fajr-cursor {
-            transform: scale(1.6);
+            transform: translate(-50%, -50%) scale(1.6);
             background: rgba(0, 123, 255, 0.1);
             border-style: dashed;
         }
@@ -40,13 +45,8 @@
             border-radius: 5px;
             background: #007bff;
         }
-        body:has(li:hover) #fajr-cursor {
-            transform: scale(1.2);
-            background: #007bff;
-            border-color: #fff;
-        }
 
-        /* أيقونة فَجر العائمة (الشعار) */
+        /* أيقونة فَجر العائمة */
         #fajr-bubble {
             position: fixed;
             bottom: 25px;
@@ -58,7 +58,7 @@
             border: 2px solid #007bff;
             border-radius: 50%;
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            cursor: pointer;
+            cursor: none !important;
             z-index: 999999;
             display: flex;
             align-items: center;
@@ -66,10 +66,7 @@
             transition: transform 0.3s ease;
         }
         #fajr-bubble:hover { transform: scale(1.1); }
-        #fajr-bubble svg {
-            width: 30px;
-            height: 30px;
-        }
+        #fajr-bubble svg { width: 30px; height: 30px; pointer-events: none; }
 
         /* صندوق الشات والبحث */
         #fajr-chat-box {
@@ -106,12 +103,9 @@
             color: white;
             padding: 3px 9px;
             border-radius: 4px;
-            cursor: pointer;
+            cursor: none !important;
             font-size: 8.5pt;
-            transition: background 0.2s;
         }
-        #fajr-toggle-view:hover { background: rgba(255,255,255,0.35); }
-        
         #fajr-chat-body {
             flex: 1;
             padding: 12px;
@@ -135,19 +129,19 @@
             padding: 6px 12px;
             border-radius: 6px;
             font-size: 9pt;
-            cursor: pointer;
+            cursor: none !important;
             z-index: 1000000;
             box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             font-weight: bold;
         }
         .fajr-highlighted-text {
-            background-color: rgba(0, 123, 255, 0.25) !important;
+            background-color: rgba(0, 123, 255, 0.3) !important;
             transition: background 0.5s;
         }
     `;
     document.head.appendChild(style);
 
-    // 2. بناء الهيكل المرئي (المؤشر + الشات مع الشعار SVG)
+    // 2. بناء الواجهة
     const container = document.createElement('div');
     container.innerHTML = `
         <div id="fajr-cursor"></div>
@@ -163,7 +157,7 @@
                 <button id="fajr-toggle-view">المحفوظات 📁</button>
             </div>
             <div id="fajr-chat-body">
-                <p style="color: #666; margin: 0 0 10px 0;">أهلاً بك! اكتب للبحث في نص الصفحة، أو حدد أي نص لاستخدام (+ تذكر).</p>
+                <p style="color: #666; margin: 0 0 10px 0;">أهلاً بك! اكتب للبحث الشامل، أو حدد أي نص لاستخدام (+ تذكر).</p>
                 <div id="fajr-results"></div>
             </div>
             <input type="text" id="fajr-chat-input" placeholder="ابحث في محتوى الصفحة...">
@@ -171,38 +165,50 @@
     `;
     document.body.appendChild(container);
 
-    // 3. تتبع حركة المؤشر (Custom Cursor Tracking)
+    // 3. تحديث موقع المؤشر فورياً بدون أي تأخير
     const cursor = document.getElementById('fajr-cursor');
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-    });
+    window.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    }, { passive: true });
 
     const bubble = document.getElementById('fajr-bubble');
     const chatBox = document.getElementById('fajr-chat-box');
-    const input = document.getElementById('fajr-chat-input');
     const chatBody = document.getElementById('fajr-chat-body');
     const toggleBtn = document.getElementById('fajr-toggle-view');
 
-    // تجميع الجمل وفتح وغلق الشات
     let sentences = [];
     let isShowingSaved = false;
 
+    // دالة لتنظيف وتوحيد الحروف العربية (إزالة الهمزات وتوحيد التاء المربوطة والألفات)
+    function normalizeArabic(text) {
+        if (!text) return "";
+        return text
+            .toLowerCase()
+            .replace(/[إأآا]/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .replace(/[\u064b-\u0652]/g, ""); // إزالة التشكيل
+    }
+
+    // فتح وغلق الشات مع تجميع النصوص الشاملة (تشمل الـ a والروابط)
     bubble.addEventListener('click', () => {
         const isOpen = chatBox.style.display === 'flex';
         chatBox.style.display = isOpen ? 'none' : 'flex';
         
         if (!isOpen && !isShowingSaved) {
             sentences = [];
-            document.querySelectorAll('p, h1, h2, h3, li').forEach(el => {
+            // شملنا p, h1-h6, li, وكمان النصوص داخل الروابط a
+            document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, a').forEach(el => {
                 const text = el.innerText.trim();
-                if(text.length > 5) {
-                    sentences.push({ text: text, element: el });
+                if(text.length > 3) {
+                    sentences.push({ text: text, normalized: normalizeArabic(text), element: el });
                 }
             });
         }
     });
 
-    // 4. نظام التبديل بين (بحث) و (المحفوظات)
+    // 4. تبويب المحفوظات
     toggleBtn.addEventListener('click', () => {
         isShowingSaved = !isShowingSaved;
         
@@ -217,7 +223,7 @@
             } else {
                 savedItems.forEach((item) => {
                     const itemDiv = document.createElement('div');
-                    itemDiv.style.cssText = "background: #f8fafc; padding: 8px; margin-bottom: 6px; border-radius: 6px; font-size: 9pt; border-right: 3px solid #007bff;";
+                    itemDiv.style.cssText = "background: #f8fafc; padding: 8px; margin-bottom: 6px; border-radius: 6px; font-size: 9pt; border-right: 3px solid #007bff; word-break: break-word;";
                     itemDiv.innerHTML = `"${item.text}" <div style="font-size: 7.5pt; color: #888; margin-top: 4px;">${item.date}</div>`;
                     chatBody.appendChild(itemDiv);
                 });
@@ -225,27 +231,29 @@
         } else {
             toggleBtn.innerText = 'المحفوظات 📁';
             chatBody.innerHTML = `
-                <p style="color: #666; margin: 0 0 10px 0;">أهلاً بك! اكتب للبحث في نص الصفحة، أو حدد أي نص لاستخدام (+ تذكر).</p>
+                <p style="color: #666; margin: 0 0 10px 0;">أهلاً بك! اكتب للبحث الشامل، أو حدد أي نص لاستخدام (+ تذكر).</p>
                 <div id="fajr-results"></div>
             `;
-            // إعادة ربط حقل البحث
-            const newResultsDiv = document.createElement('div');
-            newResultsDiv.id = 'fajr-results';
-            chatBody.appendChild(newResultsDiv);
         }
     });
 
-    // 5. محرك البحث الآني والفلترة داخل الصفحة
+    // 5. محرك البحث الذكي (شامل غير حرفي + توحيد الحروف + كلمات متفرقة Tokenized)
     document.addEventListener('input', (e) => {
         if (e.target && e.target.id === 'fajr-chat-input') {
-            const query = e.target.value.trim().toLowerCase();
+            const rawQuery = e.target.value.trim();
             const resultsDiv = document.getElementById('fajr-results');
             if(!resultsDiv) return;
             
             resultsDiv.innerHTML = '';
-            if(query.length < 2) return;
+            if(rawQuery.length < 2) return;
 
-            const matches = sentences.filter(s => s.text.toLowerCase().includes(query));
+            // تقسيم الاستعلام إلى كلمات منفصلة (لتطبيق البحث غير الحرفي والكلمات المتفرقة)
+            const queryTokens = normalizeArabic(rawQuery).split(/\s+/).filter(Boolean);
+
+            const matches = sentences.filter(s => {
+                // التأكد إن كل الكلمات اللي كتبها المستخدم موجودة في النص بغض النظر عن ترتيبها
+                return queryTokens.every(token => s.normalized.includes(token));
+            });
             
             if (matches.length === 0) {
                 resultsDiv.innerHTML = '<div style="color: #999; padding: 5px;">لا توجد نتائج مطابقة..</div>';
@@ -254,7 +262,7 @@
 
             matches.slice(0, 6).forEach(match => {
                 const item = document.createElement('div');
-                item.style.cssText = "padding: 8px; margin-bottom: 6px; background: #f1f5f9; border-radius: 6px; cursor: pointer; font-size: 9pt; border-right: 3px solid #007bff;";
+                item.style.cssText = "padding: 8px; margin-bottom: 6px; background: #f1f5f9; border-radius: 6px; cursor: none !important; font-size: 9pt; border-right: 3px solid #007bff;";
                 item.innerText = match.text.substring(0, 75) + '...';
                 
                 item.addEventListener('click', () => {
@@ -267,22 +275,22 @@
         }
     });
 
-    // 6. ميزة (+ تذكر) عند تحديد النص
+    // 6. ميزة (+ تذكر) المحسنة والمضمونة 100%
     let highlightBtn = null;
-    let currentSelectedText = "";
+    let selectedTextToSave = "";
 
     document.addEventListener('mouseup', (e) => {
         if (chatBox.contains(e.target) || bubble.contains(e.target)) return;
 
         const selection = window.getSelection();
-        currentSelectedText = selection.toString().trim();
+        selectedTextToSave = selection.toString().trim();
 
         if (highlightBtn) {
             highlightBtn.remove();
             highlightBtn = null;
         }
 
-        if (currentSelectedText.length > 2) {
+        if (selectedTextToSave.length > 2) {
             try {
                 const range = selection.getRangeAt(0);
                 const rect = range.getBoundingClientRect();
@@ -295,14 +303,20 @@
 
                 highlightBtn.addEventListener('click', (ev) => {
                     ev.stopPropagation();
-                    let saved = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
-                    saved.push({ text: currentSelectedText, date: new Date().toLocaleDateString() });
-                    localStorage.setItem('fajr_saved', JSON.stringify(saved));
                     
-                    highlightBtn.remove();
-                    highlightBtn = null;
+                    if (selectedTextToSave) {
+                        let saved = JSON.parse(localStorage.getItem('fajr_saved') || '[]');
+                        saved.push({ text: selectedTextToSave, date: new Date().toLocaleDateString() });
+                        localStorage.setItem('fajr_saved', JSON.stringify(saved));
+                        
+                        alert('تم حفظ النص محلياً بنجاح في فَجر! 🧠✨');
+                    }
+
+                    if (highlightBtn) {
+                        highlightBtn.remove();
+                        highlightBtn = null;
+                    }
                     window.getSelection().removeAllRanges();
-                    alert('تم الحفظ محلياً في فَجر بنجاح! 🧠✨');
                 });
 
                 document.body.appendChild(highlightBtn);
@@ -312,6 +326,7 @@
         }
     });
 
+    // إخفاء زر التذكر عند النقر في أي مكان آخر
     document.addEventListener('mousedown', (e) => {
         if (highlightBtn && !highlightBtn.contains(e.target)) {
             highlightBtn.remove();
