@@ -1090,7 +1090,7 @@
   }
   #formtools .fieldRow input[type="text"] {
     flex: 1;
-    margin:5px;
+    margin: 5px;
   }
   #formtools .form-btn {
     background: var(--dcolor);
@@ -3068,9 +3068,78 @@
     background: #4CAF50;
   }
   .anacard {
-    border:var(--cborder);display:inline-flex;border-radius:var(--minradius);padding:var(--spacepadd);flex-direction:column;flex-shrink: 0;min-width:200px;margin:10px;background:var(--focusbg);
+    border: var(--cborder);
+    display: inline-flex;
+    border-radius: var(--minradius);
+    padding: var(--spacepadd);
+    flex-direction: column;
+    flex-shrink: 0;
+    min-width: 200px;
+    margin: 10px;
+    background: var(--focusbg);
   }
-
+  #emoji-stage {
+    position: absolute;
+    top: 0;
+    border: 0;
+    left: 5%;
+    width: 90%;
+    height: 0;
+    z-index: 10;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .pet {
+    position: absolute;
+    bottom: 0;
+    font-size: 26px;
+    user-select: none;
+    will-change: transform;
+  }
+  @keyframes infiniteWalk {
+    0% {
+      transform: translateX(0) scaleX(-1);
+    }
+    48% {
+      transform: translateX(200px) scaleX(-1);
+    }
+    50% {
+      transform: translateX(200px) scaleX(1);
+    }
+    98% {
+      transform: translateX(0) scaleX(1);
+    }
+    100% {
+      transform: translateX(0) scaleX(-1);
+    }
+  }
+  @keyframes marioJumpOut {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    40% {
+      transform: translateY(-35px) scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(25px) scale(0.5);
+      opacity: 0;
+    }
+  }
+  .pet.cat-walk-anim {
+    position: absolute;
+    bottom: 0;
+    font-size: 26px;
+    user-select: none;
+    will-change: transform;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-name: infiniteWalk;
+  }
+  .pet.mario-exit {
+    animation: marioJumpOut 0.4s ease-in-out forwards !important;
+  }
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
       width: 80vw;
@@ -3096,7 +3165,7 @@
       border-radius: 0;
     }
     .modal-content {
-      bottom: 1vh;
+      bottom: 0;
       width: 100vw;
       min-width: auto;
       border-radius: var(--mainradius) var(--mainradius) 0 0;
@@ -3599,8 +3668,9 @@
               </div>
               <div data-id="14" class="app" onclick="switchTab('dataana');onerun('anainitForm')">
                 <svg viewBox="0 0 512 512" title="chart-line">
-  <path d="M496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zM464 96H345.94c-21.38 0-32.09 25.85-16.97 40.97l32.4 32.4L288 242.75l-73.37-73.37c-12.5-12.5-32.76-12.5-45.25 0l-68.69 68.69c-6.25 6.25-6.25 16.38 0 22.63l22.62 22.62c6.25 6.25 16.38 6.25 22.63 0L192 237.25l73.37 73.37c12.5 12.5 32.76 12.5 45.25 0l96-96 32.4 32.4c15.12 15.12 40.97 4.41 40.97-16.97V112c.01-8.84-7.15-16-15.99-16z" />
-</svg>
+                  <path
+                    d="M496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zM464 96H345.94c-21.38 0-32.09 25.85-16.97 40.97l32.4 32.4L288 242.75l-73.37-73.37c-12.5-12.5-32.76-12.5-45.25 0l-68.69 68.69c-6.25 6.25-6.25 16.38 0 22.63l22.62 22.62c6.25 6.25 16.38 6.25 22.63 0L192 237.25l73.37 73.37c12.5 12.5 32.76 12.5 45.25 0l96-96 32.4 32.4c15.12 15.12 40.97 4.41 40.97-16.97V112c.01-8.84-7.15-16-15.99-16z" />
+                </svg>
                 <b>تحليل بياني</b>
               </div>
             </div>
@@ -4966,6 +5036,7 @@
           </ul>
         </details>
       </div>
+      <div id="ahkamcontent" class="replay"></div>
       <div id="typing-indicator" class="typing-indicator">
         <span class="dot"></span>
         <span class="dot"></span>
@@ -4973,6 +5044,7 @@
       </div>
     </div>
     <div id="input" tabindex="0">
+      <div id="emoji-stage"></div>
       <div class="chips-wrapper" id="resultsBox"></div>
       <div id="sys">
         <textarea id="myInput"></textarea>
@@ -4985,6 +5057,8 @@
         <input type="file" id="htmlFiles" multiple accept=".html">
         <input type="file" id="uploader" multiple accept="image/*, application/pdf">
         <input type="file" id="file-input" multiple accept="audio/*">
+        <input type="file" id="importmemoryFile" style="display: none;" accept=".json"
+          onchange="importLocalStorage(event)">
         <input type="file" id="filenameInput">
         <button id="savememoryBtn" onclick="handleInput()">إرسال</button>
         <div id="bio-bar">
@@ -5305,27 +5379,27 @@
     <section id="dataana" class="tab-content">
       <h2>تحليل بياني</h2>
       <div class="app-container" style="overflow:auto;">
-    <fieldset>
-        <legend>الخط الزمني (مفصولة بفاصلة):</legend>
-        <input type="text" id="anatimelineInput" value="2022, 2023, 2024, 2025" oninput="anaprocessData()">
-    </fieldset>
-
-    <details style="margin:0 0 10px;">
-        <summary>تعديل الأصناف والكيانات</summary>
-        <div id="anaentitiesContainer"></div>
-            <div class="flex-center" style="margin:10px 0 0;">
-      <button class="conf-btn" onclick="anaaddEntityRow('', '#00ff41', '')">+ إضافة صنف جديد</button>
-        <button onclick="anaprocessData()">تحليل ورسم التوقعات</button>
-    </div>
-    </details>
-    <canvas id="anafajrCanvas" style="background:var(--focusbg);width:100%;border-radius:var(--minradius);" width="850" height="400"></canvas>
-    <div id="anaanalysisResults"></div>
-    <div class="flex-center" style="margin:10px 0 0;">
-        <button onclick="anaexportJSON()">تصدير JSON 💾</button>
-        <button onclick="document.getElementById('anaimportFile').click()">استيراد JSON 📂</button>
-        <input type="file" id="anaimportFile" style="display:none" accept=".json" onchange="anaimportJSON(event)">
-    </div>
-  </div>
+        <fieldset>
+          <legend>الخط الزمني (مفصولة بفاصلة):</legend>
+          <input type="text" id="anatimelineInput" value="2022, 2023, 2024, 2025" oninput="anaprocessData()">
+        </fieldset>
+        <details style="margin:0 0 10px;">
+          <summary>تعديل الأصناف والكيانات</summary>
+          <div id="anaentitiesContainer"></div>
+          <div class="flex-center" style="margin:10px 0 0;">
+            <button class="conf-btn" onclick="anaaddEntityRow('', '#00ff41', '')">+ إضافة صنف جديد</button>
+            <button onclick="anaprocessData()">تحليل ورسم التوقعات</button>
+          </div>
+        </details>
+        <canvas id="anafajrCanvas" style="background:var(--focusbg);width:100%;border-radius:var(--minradius);"
+          width="850" height="400"></canvas>
+        <div id="anaanalysisResults"></div>
+        <div class="flex-center" style="margin:10px 0 0;">
+          <button onclick="anaexportJSON()">تصدير JSON 💾</button>
+          <button onclick="document.getElementById('anaimportFile').click()">استيراد JSON 📂</button>
+          <input type="file" id="anaimportFile" style="display:none" accept=".json" onchange="anaimportJSON(event)">
+        </div>
+      </div>
     </section>
   </div>
   <div id="snackbar"></div>
@@ -5391,6 +5465,7 @@
     let typingTimer;
     function input() {
       updateTypingSpeed();
+      checkEditorIdle();
       clearTimeout(typingTimer);
       typingTimer = setTimeout(() => {
         TextProcessing();
@@ -6589,6 +6664,51 @@
         showToast("تم تنظيف الذاكرة بالكامل! 🧼");
       });
     }
+    function exportLocalStorage() {
+      const data = JSON.stringify(localStorage);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `fajr-memory-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    function importLocalStorage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const importedData = JSON.parse(e.target.result);
+          let addedCount = 0;
+          let updatedCount = 0;
+          let skippedCount = 0;
+          for (let key in importedData) {
+            const currentValue = localStorage.getItem(key);
+            const newValue = importedData[key];
+            if (currentValue === null) {
+              localStorage.setItem(key, newValue);
+              addedCount++;
+            } else if (currentValue !== newValue) {
+              localStorage.setItem(key, newValue);
+              updatedCount++;
+            } else {
+              skippedCount++;
+            }
+          }
+          alert(`تمت عملية الدمج بنجاح يا مؤسس! 🚀\n- أضيف جديد: ${addedCount}\n- تم تحديثه: ${updatedCount}\n- مطابق (تم تخطيه): ${skippedCount}`);
+          location.reload();
+        } catch (err) {
+          console.error(err);
+          alert('الملف ضرب يا هندسة أو مش بصيغة JSON سليمة! ⚠️');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
   }
   //محول الوحدات الرياضيه
   {
@@ -7217,7 +7337,7 @@
         sel.value === "select" ? "block" : "none";
     }
     function addField(name = "", type = "text", options = "") {
-      UI.fieldsArea.insertAdjacentHTML( "beforeend", `<div class="fieldRow" style="margin:0 0 20px; border:var(--cborder); border-radius:var(--secradius);padding:5px;gap:5px;"><div style="display:flex;flex-direction:row;"><input type="text" class="fname" style="margin:0 0 5px 5px;" placeholder="اسم الحقل" value="${name}"><button class="remove-btn red-btn" style="margin:0 0 5px 0;" onclick="removeField(this)">×</button></div><div class="flex"><select class="ftype" onchange="toggleOptionsField(this)"><option value="text" ${type==="text" ? "selected" : ""}>نص</option><option value="number" ${type==="number" ? "selected" : ""}>رقم</option><option value="date" ${type==="date" ? "selected" : ""}>تاريخ</option><option value="textarea" ${type==="textarea" ? "selected" : ""}>فقرة</option><option value="select" ${type==="select" ? "selected" : ""}>قائمة</option></select><input type="text" class="foptions" placeholder="خيارات (نعم،لا،ربما)" value="${options}" style="display:${type==="select" ? "block" : "none"};"></div></div>` );
+      UI.fieldsArea.insertAdjacentHTML("beforeend", `<div class="fieldRow" style="margin:0 0 20px; border:var(--cborder); border-radius:var(--secradius);padding:5px;gap:5px;"><div style="display:flex;flex-direction:row;"><input type="text" class="fname" style="margin:0 0 5px 5px;" placeholder="اسم الحقل" value="${name}"><button class="remove-btn red-btn" style="margin:0 0 5px 0;" onclick="removeField(this)">×</button></div><div class="flex"><select class="ftype" onchange="toggleOptionsField(this)"><option value="text" ${type === "text" ? "selected" : ""}>نص</option><option value="number" ${type === "number" ? "selected" : ""}>رقم</option><option value="date" ${type === "date" ? "selected" : ""}>تاريخ</option><option value="textarea" ${type === "textarea" ? "selected" : ""}>فقرة</option><option value="select" ${type === "select" ? "selected" : ""}>قائمة</option></select><input type="text" class="foptions" placeholder="خيارات (نعم،لا،ربما)" value="${options}" style="display:${type === "select" ? "block" : "none"};"></div></div>`);
       convertToFajrUI();
       UI.fieldsArea.scrollTo({ top: UI.fieldsArea.scrollHeight, behavior: 'smooth' });
     }
@@ -10479,6 +10599,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "فحص لوغاريتم", d: "تحليل الداله لفحص قوتها", run: "opentab('DawnLogarithm')" },
         { n: "بنك الأسئله", d: "إنشاء أسئله وتدريبات", run: "onerun('examreadygo');showAndMove('quesbtncontainer')" },
         { n: "تقسيم الميزانيه", d: "تقسيم الميزانيه حسب النسب", run: "showAndMove('smart-budget-app')" },
+        { n: "تحديد صحه الفعل", d: "تحديد اذا كان الفعل صح او لا", run: "onerun('ahkamrenderHome');showAndMove('ahkamcontent')"},
       ],
       "@": [
         { n: "المؤسس", d: "رسالة إلى المؤسس", run: "window.open('https://wa.me/+201095404569', '_blank')" },
@@ -10487,6 +10608,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       "!": [
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
         { n: "جولة شرح", d: "شرح مبسط لأهم استخداماتي", run: "startTour()" },
+        { n: "استعاده ذاكرتي", d: "اساتعاده ذاكرتي عن طريق ملف الذاكره", run: " document.getElementById('importmemoryFile').click()" },
         { n: "ميتا فجر", d: "إنشاء وصف صفحه الويب", run: "opentab('DawnMeta')" },
         { n: "معلومات النظام", d: "عرض معلومات بيئه التشغيل", run: "onerun('drawFajrRadar');opentab('General')" },
         { n: "تعلم الرد", d: "تدريب فجر على الرد", run: "opentab('chattraining')" },
@@ -10495,7 +10617,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "الترحيب", d: "عرض ترحيب وتعريف فجر", run: "showAndMove('welcome-modal')" },
         { n: "نقاط النور", d: "شحن رصيد النقاط والتطور", run: "showAndMove('lightcoin')" },
         { n: "فحص اللغة", d: "كشف لغه الترميز بالنمط", run: "codeget()" },
-        { n: "نسخ شخصيتي", d: "نسخ شخصيتي للكلام معاها", run: "copyDawnPersonality()" }
+        { n: "نسخ شخصيتي", d: "نسخ شخصيتي للكلام معاها", run: "copyDawnPersonality()" },
+        { n: "تنزيل ذاكرتي", d: "حفظ كل ذاكرتي في ملف واحد", run: "exportLocalStorage()" }
       ]
     };
     function discoverAgents() {
@@ -14113,140 +14236,121 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   }
   //رسم بياني
   {
-const anainitialData = [
-    { name: "شركة أ", data: "10, 25, 45, 60" },
-    { name: "شركة ب", data: "20, 18, 22, 28" },
-];
-
-function anainitForm() {
-    const container = document.getElementById('anaentitiesContainer');
-    container.innerHTML = "";
-    anainitialData.forEach(item => anaaddEntityRow(item.name, "",item.data));
-    anaprocessData();
-}
-function getRandomVibrantColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
+    const anainitialData = [
+      { name: "شركة أ", data: "10, 25, 45, 60" },
+      { name: "شركة ب", data: "20, 18, 22, 28" },
+    ];
+    function anainitForm() {
+      const container = document.getElementById('anaentitiesContainer');
+      container.innerHTML = "";
+      anainitialData.forEach(item => anaaddEntityRow(item.name, "", item.data));
+      anaprocessData();
     }
-    return color;
-}
-function anaaddEntityRow(name = "", color = "", data = "") {
-    const container = document.getElementById('anaentitiesContainer');
-    const row = document.createElement('div');
-    row.className = 'flex';
-    row.style = 'margin:10px 0 0;';
-    
-    const entityColor = color || getRandomVibrantColor();
-
-    row.innerHTML = `
+    function getRandomVibrantColor() {
+      const letters = '0123456789ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+    function anaaddEntityRow(name = "", color = "", data = "") {
+      const container = document.getElementById('anaentitiesContainer');
+      const row = document.createElement('div');
+      row.className = 'flex';
+      row.style = 'margin:10px 0 0;';
+      const entityColor = color || getRandomVibrantColor();
+      row.innerHTML = `
         <input type="text" placeholder="اسم الصنف (مثال: شركة أ)" value="${name}" style="flex:2;">
         <input type="text" placeholder="البيانات (مثال: 15, 20, 18, 30)" value="${data}" style="flex:3;">
         <button class="red-btn" onclick="this.parentElement.remove(); anaprocessData();">حذف</button>
     `;
-    row.dataset.color = entityColor;
-
-    container.appendChild(row);
-    row.querySelectorAll('input').forEach(input => input.addEventListener('input', anaprocessData));
-}
-
-function anagatherPayload() {
-    const timeline = document.getElementById('anatimelineInput').value.split(',').map(s => s.trim());
-    const rows = document.querySelectorAll('#anaentitiesContainer .flex');
-    const entities = [];
-
-    rows.forEach(row => {
+      row.dataset.color = entityColor;
+      container.appendChild(row);
+      row.querySelectorAll('input').forEach(input => input.addEventListener('input', anaprocessData));
+    }
+    function anagatherPayload() {
+      const timeline = document.getElementById('anatimelineInput').value.split(',').map(s => s.trim());
+      const rows = document.querySelectorAll('#anaentitiesContainer .flex');
+      const entities = [];
+      rows.forEach(row => {
         const color = row.dataset.color || '#00ff41';
         const inputs = row.querySelectorAll('input');
         const name = inputs[0].value;
-        const dataStr = inputs[1].value;        
+        const dataStr = inputs[1].value;
         const data = dataStr.split(/[\s,،;]+/).filter(v => v !== "").map(v => parseFloat(v) || 0);
         entities.push({ name, color, data });
-    });
-
-    return { timeline, entities };
-}
-
-function anaprocessData() {
-    const payload = anagatherPayload();
-    anadrawChart(payload);
-    anaanalyze(payload);
-}
-
-function anadrawChart(payload) {
-    const canvas = document.getElementById('anafajrCanvas');
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const padding = 50;
-    const width = canvas.width - (padding * 2);
-    const height = canvas.height - (padding * 2);
-    const n = payload.timeline.length;
-    if (n < 2) return;
-
-    ctx.strokeStyle = "#333";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(padding, padding);
-    ctx.lineTo(padding, canvas.height - padding);
-    ctx.lineTo(canvas.width - padding, canvas.height - padding);
-    ctx.stroke();
-
-    let maxVal = 100;
-    payload.entities.forEach(entity => {
+      });
+      return { timeline, entities };
+    }
+    function anaprocessData() {
+      const payload = anagatherPayload();
+      anadrawChart(payload);
+      anaanalyze(payload);
+    }
+    function anadrawChart(payload) {
+      const canvas = document.getElementById('anafajrCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const padding = 50;
+      const width = canvas.width - (padding * 2);
+      const height = canvas.height - (padding * 2);
+      const n = payload.timeline.length;
+      if (n < 2) return;
+      ctx.strokeStyle = "#333";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padding, padding);
+      ctx.lineTo(padding, canvas.height - padding);
+      ctx.lineTo(canvas.width - padding, canvas.height - padding);
+      ctx.stroke();
+      let maxVal = 100;
+      payload.entities.forEach(entity => {
         entity.data.forEach(val => { if (val > maxVal) maxVal = val * 1.2; });
-    });
-
-    const stepX = width / (n - 1);
-
-    payload.entities.forEach(entity => {
+      });
+      const stepX = width / (n - 1);
+      payload.entities.forEach(entity => {
         if (!entity.data.length) return;
         ctx.strokeStyle = entity.color;
         ctx.lineWidth = 3;
         ctx.beginPath();
-
         entity.data.forEach((val, i) => {
-            const x = padding + (i * stepX);
-            const y = (canvas.height - padding) - (val / maxVal * height);
-            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-            ctx.fillStyle = entity.color;
-            ctx.fillRect(x-3, y-3, 6, 6);
+          const x = padding + (i * stepX);
+          const y = (canvas.height - padding) - (val / maxVal * height);
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          ctx.fillStyle = entity.color;
+          ctx.fillRect(x - 3, y - 3, 6, 6);
         });
         ctx.stroke();
-
         if (entity.data.length >= 2) {
-            const slopeInfo = anacalculateSlope(entity.data);
-            const lastX = padding + ((n-1) * stepX);
-            const lastY = (canvas.height - padding) - (entity.data[n-1] / maxVal * height);
-            const predY = (canvas.height - padding) - (slopeInfo.next / maxVal * height);
-
-            ctx.setLineDash([5, 5]);
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(lastX + stepX/2, predY);
-            ctx.stroke();
-            ctx.setLineDash([]);
+          const slopeInfo = anacalculateSlope(entity.data);
+          const lastX = padding + ((n - 1) * stepX);
+          const lastY = (canvas.height - padding) - (entity.data[n - 1] / maxVal * height);
+          const predY = (canvas.height - padding) - (slopeInfo.next / maxVal * height);
+          ctx.setLineDash([5, 5]);
+          ctx.beginPath();
+          ctx.moveTo(lastX, lastY);
+          ctx.lineTo(lastX + stepX / 2, predY);
+          ctx.stroke();
+          ctx.setLineDash([]);
         }
-    });
-}
-
-function anacalculateSlope(data) {
-    const n = data.length;
-    let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-    data.forEach((y, x) => {
+      });
+    }
+    function anacalculateSlope(data) {
+      const n = data.length;
+      let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+      data.forEach((y, x) => {
         sumX += x; sumY += y; sumXY += x * y; sumX2 += x * x;
-    });
-    const denom = (n * sumX2 - sumX * sumX);
-    const slope = denom === 0 ? 0 : (n * sumXY - sumX * sumY) / denom;
-    const intercept = (sumY - slope * sumX) / n;
-    return { slope, next: (slope * n + intercept) };
-}
-
-function anaanalyze(payload) {
-    const container = document.getElementById('anaanalysisResults');
-    container.innerHTML = "";
-    payload.entities.forEach(entity => {
+      });
+      const denom = (n * sumX2 - sumX * sumX);
+      const slope = denom === 0 ? 0 : (n * sumXY - sumX * sumY) / denom;
+      const intercept = (sumY - slope * sumX) / n;
+      return { slope, next: (slope * n + intercept) };
+    }
+    function anaanalyze(payload) {
+      const container = document.getElementById('anaanalysisResults');
+      container.innerHTML = "";
+      payload.entities.forEach(entity => {
         if (!entity.data.length) return;
         const info = anacalculateSlope(entity.data);
         const card = document.createElement('div');
@@ -14257,46 +14361,113 @@ function anaanalyze(payload) {
             التوقع: ${Math.round(info.next * 10) / 10}
         `;
         container.appendChild(card);
-    });
-}
-
-function anaexportJSON() {
-    const payload = anagatherPayload();
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
-    const dlAnchor = document.createElement('a');
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", "fajr_analytics.json");
-    document.body.appendChild(dlAnchor);
-    dlAnchor.click();
-    dlAnchor.remove();
-}
-
-function anaimportJSON(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
+      });
+    }
+    function anaexportJSON() {
+      const payload = anagatherPayload();
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", "fajr_analytics.json");
+      document.body.appendChild(dlAnchor);
+      dlAnchor.click();
+      dlAnchor.remove();
+    }
+    function anaimportJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
         try {
-            const payload = JSON.parse(e.target.result);
-            if (payload.timeline) {
-                document.getElementById('anatimelineInput').value = payload.timeline.join(', ');
-            }
-            if (payload.entities) {
-                const container = document.getElementById('anaentitiesContainer');
-                container.innerHTML = "";
-                payload.entities.forEach(item => {
-                    const dataStr = Array.isArray(item.data) ? item.data.join(', ') : item.data;
-                    anaaddEntityRow(item.name, item.color || '#00ff41', dataStr);
-                });
-                anaprocessData();
-            }
+          const payload = JSON.parse(e.target.result);
+          if (payload.timeline) {
+            document.getElementById('anatimelineInput').value = payload.timeline.join(', ');
+          }
+          if (payload.entities) {
+            const container = document.getElementById('anaentitiesContainer');
+            container.innerHTML = "";
+            payload.entities.forEach(item => {
+              const dataStr = Array.isArray(item.data) ? item.data.join(', ') : item.data;
+              anaaddEntityRow(item.name, item.color || '#00ff41', dataStr);
+            });
+            anaprocessData();
+          }
         } catch (err) {
-            showToast(" ملف الـ JSON مش مظبوط، تأكد منه كويس!");
+          showToast(" ملف الـ JSON مش مظبوط، تأكد منه كويس!");
         }
-    };
-    reader.readAsText(file);
-}
-}
+      };
+      reader.readAsText(file);
+    }
+  }
+  //حيوانات فجر الأليفه
+  {
+    const stage = document.getElementById('emoji-stage');
+    const petsLibrary = [{ char: '🐕', speed: 6 }, { char: '🐈', speed: 7 }, { char: '🐎', speed: 4 }, { char: '🐪', speed: 9 }, { char: '🐀', speed: 5 }, { char: '🐢', speed: 12 }, { char: '🦆', speed: 6 }, { char: '🦢', speed: 7 }, { char: '🐠', speed: 8 }, { char: '🐜', speed: 4 }, { char: '🐤', speed: 5 },];
+    let idleTimer = null;
+    const IDLE_TIME = 10000;
+    function checkEditorIdle() {
+      const existingPet = stage.querySelector('.pet');
+      if (existingPet) {
+        existingPet.classList.add('mario-exit');
+        setTimeout(() => {
+          existingPet.remove();
+        }, 500);
+      }
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        spawnRandomPet();
+      }, IDLE_TIME);
+    }
+    function spawnRandomPet() {
+      if (stage.querySelector('.pet')) return;
+      const randomPet = petsLibrary[Math.floor(Math.random() * petsLibrary.length)];
+      const span = document.createElement('span');
+      span.classList.add('pet', 'cat-walk-anim');
+      span.textContent = randomPet.char;
+      span.style.animationDuration = `${randomPet.speed}s`;
+      const randomLeft = Math.random() * (stage.offsetWidth - 100);
+      span.style.left = `${randomLeft}px`;
+      stage.appendChild(span);
+    }
+  }
+  //كاشف الصح والخطأ في الافعال
+  {
+    const ahkamdb = {
+    1: { n: "الكدب", t: "هل كان علشان نصلح بين اتنين او ننقذ حد من الظلم؟", y: "تمام بس مش كل مره نكذب", ny: "غلط لازم مش نكذب"},
+    //2: { n: "", t: "", y: "", ny: ""},
+};
+    function ahkamrenderHome() {
+        const app = document.getElementById('ahkamcontent');
+        let btns = Object.keys(ahkamdb).map(k => `<button onclick="ahkamrenderCheck(${k})">${ahkamdb[k].n}</button>`).join('');
+        app.innerHTML = `<div class="node-info">اختر السلوك للفحص السريع:</div><div class="btn-container">${btns}</div>`;
+    }
+    function ahkamrenderCheck(id) {
+        let x = ahkamdb[id], app = document.getElementById('ahkamcontent');
+        app.innerHTML = `
+        <div style="text-align:center;flex-direction:column;"class="flex-center">
+            <div class="node-info">Target: [ ${x.n} ]</div>
+            <div class="question">${x.t}</div>
+            <div class="flex">
+                <button class="conf-btn" data-type="halal" onclick="ahkamshowResult('${x.y}', this)">نعم 👍</button>
+                <button class="red-btn-sec" data-type="haram" onclick="ahkamshowResult('${x.ny}', this)">لا 👎</button>
+            </div>
+            <button onclick="ahkamrenderHome()">العودة ↩️</button>
+            </div>
+        `;
+    }
+    function ahkamshowResult(res, btn) {
+        let type = btn.getAttribute('data-type');
+        document.getElementById('ahkamcontent').innerHTML = `
+            <div class="question">النتيجة النهائية:</div>
+            <div class="${type === 'halal' ? 'result-halal' : 'result-haram'}">${res}</div>
+            <div class="safety-note">
+                💡 <strong>تنبيه:</strong> هذه النتيجة استرشادية بناءً على القواعد العامة، ومن الأفضل دائماً مراجعة عالم أو متخصص للتأكد من تفاصيل حالتك بدقة.
+            </div>
+            <button onclick="ahkamrenderHome()">فحص سلوك آخر 🔄</button>
+        `;
+    }
+  }
+  
   var UI = {};
   function initUI() {
     var bodyContainer = document.body || document.getElementsByTagName("body")[0];
