@@ -18,10 +18,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Dawn OS">
-  <meta name="description" content="فجر هي نظام تشغيل خفيفة الوزن ومفتوحة المصدر تعتمد على الويب">
+  <meta name="description" content="فَجر هي نظام تشغيل خفيفة الوزن مفتوح المصدر تعتمد على الويب">
   <meta property="og:locale" content="ar_AR">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="نظام تشغيل فجر | مستقبل الأنظمة العربية على الويب">
+  <meta property="og:title" content="فجر | مستقبل الأنظمة العربية على الويب">
   <meta property="og:description"
     content="فجر: نظام تشغيل خفيف، سريع، ومفتوح المصدر. تجربة ويب سلسة تجمع بين البساطة والأداء الفائق.">
   <meta property="og:url" content="https://dawn-green.vercel.app/">
@@ -51,7 +51,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     scroll-behavior: smooth;
-    transition: all 0.3s ease;
     cursor: none !important;
     touch-action: manipulation;
   }
@@ -586,8 +585,10 @@
     position: absolute;
     top: 15px;
     right: 60px;
-    width: calc(100% - 40px);
-    padding: 0 0 15px;
+    left:60px;
+    font-size:24px;
+    height: 35px; 
+    line-height: 35px;
   }
   .modal-content h5 {
     color: var(--bcolor);
@@ -602,9 +603,9 @@
     overflow: auto;
     height: auto;
     min-height: 120px;
-    max-height: 70vh;
+    max-height: 450px;
     width: calc(100vw - 30px);
-    max-width: 600px;
+    max-width: 750px;
     border-radius: var(--secradius);
     background: var(--secbg);
     padding: var(--mainpadd);
@@ -2110,22 +2111,18 @@
     outline: none;
     box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
   }
-  #fajrGuard.active-sleep {
+  #fajrGuard{
     position: fixed;
     display: none;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     inset: 0;
+    color:var(--bcolor) !important;
     margin: auto;
-    transform: translate(0, 0);
     min-width: 100vw;
     min-height: 100vh;
-    border-radius: 0;
-    background: rgba(10, 15, 30, 0.98);
     backdrop-filter: blur(50px);
-    max-width: none;
-    max-height: 0;
     z-index: 9999;
   }
   input#pinInp {
@@ -3462,6 +3459,10 @@
     </div>
   </div>
   <div id="fajr-cursor"></div>
+  <div id="fajrGuard">
+  <h1 id="guardtext">تعيين رمز القفل</h1><br>
+  <input type="text" id="pinInp" class="secure-pin" maxlength="4" placeholder="****" autocomplete="off">
+  </div>
   <div id="sosOverlay"> تم تفعيل وضع طوارئ! هحتاج الضغط هنا 5 مرات للإلغاء </div>
   <div id="mediaoverlay">
     <span class="overlayclosebn" onclick="mediaoverlayoff()">×</span>
@@ -4883,10 +4884,6 @@
       <div id="heavystatus" class="replay">جاهز للعمل...</div>
       <div id="resultsdisplayarea" class="replay"></div>
       <div id="memoryresultCount" class="replay"></div>
-      <div id="fajrGuard" class="replay" style=" flex-direction: column;">
-        <h3>تعيين رمز القفل</h3>
-        <input type="text" id="pinInp" class="secure-pin" maxlength="4" placeholder="****" autocomplete="off">
-      </div>
       <div id="suggestion-div" class="replay">
         <p id="suggest-text"></p>
       </div>
@@ -5016,23 +5013,14 @@
         انا مش نموذج لغوي زي الذكاء الاصطناعي، أنا بساعدك في خدمات معلوماتية ومهمات يوميه في حدود قدراتي ومش مسموح ليا
         أكتب محتوى بنفسي علشان ادعمك في تنميه مهاراتك
         <details>
-          <summary>أقولك أمثله تساعدك اكتر؟</summary>
-          <ul class="examples-list">
+          <summary>أقولك أمثله بسيطه تساعدك؟</summary>
+          <ul style="padding: 0 5px;">
             <li>🔹 السرعه 11كم والزمن 14ثانيه</li>
-            <li>🔹 السكر 120</li>
-            <li>🔹 اخبار كاس العالم ؟</li>
+            <li>🔹 السكر 120 والنبض 72</li>
             <li>🔹 5 + 5 =</li>
-            <li>🔹 ارقام تليفونات وروابط وارقام قوميه</li>
-            <li>🔹 كلمات تدل على وجود خطر حولك او اصابه</li>
+            <li>🔹 كلمات تدل على خطر او اصابه</li>
             <li>🔹 معطيات قوانين (بعد حفظها)</li>
-            <li>🔹 استخراج واعراب سطحي</li>
-            <li>🔹 كلمات تدل على الاهميه</li>
-            <li>🔹 استخدام الرموز التعبيريه لتغيير اسلوب النداء</li>
-            <li>🔹 الرمز @ لتغيير الوضع او اختيار جهة</li>
-            <li>🔹 الرمز ! للأوامر</li>
-            <li>🔹 الرمز # للأدوات المرتبطه</li>
-            <li>🔹 علامه الاستفهام للبحث في الذاكره</li>
-            <li>🔹 اكتر كمان ممكن استكشافه</li>
+            <li>🔹 وأكتر من كدا لإكتشافه ...</li>
           </ul>
         </details>
       </div>
@@ -10599,7 +10587,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "فحص لوغاريتم", d: "تحليل الداله لفحص قوتها", run: "opentab('DawnLogarithm')" },
         { n: "بنك الأسئله", d: "إنشاء أسئله وتدريبات", run: "onerun('examreadygo');showAndMove('quesbtncontainer')" },
         { n: "تقسيم الميزانيه", d: "تقسيم الميزانيه حسب النسب", run: "showAndMove('smart-budget-app')" },
-        { n: "تحديد صحه الفعل", d: "تحديد اذا كان الفعل صح او لا", run: "onerun('ahkamrenderHome');showAndMove('ahkamcontent')"},
+        //{ n: "تحديد صحه الفعل", d: "تحديد اذا كان الفعل صح او لا", run: "onerun('ahkamrenderHome');showAndMove('ahkamcontent')"},
       ],
       "@": [
         { n: "المؤسس", d: "رسالة إلى المؤسس", run: "window.open('https://wa.me/+201095404569', '_blank')" },
@@ -12026,22 +12014,28 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   {
     const guard = document.getElementById('fajrGuard');
     const pinInp = document.getElementById('pinInp');
+    const guardtext = document.getElementById('guardtext');
     function openGuard() {
       guard.style.display = 'flex';
+      if (localStorage.getItem('fajr_sleep_key')) {
+        guardtext.textContent = 'اكتب الرمز لفك الحمايه';
+      } else {
+        guardtext.textContent = 'اى هو رمز الحمايه ؟';
+      }
       pinInp.focus();
     }
     pinInp.addEventListener('input', () => {
       if (pinInp.value.length === 4) {
         const enteredPin = btoa(pinInp.value);
         const savedPin = localStorage.getItem('fajr_sleep_key');
-        if (!guard.classList.contains('active-sleep')) {
+        if (!savedPin) {
           localStorage.setItem('fajr_sleep_key', enteredPin);
           enterSleep();
         } else {
           if (enteredPin === savedPin) {
             exitSleep();
           } else {
-            msg.innerText = "الرمز خاطئ!";
+            guardtext.textContent = "الرمز خاطئ! حاول تاني";
             pinInp.value = '';
             guard.style.animation = "shake 0.3s";
             setTimeout(() => guard.style.animation = "", 300);
@@ -12050,26 +12044,23 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     });
     function enterSleep() {
-      guard.style.display = 'flex';
-      guard.classList.add('active-sleep');
+      guardtext.textContent = 'تم! لازم نكتبها مره تانيه لفك الحمايه';
       pinInp.value = '';
       pinInp.placeholder = "****";
     }
     function exitSleep() {
-      guard.classList.remove('active-sleep');
       localStorage.removeItem('fajr_sleep_key');
-      setTimeout(() => {
-        guard.style.display = 'none';
-        pinInp.value = '';
-        pinInp.placeholder = "****";
-      }, 600);
+      guard.style.display = 'none';
+      pinInp.value = '';
+      pinInp.placeholder = "****";
     }
     function getguard() {
       if (localStorage.getItem('fajr_sleep_key')) {
+        guard.style.display = 'flex';
         enterSleep();
       }
-    };
-  }
+    }
+}
   //دردشه طوارئ (إرسال لأقرب جهاز)
   {
     (function () {
@@ -13818,6 +13809,23 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         input.addEventListener('blur', function () { this.setAttribute('readonly', 'true'); });
       });
     });
+    document.addEventListener('wheel', (e) => {
+    const scrollable = e.target.closest('*');
+    if (scrollable) {
+        const hasHorizontalScroll = scrollable.scrollWidth > scrollable.clientWidth;
+        const style = window.getComputedStyle(scrollable);
+        const overflowX = style.getPropertyValue('overflow-x');
+        if (hasHorizontalScroll && (overflowX === 'auto' || overflowX === 'scroll')) {
+            if (e.deltaY !== 0) {
+                scrollable.scrollBy({
+                    left: e.deltaY,
+                    behavior: 'auto'
+                });
+                e.preventDefault();
+            }
+        }
+    }
+}, { passive: false });
   }
   //تعليمات للمستخدم داخل حقل الكتابه
   {
@@ -14482,12 +14490,12 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         }
       }
     }
+    getguard();
     updateDateTime();
     setGreeting();
     startGlobalTimer();
     timesaveAndRender();
     preparewelcome();
-    getguard();
     convertToFajrUI();
     updateCursor();
     loadpagetime();
