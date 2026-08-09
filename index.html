@@ -56,8 +56,8 @@
   }
   :root {
     --mainbg: rgb(250, 250, 250, 0.8);
-    --secbg: #fff;
-    --focusbg: #f0f7f8;
+    --secbg: rgb(255,255,255,.85);
+    --focusbg: #f0f8f9;
     --backfilter: blur(5px);
     --dborder: 1px solid #ddd;
     --cborder: 1px solid #ccc;
@@ -534,11 +534,13 @@
   }
   .tab-content>h2 {
     position: absolute;
-    top: 18px;
+    top: 15px;
     right: 15px;
     color: var(--gcolor);
     font-weight: bold;
-    font-size: 21px;
+    font-size:21px;
+    height: 35px; 
+    line-height: 35px;
   }
   .tab-content>.app-container {
     position: absolute;
@@ -1921,6 +1923,7 @@
   }
   #menu .t:hover {
     background: var(--focusbg);
+    box-shadow:var(--shadow);
   }
   #menu .t:last-child {
     border-bottom: none;
@@ -1935,12 +1938,10 @@
   }
   #menu .n {
     font-size: var(--dfont);
-    padding-right: 10px;
     color: var(--bcolor);
   }
   #menu .d {
     font-size: var(--mfont);
-    padding-right: 10px;
     color: #888;
   }
   #Musicer .main {
@@ -2531,7 +2532,7 @@
     position: fixed;
     top: 65px;
     right: 10px;
-    max-width: 350px;
+    max-width: 360px;
     width: calc(100vw - 20px);
     overflow: auto;
     z-index: 2;
@@ -2568,7 +2569,7 @@
   #preyresults a {
     border: var(--cborder);
     margin: 10px 0 0 5px;
-    padding: 6px 10px;
+    padding: 8px 15px;
     display: inline-block;
     border-radius: 18px;
     text-decoration: none;
@@ -2653,7 +2654,7 @@
     background: var(--secbg);
     border-radius: var(--secradius);
     overflow: auto;
-    height: calc(60vh - 20px);
+    height: calc(60vh - 60px);
     padding: 5px 5px 40px;
     max-width: 400px;
     margin: 0 auto;
@@ -2714,16 +2715,14 @@
     font-size: 18px;
   }
   #Dawnplaylist .add-btn {
-    display: block;
+    display: flex;
     position: absolute;
+    justify-content:center;
+    align-items:center;
     bottom: 25px;
     left: 25px;
-    margin: auto;
-    height: 50px;
-    width: 50px;
-    border-radius: var(--roundradius);
-    font-size: 27px;
-    padding: 0 0 3px;
+    border-radius: var(--mainradius);
+    font-size: 14px;
     box-shadow: var(--shadow);
   }
   .emptylist-state {
@@ -3936,7 +3935,7 @@
           <div class="playlist" id="playlist-container">
           </div>
           <button class="add-btn conf-btn flex-center"
-            onclick="document.getElementById('file-input').click()">+</button>
+            onclick="document.getElementById('file-input').click()">+ وسائط</button>
           <audio id="main-audio"></audio>
         </div>
       </div>
@@ -4870,7 +4869,7 @@
       <div id="clocktext">جاري المزامنة...</div>
       <div id="preyresults"></div>
       <div onclick="opentab('timesetting')" class="settingbtn">إعدادات الوقت</div>
-      <div onclick="onerun('renderDawnroutin');switchTab('tasksandroutin')" class="settingbtn">عرض الروتين والمهمات
+      <div onclick="onerun('renderDawnroutin');switchTab('tasksandroutin')" class="settingbtn">الروتين والتنبيهات
       </div>
     </div>
     <div class="logo"><span>فَجْر</span></div>
@@ -5313,8 +5312,8 @@
           <div class="dashboard-grid" id="mainGrid"></div>
         </div>
         <button
-          style="position:absolute;bottom:15px;left:15px;border-radius:50%;font-size:2em;line-height:25px;height:50px;width:50px;text-align: center;padding: 0 10px 8px;"
-          class="conf-btn" onclick="opentab('timer-container')">+</button>
+          style="position:absolute;bottom:15px;left:15px;border-radius:var(--mainradius);display:flex;justify-content:center;align-items:center;"
+          class="conf-btn" onclick="opentab('timer-container')">+ تنبيه جديد </button>
       </div>
     </section>
     <section id="ProgressTracker" class="tab-content">
@@ -6022,7 +6021,7 @@
       } else if (hours >= 12) {
         greeting = "يومك جميل 🌹";
         body.style.background =
-          "linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%)";
+          "linear-gradient(220deg, #e0c3fa 30%, #0f3460 110%)";
         document.body.classList.remove('dark-mode');
       } else if (hours >= 6) {
         greeting = "صباح الخير 🥰";
@@ -6178,7 +6177,7 @@
       checkZone(times);
     }
     function display(times, name) {
-      let html = `<h4>مواقيت تقريبية (${name})</h4><div class="getpray">`;
+      let html = `<h4>فترات اليوم في (${name})</h4><div>`;
       for (let p in times) {
         let t = times[p];
         let h = Math.floor(t / 60) % 24;
@@ -10596,7 +10595,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       "!": [
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
         { n: "جولة شرح", d: "شرح مبسط لأهم استخداماتي", run: "startTour()" },
-        { n: "استعاده ذاكرتي", d: "اساتعاده ذاكرتي عن طريق ملف الذاكره", run: " document.getElementById('importmemoryFile').click()" },
+        { n: "استعاده ذاكرتي", d: "استعاده عن طريق ملف الذاكره", run: " document.getElementById('importmemoryFile').click()" },
         { n: "ميتا فجر", d: "إنشاء وصف صفحه الويب", run: "opentab('DawnMeta')" },
         { n: "معلومات النظام", d: "عرض معلومات بيئه التشغيل", run: "onerun('drawFajrRadar');opentab('General')" },
         { n: "تعلم الرد", d: "تدريب فجر على الرد", run: "opentab('chattraining')" },
@@ -11511,7 +11510,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       });
     }
     function showEmptyState() {
-      playlistContainer.innerHTML = `<div class="emptylist-state"><span style="font-size:31px;margin:0 0 20px;">🎵</span><p>إضافه ملفاتك الصوتيه للقائمة</p></div>`;
+      playlistContainer.innerHTML = `<div class="emptylist-state"><svg viewBox="0 0 24 24" style="width:50px;fill:var(--dcolor);" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" d="M21,14 L19,14 L19,10 L21,10 L21,14 Z M17,16 L15,16 L15,8 L17,8 L17,16 Z M13,19 L11,19 L11,5 L13,5 L13,19 Z M9,16 L7,16 L7,8 L9,8 L9,16 Z M5,14 L3,14 L3,10 L5,10 L5,14 Z" /></svg><p>إضافه ملفاتك الصوتيه للقائمة</p></div>`;
     }
     function seekAudio(slider) {
       if (currentIndex !== -1) audio.currentTime = slider.value;
