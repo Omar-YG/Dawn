@@ -383,8 +383,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: var(--dborder);
-    box-shadow: var(--shadow);
   }
 
   .logo {
@@ -447,7 +445,7 @@
     border: var(--dborder);
     overflow: hidden;
     z-index: 2;
-    transition: 0.3s;
+    transition: 0.45s;
   }
 
   #nav details {
@@ -1996,9 +1994,9 @@
     background: var(--focusbg);
     border-radius: var(--secradius);
     padding: var(--mainpadd);
-    max-height: 200px;
+    max-height: 160px;
     overflow-y: auto;
-    margin-bottom: 20px;
+    margin: 20px auto;
   }
 
   .key-item {
@@ -2716,7 +2714,7 @@
 
   #DawnRunGo #game-container {
     position: relative;
-    width: calc(100vw - 80px);
+    width: calc(100vw - 120px);
     height: 160px;
     max-width: 300px;
     background: var(--secbg);
@@ -3417,8 +3415,6 @@
     width: 100%;
     max-width: 350px;
     max-height: 350px;
-    border-radius: 8px;
-    background: var(--secbg);
   }
 
   .canvas-container {
@@ -4069,7 +4065,10 @@
                     <legend>📇 بطاقتي الشخصية</legend>
                     <div id="profileDisplay"></div>
                   </fieldset>
+                  <center>
                   <button class="conf-btn" onclick="opentab('mypersonalinfo')">تحديث بياناتي</button>
+                  </center>
+
                 </details>
               </div>
             </div>
@@ -5517,7 +5516,8 @@
           style="height:15px;width:30px;border-radius:30px;display:inline-block;border:2px solid #ddd;"></div> ضغطة هنا
         وأعرضلك باقي الدرجات؟
       </div>
-      <div id="geogbra" class="replay">
+      <div id="geogbra" class="replay" style="display:block;">
+        رسم الداله جبريا: 
         <canvas id="GeoGabragraph"></canvas>
       </div>
       <div id="DawnRunGo" class="replay" style="padding:10px;">
@@ -5739,7 +5739,7 @@
     <section id="treeviewtab" class="tab-content">
       <h2>شجرة ذهنية</h2>
       <div id="treemoralview" class="app-container">
-        <details style="background:#fff;width:100%;" open>
+        <details style="width:100%;" open>
           <summary>هيكل الشجره</summary>
           <textarea id="treetextInput"
             placeholder="القسم الرئيسي &#10; - الفرع الاول &#10; -- الفرع الاول القسم 2 &#10; - الفرع الثاني"></textarea>
@@ -6206,7 +6206,6 @@
                 <div style="font-size: 48px; margin-bottom: 10px;">👀</div>
                 <p style="font-size: 16px; margin: 0;">لسه معرفش حاجه عنك!</p>
                 <p style="font-size: 14px; margin: 5px 0 15px 0;">يلا نضيف شوية بيانات عشان أعرفك أكتر 😊</p>
-                <button onclick="opentab('mypersonalinfo');editProfile()" class="conf-btn" style="padding: 8px 25px; border-radius: 30px;">➕ أضف بياناتي</button>
             </div>
         `;
         return;
@@ -12412,7 +12411,9 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const statsArea = document.getElementById('profstats-area');
       statsArea.innerHTML = state.stats.map(s => `
             <div class="stat-chip" style="${s.id === 'mine' ? 'border-color: var(--ccolor); background: rgba(241, 196, 15, 0.1);' : ''}">
-                <svg viewBox="0 0 24 24" width='24'><path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z"/></svg>
+                <svg viewBox="0 0 320 512" width='14' fill='var(--gcolor)' title="angle-double-up">
+  <path d="M177 255.7l136 136c9.4 9.4 9.4 24.6 0 33.9l-22.6 22.6c-9.4 9.4-24.6 9.4-33.9 0L160 351.9l-96.4 96.4c-9.4 9.4-24.6 9.4-33.9 0L7 425.7c-9.4-9.4-9.4-24.6 0-33.9l136-136c9.4-9.5 24.6-9.5 34-.1zm-34-192L7 199.7c-9.4 9.4-9.4 24.6 0 33.9l22.6 22.6c9.4 9.4 24.6 9.4 33.9 0l96.4-96.4 96.4 96.4c9.4 9.4 24.6 9.4 33.9 0l22.6-22.6c9.4-9.4 9.4-24.6 0-33.9l-136-136c-9.2-9.4-24.4-9.4-33.8 0z" />
+</svg>
                 <span>${s.name} <span class="stat-val">${s.val.toFixed(2)}</span></span>
             </div>
         `).join('');
@@ -13373,7 +13374,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const isOnlySpaces = /^ +$/.test(val);
       if (isOnlySpaces && spaceCount >= 3) {
         container.style.display = 'block';
-        DawnRunGo.style.display = 'block';
+        showAndMove('DawnRunGo');
         onerun('startanimation');
         if (spaceCount >= 4 && !isRunning && !isGameOver) startGame();
       } else {
@@ -14207,14 +14208,14 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         .replace(/x/g, '(x)');
     }
     function drawGrid() {
-      ctx.strokeStyle = '#333';
+      ctx.strokeStyle = 'var(--bcolor)';
       ctx.beginPath();
       ctx.moveTo(0, h / 2); ctx.lineTo(w, h / 2);
       ctx.moveTo(w / 2, 0); ctx.lineTo(w / 2, h);
       ctx.stroke();
     }
     function drawTicks() {
-      ctx.fillStyle = '#888';
+      ctx.fillStyle = 'dodgerblue';
       ctx.font = '10px Arial';
       ctx.textAlign = 'center';
       for (let i = -w / 2; i <= w / 2; i += scale) {
@@ -14269,7 +14270,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const rect = canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
       const xVal = ((mouseX - w / 2) / scale).toFixed(2);
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = 'var(--bcolor)';
       ctx.fillText(`X: ${xVal}`, mouseX + 10, 20);
     });
   }
