@@ -3142,6 +3142,9 @@
     position: absolute;
     inset: 0;
     margin: auto;
+    width: 100%;
+  height: 100vh;
+  overflow: hidden;
   }
   .star {
     position: absolute;
@@ -3151,11 +3154,11 @@
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 0 10px #1da1f2, 0 0 20px #1da1f2;
-    animation: pulse 5s infinite alternate;
+    animation: starpulse 5s infinite alternate;
     transition: transform 0.2s, background-color 0.2s;
   }
   .star:hover {
-    transform: scale(5.2);
+    transform: scale(5);
     background-color: #ffffff;
     box-shadow: 0 0 15px #ffffff, 0 0 30px #1da1f2;
     z-index: 10;
@@ -3359,7 +3362,7 @@
       opacity: 1;
     }
   }
-  @keyframes pulse {
+  @keyframes starpulse {
     0% {
       opacity: 0.4;
       transform: scale(0.8);
@@ -14570,17 +14573,15 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       (year) => `زي اليومين دول سنة <b>${year} م</b> `
     ];
     const birthPrefixes = [
-      (year) => `زي النهاردة سنة <b>${year} م</b> اتولد `,
-      (year) => `في سنة <b>${year} م</b> اتولد `,
+      (year) => `زي النهاردة سنة <b>${year} م</b> ذكرى ميلاد `,
+      (year) => `في سنة <b>${year} م</b> كان ميلاد `,
       (year) => `اليوم ده بيفكرنا بيوم ميلاد `,
-      (year) => `زي اليومين دول سنة <b>${year} م</b> اتولد `,
-      (year) => `في سنة <b>${year} م</b> جه على الدنيا `
+      (year) => `في سنة <b>${year} م</b> وصل لينا على الدنيا `
     ];
     const deathPrefixes = [
-      (year) => `زي النهاردة سنة <b>${year} م</b> اتوفى `,
-      (year) => `في سنة <b>${year} م</b> سابنا ومشي `,
-      (year) => `زي اليومين دول سنة <b>${year} م</b> اتوفى `,
-      (year) => `في سنة <b>${year} م</b> توفى `,
+      (year) => `زي النهاردة سنة <b>${year} م</b> حدث وفاة `,
+      (year) => `زي اليومين دول سنة <b>${year} م</b>  كانت وفاة `,
+      (year) => `في سنة <b>${year} م</b> ذكرى وفاة `,
       (year) => `اليوم ده بيفكرنا بوفاة `
     ];
     function getRandomPrefix(prefixArray, year) {
@@ -14646,6 +14647,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         star.style.animationDuration = `${(Math.random() * 2 + 1).toFixed(1)}s`;
         star.addEventListener('click', () => {
           const displayText = document.getElementById('display-startext');
+          document.getElementById('contentstarsbox').style.display = "none";
           showAndMove('contentstarsbox');
           displayText.style.opacity = 0;
           setTimeout(() => {
