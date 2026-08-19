@@ -1416,7 +1416,7 @@
     flex-shrink: 0;
     min-width: 120px;
     white-space: nowrap;
-    color: var(--wcolor) !important;
+    color: #fff !important;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     font-size: .9em;
@@ -5106,6 +5106,7 @@
       <div id="contentstarsbox" class="replay">
         <p id="display-startext"></p>
       </div>
+      <div id="responseText" class="replay"></div>
       <div id="typing-indicator" class="typing-indicator">
         <span class="dot"></span>
         <span class="dot"></span>
@@ -6306,7 +6307,7 @@
         "أنا ممتن"
       ]
     };
-    let light = parseInt(localStorage.light !== undefined ? localStorage.light : 100),
+    let light = parseInt(localStorage.light !== undefined ? localStorage.light : 150),
       can = true;
     const upd = () => {
       bcoin.textContent = "متاح " + light + " نقطة ";
@@ -6557,6 +6558,7 @@
       }
       if (UI.mybtn) {
         UI.mybtn.onclick = () => {
+          setTimeout(() => {triggerFajrAction();}, 2000);
           updateCustomSelection();
           if (!activeDalalat.length) {
             activeDalalat = autoSelectDalalat();
@@ -14658,6 +14660,94 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       return text.replace(/(\.mw-parser-output[\s\S]*?\})/g, '').trim();
     } getnewday();
   }
+  //مقدار صبر فجر
+  {
+    const fajrProgressive = [
+      "كدا الكلام رايق، صح؟ 🤭",
+      "هممم.. شكل في كلام مهم 🤫",
+      "غريبه النشاط دا 😂، بالراحة شوية على نفسك 🐤",
+      "لا بقا! دا كدا بجد في حاجه 👀",
+      "ثواني طيب!! هو الوقت بيطير؟؟ 😤",
+      "طيب في إى معصبك؟ 🤡",
+      "يلهوي عليا 😱، طيب أخد نفسي طيب 🥺",
+      "طب ثواني أظبط شعري وأرجعلك 🤡",
+      "يالهوي القهوة فارت على النار! 😱☕",
+      "ضوافري باظت من كتر الكتابه 😭",
+      "أنا بدأت أدوخ على فكرة.. الرحمه! 😵",
+      "حرام بقا... انا هنقرض 🤯"
+    ];
+    const fajrOnFire = [
+      "عاااااا! الرحمة يا بشر! 😱🔥",
+      "كفاية ونبي! 🥺😵",
+      "أنا بولع بولع وقربت أطلب النجده! 🌋💥",
+      "أنا طالعة أصلح النظارة ومش راجعة تاني! 👓🏃‍♀️",
+      "إلحقوووونيييي! 🚨🤯",
+      "أبوس ايدك كفايه رسايل 😭😭"
+    ];
+    const fajrCoolDown = [
+      "الحمد لله.. الرحمة حلوة برضه! 😮‍💨❤️",
+      "ربنا يكملك بعقلك.. كنت هقطع شراييني من التوتر! 🤲😂",
+      "أخيراً نفَس عميق.. رجعنا للروقان والتكتكة صح ☕✨",
+    ];
+    const fajrIdleComments = [
+      "فينك؟ الهدوء ده مش مطمني بصراحة.. 👀",
+      "هو فيه إيه؟ السكوت المفاجئ ده معناه مصيبة صح؟ 🤐😂",
+      "يا قوم.. هل أنتم هنا أم اختفيتم؟ 🤷‍♀️✨",
+      "الهدوء ده غريب جداً.. فينك؟ 🤔",
+      "...بوووو 👻",
+      "إى الملل دا ؟ 🥱💀",
+      "شكلي هروح اتغطى وانام 🐹",
+    ];
+    let progressIndex = 0;
+    let lastInteractionTime = null;
+    let wasOnFire = false;
+    let idleTriggered = false;
+    setInterval(() => {
+      if (lastInteractionTime && !idleTriggered) {
+        const idleTime = (Date.now() - lastInteractionTime) / 1000;
+        if (idleTime >= 180) {
+          const randomIdle = fajrIdleComments[Math.floor(Math.random() * fajrIdleComments.length)];
+          document.getElementById("responseText").innerText = `${randomIdle}`;
+          showAndMove('responseText');
+          idleTriggered = true;
+        }
+      }
+    }, 1000);
+    function triggerFajrAction() {
+      const currentTime = Date.now();
+      const responseText = document.getElementById("responseText");
+      responseText.style.display ="none";
+      idleTriggered = false;
+      if (!lastInteractionTime) {
+        lastInteractionTime = currentTime;
+        responseText.innerText = fajrProgressive[0];
+        progressIndex = 1;
+        return;
+      }
+      const timeDiff = (currentTime - lastInteractionTime) / 1000;
+      lastInteractionTime = currentTime;
+      if (timeDiff < 8) {
+        if (progressIndex < fajrProgressive.length) {
+          responseText.innerText = fajrProgressive[progressIndex];
+          showAndMove('responseText');
+          progressIndex++;
+        } else {
+          wasOnFire = true;
+          const randomFire = fajrOnFire[Math.floor(Math.random() * fajrOnFire.length)];
+          responseText.innerText = randomFire;
+          showAndMove('responseText');
+        }
+      } else {
+        if (wasOnFire) {
+          const randomCool = fajrCoolDown[Math.floor(Math.random() * fajrCoolDown.length)];
+          responseText.innerText = randomCool;
+          showAndMove('responseText');
+          wasOnFire = false;
+        } else { responseText.innerText = "إى تاني عايزين نعمله دلوقتي ؟✨"; showAndMove('responseText');
+        } progressIndex = 0;
+      }
+    }
+    }
   var UI = {};
   function initUI() {
     var bodyContainer = document.body || document.getElementsByTagName("body")[0];
