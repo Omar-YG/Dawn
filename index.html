@@ -1836,10 +1836,12 @@
     inset: 15px 15px 27px;
     margin: auto;
     overflow: auto;
+    font-style: none !important;
+    font-weight: thin !important;
   }
   #richeditor:empty::before {
     content: attr(placeholder);
-    color: var(--bcolor);
+    color: var(--gcolor);
     font-style: italic;
     cursor: text;
   }
@@ -3143,8 +3145,8 @@
     inset: 0;
     margin: auto;
     width: 100%;
-  height: 100vh;
-  overflow: hidden;
+    height: 100vh;
+    overflow: hidden;
   }
   .star {
     position: absolute;
@@ -3162,6 +3164,66 @@
     background-color: #ffffff;
     box-shadow: 0 0 15px #ffffff, 0 0 30px #1da1f2;
     z-index: 10;
+  }
+  #lapmerge-compine,
+  #lapmerge-apear {
+    position: relative;
+    background: var(--secbg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 15px 40px;
+    max-width: 530px;
+    margin: auto;
+    min-height: 160px;
+    gap: 10px;
+  }
+  #lapmerge-apear {
+    padding: 15px;
+  }
+  #lapmerge-addelementbtn {
+    position: absolute;
+    bottom: 10px;
+  }
+  #lapmerge-dawnelement {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 0 15px;
+    flex-wrap: wrap;
+  }
+  #tashkeel-result-Box {
+    margin: 20px auto;
+    font-size: 22px;
+    text-align: center !important;
+  }
+  .tashkeel-error-char {
+    color: #ff5252;
+    background: rgba(255, 82, 82, 0.1);
+    padding: 0 3px;
+    border-radius: 4px;
+    border-bottom: 2px solid #ff5252;
+  }
+  .tashkeel-correct-char {
+    color: #4CAF50;
+  }
+  .catalog-row,
+  .calc-row {
+    gap: 5px;
+    margin: 5px 0;
+  }
+  .calc-row .fajr-dropdown-container {
+    flex-shrink: 0;
+  }
+  .catalog-row.red-btn,
+  .calc-row.red-btn {
+    flex-shrink: 0;
+  }
+  .result-item {
+    border-right: 3px solid var(--gcolor);
+    padding: 10px;
+    margin: 10px 0;
   }
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
@@ -3752,6 +3814,13 @@
                 </svg>
                 <b>تحليل بياني</b>
               </div>
+              <div data-id="15" class="app" onclick="onerun('sociLoadFromLocalStorage');switchTab('sociappmang')">
+                <svg viewBox="0 0 512 512" title="th-large">
+                  <path
+                    d="M296 32h192c13.255 0 24 10.745 24 24v160c0 13.255-10.745 24-24 24H296c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24zm-80 0H24C10.745 32 0 42.745 0 56v160c0 13.255 10.745 24 24 24h192c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24zM0 296v160c0 13.255 10.745 24 24 24h192c13.255 0 24-10.745 24-24V296c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 24zm296 184h192c13.255 0 24-10.745 24-24V296c0-13.255-10.745-24-24-24H296c-13.255 0-24 10.745-24 24v160c0 13.255 10.745 24 24 24z" />
+                </svg>
+                <b>موارد مجموعه</b>
+              </div>
             </div>
             <div class="divider"></div>
             <div class="search-container">
@@ -3852,6 +3921,49 @@
             </details>
           </div>
         </div>
+      </div>
+      <div id="soci-results" class="modaltab">
+        <h2 id="soci-title4">النتائج والتقارير 📊</h2>
+      </div>
+      <div id="tashkeeltab" class="modaltab">
+        <h2>تدريب تشكيل الفقرات</h2>
+        <h1 style="text-align:center;color:var(--dcolor);margin:20px auto;">تحدي تشكيل الجملة </h1>
+        <fieldset>
+          <legend>منطقة الإجابة</legend>
+          <input type="text" id="tashkeel-userInput" autocomplete="off">
+          <br>
+          <button class="conf-btn" onclick="tashkeelCheckResult()">فحص النتيجة 🔍</button>
+          <button class="red-btn-sec" onclick="tashkeelInitGame()">جملة جديده</button>
+        </fieldset>
+        <div id="tashkeel-result-Box"></div>
+      </div>
+      <div id="labmergego" class="modaltab">
+        <h2>معمل الدمج</h2>
+        <div>
+          <div id="lapmerge-compine">
+            <h3 id="lapmerge-merged-list">اختيار عناصر...</h3>
+            <h3 id="lapmerge-mergeresult"></h3>
+            <button id="lapmerge-addelementbtn" class="conf-btn" onclick="lapmergeOpenModal()">إنشاء [مركب/عنصر] جديد
+              +</button>
+          </div>
+          <div id="lapmerge-apear" style="display:none;">
+            <h3 id="lapmerge-selected-preview" style="color:var(--bcolor);text-align:right;width:100%;">المكونات</h3>
+            <input id="lapmerge-elementnew-name" placeholder="اسم العنصر الجديد" />
+            <div class="lapmerge-modal-btns">
+              <button onclick="lapmergeAddNew()" class="conf-btn">إضافة عنصر</button>
+              <button onclick="lapmergeExportData()">تصدير</button>
+              <button onclick="lapmergeImportData()">استيراد</button>
+              <button onclick="lapmergeCloseModal()" class="red-btn-sec">إغلاق</button>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <fieldset>
+          <legend>مكتبه العناصر</legend>
+          <input type="text" id="lapmerge-search-box" placeholder="بحث عن عنصر... " oninput="lapmergeFilterElements()"
+            style="width: 90%; max-width: 400px; display: block; margin: 15px auto 25px;" />
+          <div id="lapmerge-dawnelement"></div>
+        </fieldset>
       </div>
       <div id="founderwordtab" class="modaltab">
         <h2>كلمة المؤسس</h2>
@@ -5234,6 +5346,42 @@
           d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
       </svg>
     </div>
+    <section id="sociappmang" class="tab-content">
+      <h2>إداره موارد مجموعه</h2>
+      <div id="soci" class="app-container" style="overflow:auto;">
+        <div id="soci-container" style="max-width:800px;margin:20px auto;">
+          <div id="soci-section-calc">
+            <h2 id="soci-title3">حسابات واستهلاك المخزون</h2>
+            <br>
+            <form id="soci-resourceForm">
+              <div id="soci-formGroup" class="flex" style="margin:10px 0 25px;">
+                <input type="number" id="soci-totalPeople" min="1" value="" required placeholder="إجمالي عدد الأفراد">
+                <input type="number" id="soci-targetDays" min="1" value="" required
+                  placeholder="المدة المستهدفة للتقرير (بالأيام)">
+              </div>
+              <fieldset>
+                <legend>قائمه العناصر المستهلكه</legend>
+                <div id="soci-calcItemList"></div>
+              </fieldset>
+              <button type="button" id="soci-addCalcItem" class="conf-btn" style="margin-bottom: 15px;">+ إدخال صنف
+                للمتابعة</button>
+              <button type="submit">تشغيل التحليل والحسابات ✨</button>
+            </form>
+          </div>
+          <p id="soci-desc2" style="color:var(--gcolor);margin:10px auto 20px;text-align:center;">ضغطة على "تشغيل
+            التحليل والحسابات" لعرض الحالة.</p>
+          <div id="soci-section-catalog" style="border-top:var(--cborder);padding:20px auto 10px;">
+            <center style="margin:20px 0 0;">
+              <h2 id="soci-title2">قاعدة بيانات الأصناف الثابتة</h2>
+              <p id="soci-desc1" style="font-size: 13px; color:var(--gcolor); margin-bottom: 15px;">تعريف اسم الصنف،
+                وحدة القياس، ومعدل الاستهلاك الطبيعي.</p>
+            </center>
+            <div id="soci-catalogList"></div>
+            <button type="button" id="soci-addCatalogItem" class="conf-btn">+ إضافة صنف جديد للقاعدة</button>
+          </div>
+        </div>
+      </div>
+    </section>
     <section id="drawtab" class="tab-content">
       <h2>لوحة الرسم</h2>
       <div id="draw" class="app-container">
@@ -5286,6 +5434,7 @@
     <section id="formbuildertab" class="tab-content">
       <h2>النموذج</h2>
       <div class="app-container" style="overflow:auto;">
+        <div id="analytics-panel"></div>
         <div id="formtools">
           <div id="formbuilder">
             <details open>
@@ -5836,10 +5985,10 @@
   {
     const fajrabilityLibrary = {
       معالجة: ["محرك المدخلات الرئيسية", "حساب النص وتحليله", "التصحيح النصي للفرانكو ولوحه المفاتيح", "كاشف اللغات البرمجيه", "معالجه النصوص لتنظيفها للنظام", "إستخراج البيانات الرقميه من النص", "تحديد الجمل الهامه", "الذاكره الكلاميه الدائمه والمؤقته", "التدريب الكلامي للردود", "مساعد إعرابي", "النص الى كلام", "تدريب ماركوف", "كاشف المشاعر وتفاعل باللون", "كاشف الطابع الشخصي من النص", "الإملاء والتصحيح", "ضفط النصوص", "تأثير وترتيب الرسائل", "معالجه النصوص الضخمه"],
-      إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى"],
-      منطق: ["آله حاسبه فورية", "محول الوحدات الرياضيه", "بنك الاسئله والتدريبات", "مشتق القوانين المسجله", "ترتيب البيانات تصاعدي وتنازلي", "محلل القانون", "حساب التركه", "فاحص اللوغارتم", "مكتبه القانون والاحكام", "موزع الميزانيه", "حسابه صافي المرتب", "ميزان اتخاز القرار", "نظام التصنيف", "رسم الدوال الجبرية"],
+      إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه"],
+      منطق: ["آله حاسبه فورية", "محول الوحدات الرياضيه", "بنك الاسئله والتدريبات", "مشتق القوانين المسجله", "ترتيب البيانات تصاعدي وتنازلي", "محلل القانون", "حساب التركه", "فاحص اللوغارتم", "مكتبه القانون والاحكام", "موزع الميزانيه", "حسابه صافي المرتب", "ميزان اتخاز القرار", "نظام التصنيف", "رسم الدوال الجبرية", "اختبار صحه علامات التشكيل", "معمل دمج العناصر"],
       تطوير: ["تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث"],
-      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)"],
+      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر"],
       وسائط: ["لوحه الرسم", "تسجيل الصوت", "المنبه والمؤقت", "العاب وتسليه", "رسم الخريطه الشجرية", "بلاطات الالوان", "إنشاء موسيقى ونغمات", "لعبه فرقعه الأرقام", "لعبه عداد الضغطات", "لعبه الضغط بالترتيب", "قائمه مشغل الاغاني", "الألوان المتناسقه", "الحصول على اللون", "الحصول على اللون", "لعبه ركض فجر", "تسجيل الشاشه", "الفحص الطبي المبدأي", "مؤشر التحاليل الطبيه", "تسجيل أماكن الالم", "ملف القوة الشخصيه", "حامي الشاشه", "رسم بياني بالاعمده", "روتين المستخدم اليومي", "خريطه أماكن واتجاهات", "صانع الجولات الإفتراضيه", "رسم بياني", "حيوانات فجر الأليفه"]
     };
     function drawFajrRadar() {
@@ -6561,7 +6710,7 @@
       }
       if (UI.mybtn) {
         UI.mybtn.onclick = () => {
-          setTimeout(() => {triggerFajrAction();}, 2000);
+          setTimeout(() => { triggerFajrAction(); }, 2000);
           updateCustomSelection();
           if (!activeDalalat.length) {
             activeDalalat = autoSelectDalalat();
@@ -6754,11 +6903,11 @@
               skippedCount++;
             }
           }
-          alert(`تمت عملية الدمج بنجاح يا مؤسس! 🚀\n- أضيف جديد: ${addedCount}\n- تم تحديثه: ${updatedCount}\n- مطابق (تم تخطيه): ${skippedCount}`);
+          showToast(`تمت عملية الدمج بنجاح ! 🚀\n- أضيف جديد: ${addedCount}\n- تم تحديثه: ${updatedCount}\n- مطابق (تم تخطيه): ${skippedCount}`);
           location.reload();
         } catch (err) {
           console.error(err);
-          alert('الملف ضرب يا هندسة أو مش بصيغة JSON سليمة! ⚠️');
+          showToast('الملف ضرب يا هندسة أو مش بصيغة JSON سليمة! ⚠️');
         }
       };
       reader.readAsText(file);
@@ -7469,7 +7618,7 @@
         .map(
           (f) => `
 <div class="container">
-<div class="name" onclick='switchTab("formbuildertab"); loadFormForDisplay("${f.id}")'>${f.name}</div>
+<div class="name" onclick='switchTab("formbuildertab"); loadFormForDisplay("${f.id}");onerun("convertToFajrUI")'>${f.name}</div>
 <div class="type upload">نموذج</div>
 </div>
 `
@@ -7496,6 +7645,23 @@
     }
     function buildForm(form) {
       UI.formbuilder.style.display = "block";
+      let analyticsHTML = `
+<div class="flex" class="no-print">
+    <select id="calcColumn">
+        <option value="" disabled selected>اختر الحقل للحساب...</option>
+        ${form.fields.map(f => `<option value="${f.name}">${f.name}</option>`).join("")}
+    </select>
+    <select id="calcOperation">
+        <option value="sum">المجموع (Sum)</option>
+        <option value="avg">المتوسط (Average)</option>
+        <option value="count">العدد (Count)</option>
+        <option value="max">أكبر قيمة (Max)</option>
+        <option value="min">أقل قيمة (Min)</option>
+    </select>
+    <button onclick="runColumnCalculation('${form.id}')" class="conf-btn">حساب 📊</button>
+</div>
+<div id="calcResultDisplay" style="margin-top: 10px; font-weight: bold; color: var(--text-color);"></div>
+`;
       UI.formContainer.innerHTML = `
 <div style="display:flex;align-items:center;gap:10px;margin-bottom:15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
 <h4 style="margin:0;">${form.name}</h4>
@@ -7504,6 +7670,10 @@
 <button onclick="exportCSV('${form.id}')" style="background:#00e060;color:#fff;border:none;padding:5px 12px;border-radius:18px;cursor:pointer;margin-right:auto;">تصدير Excel</button>
 <button onclick="exportSQL('${form.id}')" style="background:#6c757d;color:#fff;border:none;padding:5px 12px;border-radius:18px;cursor:pointer;margin-right:5px;">تصدير SQL</button>
 </div>
+<fieldset style="margin:15px auto;">
+  <legend>العمليات الحسابية</legend>
+${analyticsHTML}
+</fieldset>
 `;
       const formEl = document.createElement("form");
       formEl.style.display = "grid";
@@ -7692,6 +7862,38 @@
       });
       if (!found) resultsHTML += `<p>للأسف ملقيتش حاجة مطابقة! 😅</p>`;
       UI.resultsdisplayarea.innerHTML = resultsHTML;
+    }
+    function runColumnCalculation(fID) {
+      const colName = document.getElementById('calcColumn').value;
+      const op = document.getElementById('calcOperation').value;
+      const resultDiv = document.getElementById('calcResultDisplay');
+      if (!colName) return showToast("اختر الحقل الأول!");
+      const data = JSON.parse(localStorage.getItem(`data_${fID}`) || "[]");
+      if (!data.length) return resultDiv.textContent = "مفيش بيانات في الجدول للحساب!";
+      const values = data.map(row => parseFloat(row[colName])).filter(val => !isNaN(val));
+      const allValues = data.map(row => row[colName]).filter(val => val !== undefined && val !== "");
+      let result = 0;
+      let label = "";
+      if (op === "count") {
+        result = allValues.length;
+        label = `عدد المدخلات غير الفارغة لـ (${colName})`;
+      } else {
+        if (!values.length) return resultDiv.textContent = `الحقل "${colName}" لا يحتوي على أقسام رقمية لتطبيق (${op})!`;
+        if (op === "sum") {
+          result = values.reduce((a, b) => a + b, 0);
+          label = `مجموع (${colName})`;
+        } else if (op === "avg") {
+          result = values.reduce((a, b) => a + b, 0) / values.length;
+          label = `متوسط (${colName})`;
+        } else if (op === "max") {
+          result = Math.max(...values);
+          label = `أكبر قيمة في (${colName})`;
+        } else if (op === "min") {
+          result = Math.min(...values);
+          label = `أقل قيمة في (${colName})`;
+        }
+      }
+      resultDiv.innerHTML = `✨ ${label}: <span style="color: #28a745; font-size: 1.1em;">${typeof result === 'number' && !Number.isInteger(result) ? result.toFixed(2) : result}</span>`;
     }
   }
   //بنك الاسئله والتدريبات
@@ -10674,6 +10876,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "فحص لوغاريتم", d: "تحليل الداله لفحص قوتها", run: "opentab('DawnLogarithm')" },
         { n: "بنك الأسئله", d: "إنشاء أسئله وتدريبات", run: "onerun('examreadygo');showAndMove('quesbtncontainer')" },
         { n: "تقسيم الميزانيه", d: "تقسيم الميزانيه حسب النسب", run: "showAndMove('smart-budget-app')" },
+        { n: "دمج العناصر", d: "إنشاء ودمج المركبات", run: "onerun('lapmergeRender');opentab('labmergego')" },
+        { n: "تدريب التشكيل", d: "تقييم تشكيل الجمل العربية", run: "onerun('tashkeelInitGame');opentab('tashkeeltab')" },
         //{ n: "تحديد صحه الفعل", d: "تحديد اذا كان الفعل صح او لا", run: "onerun('ahkamrenderHome');showAndMove('ahkamcontent')"},
       ],
       "@": [
@@ -14595,7 +14799,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const cachedPosts = localStorage.getItem('wiki_galaxy_posts');
       if (cachedDate === currentDateKey && cachedPosts) {
         renderStars(JSON.parse(cachedPosts));
-      } else {await fetchAndCacheNewData(today, currentDateKey);
+      } else {
+        await fetchAndCacheNewData(today, currentDateKey);
       }
     }
     async function fetchAndCacheNewData(today, currentDateKey) {
@@ -14718,7 +14923,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     function triggerFajrAction() {
       const currentTime = Date.now();
       const responseText = document.getElementById("responseText");
-      responseText.style.display ="none";
+      responseText.style.display = "none";
       idleTriggered = false;
       if (!lastInteractionTime) {
         lastInteractionTime = currentTime;
@@ -14745,11 +14950,418 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           responseText.innerText = randomCool;
           showAndMove('responseText');
           wasOnFire = false;
-        } else { responseText.innerText = "إى تاني عايزين نعمله دلوقتي ؟✨"; showAndMove('responseText');
+        } else {
+          responseText.innerText = "إى تاني عايزين نعمله دلوقتي ؟✨"; showAndMove('responseText');
         } progressIndex = 0;
       }
     }
+  }
+  //معمل دمج العناصر
+  {
+    const lapmergeDefaultElements = {};
+    const lapmergeDefaultRecipes = {};
+    let lapmergeUserElements = JSON.parse(localStorage.getItem('lab_elements')) || {};
+    let lapmergeUserRecipes = JSON.parse(localStorage.getItem('lab_recipes')) || {};
+    let lapmergeElements = { ...lapmergeDefaultElements, ...lapmergeUserElements };
+    let lapmergeRecipes = { ...lapmergeDefaultRecipes, ...lapmergeUserRecipes };
+    let lapmergeSelected = [];
+    function lapmergeRender() {
+      const container = document.getElementById('lapmerge-dawnelement');
+      container.innerHTML = '';
+      if (Object.keys(lapmergeElements).length === 0) {
+        container.innerHTML = '<div style="color: #888; width: 100%; text-align: center; padding: 20px;">المختبر فارغ حالياً! اضغط على زر (+) لإضافة عناصر جديدة 🧪✨</div>';
+        return;
+      }
+      const searchTerm = document.getElementById('lapmerge-search-box') ? document.getElementById('lapmerge-search-box').value.toLowerCase() : '';
+      Object.entries(lapmergeElements).forEach(([id, name]) => {
+        if (searchTerm && !name.toLowerCase().includes(searchTerm)) {
+          return;
+        }
+        const btn = document.createElement('button');
+        btn.textContent = name;
+        btn.onclick = () => lapmergeToggleSelect(id, btn);
+        btn.ondblclick = () => lapmergeShowRecipe(id);
+        btn.oncontextmenu = (e) => {
+          e.preventDefault();
+          if (id.length > 5) lapmergeDeleteElement(id);
+          else showToast("العناصر الأساسية لا يمكن حذفها! 😉");
+        };
+        if (lapmergeSelected.includes(id)) btn.classList.add('conf-btn');
+        container.appendChild(btn);
+      });
     }
+    function lapmergeFilterElements() {
+      lapmergeRender();
+    }
+    function lapmergeToggleSelect(id, btn) {
+      if (lapmergeSelected.includes(id)) {
+        lapmergeSelected = lapmergeSelected.filter(x => x !== id);
+        btn.classList.remove('conf-btn');
+      } else {
+        lapmergeSelected.push(id);
+        btn.classList.add('conf-btn');
+      }
+      document.getElementById('lapmerge-merged-list').textContent = lapmergeSelected.map(i => lapmergeElements[i]).join(' + ') || "اختار عناصر...";
+      lapmergeCheckMerge();
+    }
+    function lapmergeCheckMerge() {
+      if (lapmergeSelected.length < 2) return;
+      const key = [...lapmergeSelected].sort().join('+');
+      const resId = lapmergeRecipes[key];
+      if (resId) {
+        const resultName = lapmergeElements[resId] || resId;
+        document.getElementById('lapmerge-mergeresult').textContent = "ينتج عنه: " + resultName;
+      } else {
+        document.getElementById('lapmerge-mergeresult').textContent = "";
+      }
+    }
+    function lapmergeShowRecipe(id) {
+      let recipeFound = "عنصر أساسي";
+      for (let r in lapmergeRecipes) {
+        if (lapmergeRecipes[r] == id) {
+          const parts = r.split('+').map(p => lapmergeElements[p] || p);
+          recipeFound = `تركيبته: ${parts.join(' + ')}`;
+          break;
+        }
+      }
+      document.getElementById('lapmerge-merged-list').textContent = lapmergeElements[id];
+      document.getElementById('lapmerge-mergeresult').textContent = recipeFound;
+    }
+    function lapmergeDeleteElement(id) {
+      openSystemConfirm("تأكيد الحذف", `حذف "${lapmergeElements[id]}"؟`, () => {
+        delete lapmergeElements[id];
+        delete lapmergeUserElements[id];
+        for (let r in lapmergeRecipes) {
+          if (lapmergeRecipes[r] == id || r.includes(id)) {
+            delete lapmergeRecipes[r];
+            delete lapmergeUserRecipes[r];
+          }
+        }
+        lapmergeSave();
+        lapmergeRender();
+      });
+    }
+    function lapmergeOpenModal() {
+      tooglelapmerge();
+      document.getElementById('lapmerge-elementnew-name').value = "";
+      document.getElementById('lapmerge-selected-preview').textContent = "العناصر المختارة: " + (lapmergeSelected.map(i => lapmergeElements[i]).join(' + ') || "لا يوجد");
+    }
+    function lapmergeAddNew() {
+      const name = document.getElementById('lapmerge-elementnew-name').value.trim();
+      if (!name) return;
+      const newId = Date.now().toString();
+      lapmergeElements[newId] = name;
+      lapmergeUserElements[newId] = name;
+      if (lapmergeSelected.length >= 2) {
+        const key = [...lapmergeSelected].sort().join('+');
+        lapmergeRecipes[key] = newId;
+        lapmergeUserRecipes[key] = newId;
+      }
+      lapmergeSave();
+      lapmergeRender();
+      lapmergeCloseModal();
+      document.getElementById('lapmerge-elementnew-name').value = '';
+      lapmergeSelected = [];
+    }
+    function lapmergeSave() {
+      localStorage.setItem('lab_elements', JSON.stringify(lapmergeUserElements));
+      localStorage.setItem('lab_recipes', JSON.stringify(lapmergeUserRecipes));
+    }
+    function lapmergeExportData() {
+      const data = JSON.stringify({ elements: lapmergeElements, recipes: lapmergeRecipes });
+      const blob = new Blob([data], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'lab_data.json';
+      a.click();
+    }
+    function lapmergeImportData() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.onchange = e => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const d = JSON.parse(ev.target.result);
+          lapmergeUserElements = d.elements;
+          lapmergeUserRecipes = d.recipes;
+          lapmergeElements = { ...lapmergeDefaultElements, ...lapmergeUserElements };
+          lapmergeRecipes = { ...lapmergeDefaultRecipes, ...lapmergeUserRecipes };
+          lapmergeSave();
+          lapmergeRender();
+          lapmergeCloseModal();
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    }
+    function lapmergeCloseModal() {
+      tooglelapmerge();
+      document.getElementById('lapmerge-elementnew-name').value = "";
+    }
+    function tooglelapmerge() {
+      const div1 = document.getElementById('lapmerge-compine');
+      const div2 = document.getElementById('lapmerge-apear');
+      div1.style.display = div1.style.display === "none" ? "flex" : "none";
+      div2.style.display = div2.style.display === "none" ? "flex" : "none";
+    };
+  }
+  //اختبار صحة علامات التشكيل
+  {
+    const tashkeelSentencesBank = ["كَتَبَ المُهَنْدِسُ البَرْمَجِيَّةَ.", "يَذْهَبُ الطَّالِبُ إلى المَدْرَسَةِ.", "قَرَأَ المُعَلِّمُ الكِتَابَ المُفِيدَ.", "رَسَمَ الفَنَّانُ لَوْحَةً جَمِيلَةً.", "يَأْكُلُ الوَلَدُ تُفَّاحَةً لَذِيذَةً.", "شَرِبَ الضَّيْفُ القَهْوَةَ السَّاخِنَةَ.", "فَتَحَ الرَّجُلُ البَابَ بِهُدُوءٍ.", "يَلْعَبُ الأَطْفَالُ فِي الحَدِيقَةِ.", "سَافَرَ المُهَنْدِسُ إلى الخَارِجِ.", "شَاهَدَتْ لَيْلَى الفِيلْمَ الجَدِيدَ.", "يَكْتُبُ الطَّالِبُ الدَّرْسَ بِعِنَايَةٍ.", "زَرَعَ الفَلَّاحُ القَمْحَ فِي الأَرْضِ.", "حَصَدَ العَامِلُ الثِّمَارَ النَّاضِجَةَ.", "سَمِعَ الصَّبِيُّ الصَّوْتَ الوَاضِحَ.", "يَسْتَمِعُ الطِّفْلُ إلى القِصَّةِ.", "طَبَخَتِ الأُمُّ طَعَاماً لَذِيذاً.", "يُسَاعِدُ الوَلَدُ أُمَّهُ الكَرِيمَةَ.", "صَنَعَ النَّجَّارُ كُرْسِيّاً خَشَبِيّاً.", "اشْتَرَى الأَبُ سَيَّارَةً حَدِيثَةً.", "يَحْفَظُ الطَّالِبُ القُرْآنَ الكَرِيمَ.", "صَامَ المُسْلِمُ شَهْرَ رَمَضَانَ.", "حَجَّ البَايِعُ البَيْتَ الحَرَامَ.", "يَطُوفُ الحَجَّاجُ حَوْلَ الكَعْبَةِ.", "سَبَحَ الوَلَدُ فِي المَاءِ العَمِيقِ.", "صَعِدَ الرَّجُلُ الجَبَلَ العَالِيَ.", "هَبَطَتِ الطَّائِرَةُ على المَدْرَجِ.", "يَطِيرُ العُصْفُورُ فِي السَّمَاءِ.", "غَرَدَ البُلْبُلُ عَلَى الغُصْنِ.", "نَظَّفَ العَامِلُ الشَّارِعَ المُهِمَّ.", "تَرَكَ الرَّجُلُ الحَقِيبَةَ هُنَاكَ.", "يَحْمِلُ الجُنْدِيُّ السِّلَاحَ الثَّقِيلَ.", "دَافَعَ الجَيْشُ عَنِ الوَطَنِ.", "يَحْتَفِلُ الشَّعْبُ بِالعِيدِ.", "فَازَ الفَرِيقُ بِالمُبَارَاةِ الكُبْرَى.", "سَجَّلَ اللاَّعِبُ هَدَفاً رَائِعاً.", "رَكَلَ الوَلَدُ الكُرَةَ بِقُوَّةٍ.", "يَرْكُضُ الحِصَانُ بِسُرْعَةٍ فَائِقَةٍ.", "وَقَفَ الحَارِسُ أَمَامَ المَرْمَى.", "يَحْرُسُ الكَلْبُ البَيْتَ لَيْلًا.", "نَابَ الرَّجُلُ عَنْ صَدِيقِهِ.", "صَاحَ الدِّيكُ عِنْدَ الفَجْرِ.", "طَلَعَتِ الشَّمْسُ بَعْدَ الشُّرُوقِ.", "غَرَبَتِ الشَّمْسُ خَلْفَ الجِبَالِ.", "أَضَاءَ القَمَرُ اللَّيْلَ المُظْلِمَ.", "لَمَعَتِ النُّجُومُ فِي السَّمَاءِ.", "هَطَلَ المَطَرُ بغَزَارَةٍ اليَوْمَ.", "نَزَلَتِ الأَمْطَارُ عَلَى الأَرْضِ.", "أَثْمَرَتِ الشَّجَرَةُ تَمْراً طَيِّباً.", "يَسْقِي الفَلَّاحُ الزَّرْعَ صَبَاحاً.", "عَادَ المُسَافِرُ إلى وَطَنِهِ."];
+    let tashkeelCurrentOriginal = "";
+    function tashkeelInitGame() {
+      tashkeelCurrentOriginal = tashkeelSentencesBank[Math.floor(Math.random() * tashkeelSentencesBank.length)].normalize("NFC");
+      document.getElementById('tashkeel-userInput').value = tashkeelStripTashkeel(tashkeelCurrentOriginal);
+      document.getElementById('tashkeel-result-Box').innerHTML = "";
+    }
+    function tashkeelStripTashkeel(text) {
+      return text.replace(/[\u064B-\u0652]/g, "");
+    }
+    function tashkeelParseToTokens(text) {
+      let tashkeelTokens = [];
+      let tashkeelTashkeelRegex = /[\u064B-\u0652]/;
+      for (let tashkeelI = 0; tashkeelI < text.length; tashkeelI++) {
+        let tashkeelChar = text[tashkeelI];
+        if (tashkeelTashkeelRegex.test(tashkeelChar)) {
+          if (tashkeelTokens.length > 0 && !tashkeelTokens[tashkeelTokens.length - 1].mark) {
+            tashkeelTokens[tashkeelTokens.length - 1].mark = tashkeelChar;
+          }
+        } else {
+          tashkeelTokens.push({ base: tashkeelChar, mark: "" });
+          if (tashkeelI + 1 < text.length && tashkeelTashkeelRegex.test(text[tashkeelI + 1])) {
+            tashkeelTokens[tashkeelTokens.length - 1].mark = text[tashkeelI + 1];
+            tashkeelI++;
+          }
+        }
+      }
+      return tashkeelTokens;
+    }
+    function tashkeelCheckResult() {
+      let tashkeelUserText = document.getElementById('tashkeel-userInput').value.normalize("NFC");
+      let tashkeelOriginalTokens = tashkeelParseToTokens(tashkeelCurrentOriginal);
+      let tashkeelUserTokens = tashkeelParseToTokens(tashkeelUserText);
+      let tashkeelMatches = 0;
+      let tashkeelTotal = tashkeelOriginalTokens.length;
+      let tashkeelDiffHtml = "";
+      for (let tashkeelI = 0; tashkeelI < tashkeelTotal; tashkeelI++) {
+        let tashkeelOrig = tashkeelOriginalTokens[tashkeelI];
+        let tashkeelUsr = tashkeelUserTokens[tashkeelI] || { base: tashkeelOrig.base, mark: "" };
+        let tashkeelIsBaseMatch = (tashkeelOrig.base === tashkeelUsr.base);
+        let tashkeelIsMarkMatch = (tashkeelOrig.mark === tashkeelUsr.mark);
+        if (tashkeelIsBaseMatch && tashkeelIsMarkMatch) {
+          tashkeelMatches++;
+          tashkeelDiffHtml += `<span class="tashkeel-correct-char">${tashkeelUsr.base}${tashkeelUsr.mark}</span>`;
+        } else {
+          let tashkeelDisplayMark = tashkeelUsr.mark ? tashkeelUsr.mark : "";
+          tashkeelDiffHtml += `<span class="tashkeel-error-char">${tashkeelOrig.base}${tashkeelDisplayMark}</span>`;
+        }
+      }
+      let tashkeelPercentage = Math.round((tashkeelMatches / tashkeelTotal) * 100);
+      if (tashkeelPercentage < 0) tashkeelPercentage = 0;
+      if (tashkeelPercentage > 100) tashkeelPercentage = 100;
+      document.getElementById('tashkeel-result-Box').innerHTML = `
+<div style="margin-bottom: 10px;">نسبة التطابق: <strong>${tashkeelPercentage}%</strong> 🎯</div>
+<div class="flex">
+<div>
+<div style="font-size: 18px; color: #a0a0a0; margin-top: 10px;">النص الأصلي الصحيح:</div>
+<div style="font-size: 24px; color: #4CAF50; letter-spacing: 2px;">${tashkeelCurrentOriginal}</div>
+</div>
+<div>
+<div style="font-size: 18px; color: #a0a0a0; margin-top: 15px;">ما قمت بتعديله:</div>
+<div style="font-size: 24px; letter-spacing: 2px;">${tashkeelDiffHtml}</div>
+</div>
+</div>
+`;
+    }
+  }
+  //إداره موارد مجموعه
+  {
+    function sociSaveToLocalStorage() {
+      const sociCatalogData = [];
+      document.querySelectorAll('.catalog-row').forEach(sociRow => {
+        sociCatalogData.push({
+          name: sociRow.querySelector('.cat-name').value,
+          unit: sociRow.querySelector('.cat-unit').value,
+          rate: sociRow.querySelector('.cat-rate').value,
+          period: sociRow.querySelector('.cat-period').value
+        });
+      });
+      const sociCalcData = [];
+      document.querySelectorAll('.calc-row').forEach(sociRow => {
+        const sociSelect = sociRow.querySelector('.calc-item-select');
+        const sociQty = sociRow.querySelector('.calc-qty');
+        sociCalcData.push({
+          selected: sociSelect ? sociSelect.value : '',
+          qty: sociQty ? sociQty.value : ''
+        });
+      });
+      const sociSettings = {
+        totalPeople: document.getElementById('soci-totalPeople').value,
+        targetDays: document.getElementById('soci-targetDays').value,
+        catalog: sociCatalogData,
+        calc: sociCalcData
+      };
+      localStorage.setItem('sociInventoryData', JSON.stringify(sociSettings));
+    }
+    function sociLoadFromLocalStorage() {
+      const sociSaved = localStorage.getItem('sociInventoryData');
+      const sociCatalogList = document.getElementById('soci-catalogList');
+      const sociCalcList = document.getElementById('soci-calcItemList');
+      sociCatalogList.innerHTML = '';
+      sociCalcList.innerHTML = '';
+      if (sociSaved) {
+        try {
+          const sociData = JSON.parse(sociSaved);
+          if (sociData.totalPeople) document.getElementById('soci-totalPeople').value = sociData.totalPeople;
+          if (sociData.targetDays) document.getElementById('soci-targetDays').value = sociData.targetDays;
+          if (sociData.catalog && sociData.catalog.length > 0) {
+            sociData.catalog.forEach(sociItem => {
+              sociAddCatalogRow(sociItem.name, sociItem.unit, sociItem.rate, sociItem.period);
+            });
+          }
+          if (sociData.calc && sociData.calc.length > 0) {
+            sociData.calc.forEach(sociItem => {
+              sociAddCalcRow(sociItem.qty);
+            });
+          }
+        } catch (e) {
+          sociLoadDefaults();
+        }
+      } else {
+        sociLoadDefaults();
+      }
+      sociUpdateItemDropdowns();
+      convertToFajrUI();
+      if (sociSaved) {
+        try {
+          const sociData = JSON.parse(sociSaved);
+          const sociCalcRows = document.querySelectorAll('.calc-row');
+          sociData.calc.forEach((sociItem, sociIdx) => {
+            if (sociCalcRows[sociIdx]) {
+              const sociSelect = sociCalcRows[sociIdx].querySelector('.calc-item-select');
+              if (sociSelect) sociSelect.value = sociItem.selected;
+            }
+          });
+        } catch (e) { }
+      }
+    }
+    function sociLoadDefaults() {
+      sociAddCatalogRow("أرز", "كيلو", "0.2", "month");
+      sociAddCatalogRow("حليب", "لتر", "1", "day");
+      sociAddCalcRow("20");
+    }
+    function sociAddCatalogRow(sociName = '', sociUnit = '', sociRate = '1', sociPeriod = 'month') {
+      const sociList = document.getElementById('soci-catalogList');
+      const sociRow = document.createElement('div');
+      sociRow.className = 'catalog-row flex';
+      sociRow.innerHTML = `
+<input type="text" class="cat-name" value="${sociName}" placeholder="اسم الصنف" required>
+<input type="text" class="cat-unit" value="${sociUnit}" placeholder="وحدة القياس" required>
+<input type="number" class="cat-rate" value="${sociRate}" step="any" min="0" placeholder="معدل الفرد" required>
+<select class="cat-period">
+<option value="day" ${sociPeriod === 'day' ? 'selected' : ''}>يومي</option>
+<option value="week" ${sociPeriod === 'week' ? 'selected' : ''}>أسبوعي</option>
+<option value="month" ${sociPeriod === 'month' ? 'selected' : ''}>شهري</option>
+</select>
+<button type="button" class="red-btn" onclick="this.closest('.catalog-row').remove(); sociUpdateItemDropdowns(); sociSaveToLocalStorage();">&times;</button>
+`;
+      sociList.appendChild(sociRow);
+    }
+    function sociAddCalcRow(sociQtyVal = '') {
+      const sociList = document.getElementById('soci-calcItemList');
+      const sociRow = document.createElement('div');
+      sociRow.className = 'calc-row flex';
+      sociRow.innerHTML = `
+<select class="calc-item-select" required></select>
+<input type="number" class="calc-qty" value="${sociQtyVal}" min="0" step="any" placeholder="الكمية المتوفرة" required>
+<button type="button" class="red-btn" onclick="this.closest('.calc-row').remove(); sociSaveToLocalStorage();">&times;</button>
+`;
+      sociList.appendChild(sociRow);
+      sociUpdateItemDropdowns();
+    }
+    function sociUpdateItemDropdowns() {
+      const sociCatalogRows = document.querySelectorAll('.catalog-row');
+      const sociCalcRows = document.querySelectorAll('.calc-row');
+      let sociOptionsHtml = '<option value="" disabled selected> الصنف</option>';
+      sociCatalogRows.forEach(sociRow => {
+        const sociName = sociRow.querySelector('.cat-name').value;
+        const sociUnit = sociRow.querySelector('.cat-unit').value;
+        if (sociName) {
+          sociOptionsHtml += `<option value="${sociName}" data-unit="${sociUnit}">${sociName} (${sociUnit || 'وحدة'})</option>`;
+        }
+      });
+      sociCalcRows.forEach(sociRow => {
+        const sociSelect = sociRow.querySelector('.calc-item-select');
+        const sociCurrentValue = sociSelect.value;
+        sociSelect.innerHTML = sociOptionsHtml;
+        sociSelect.value = sociCurrentValue;
+      });
+    }
+    document.getElementById('soci-addCatalogItem').addEventListener('click', function () {
+      sociAddCatalogRow();
+      sociUpdateItemDropdowns();
+      sociSaveToLocalStorage();
+      convertToFajrUI();
+    });
+    document.getElementById('soci-addCalcItem').addEventListener('click', function () {
+      sociAddCalcRow();
+      sociUpdateItemDropdowns();
+      sociSaveToLocalStorage();
+      convertToFajrUI();
+    });
+    document.addEventListener('input', function (sociE) {
+      if (sociE.target.closest('#soci')) {
+        sociUpdateItemDropdowns();
+        sociSaveToLocalStorage();
+      }
+    });
+    document.getElementById('soci-resourceForm').addEventListener('submit', function (sociE) {
+      sociE.preventDefault();
+      sociSaveToLocalStorage();
+      opentab('soci-results');
+      const sociTotalPeople = parseInt(document.getElementById('soci-totalPeople').value) || 1;
+      const sociTargetDays = parseInt(document.getElementById('soci-targetDays').value) || 30;
+      const sociResultsDiv = document.getElementById('soci-results');
+      sociResultsDiv.innerHTML = '<h2>النتائج والتقارير 📊</h2>';
+      const sociCatalogData = {};
+      document.querySelectorAll('.catalog-row').forEach(sociRow => {
+        const sociName = sociRow.querySelector('.cat-name').value;
+        const sociUnit = sociRow.querySelector('.cat-unit').value || '';
+        const sociRate = parseFloat(sociRow.querySelector('.cat-rate').value) || 0;
+        const sociPeriod = sociRow.querySelector('.cat-period').value;
+        let sociDailyRate = sociRate;
+        if (sociPeriod === 'week') sociDailyRate = sociRate / 7;
+        if (sociPeriod === 'month') sociDailyRate = sociRate / 30;
+        sociCatalogData[sociName] = { dailyRate: sociDailyRate, unit: sociUnit };
+      });
+      document.querySelectorAll('.calc-row').forEach(sociRow => {
+        const sociItemName = sociRow.querySelector('.calc-item-select').value;
+        const sociAvailableQty = parseFloat(sociRow.querySelector('.calc-qty').value) || 0;
+        if (sociItemName && sociCatalogData[sociItemName] !== undefined) {
+          const sociItemInfo = sociCatalogData[sociItemName];
+          const sociTotalDailyConsumption = sociItemInfo.dailyRate * sociTotalPeople;
+          const sociConsumedForTargetPeriod = sociTotalDailyConsumption * sociTargetDays;
+          const sociRemainingQty = sociAvailableQty - sociConsumedForTargetPeriod;
+          const sociDaysLasting = sociTotalDailyConsumption > 0 ? (sociAvailableQty / sociTotalDailyConsumption) : 9999;
+          let sociStatus = '';
+          if (sociRemainingQty < 0) {
+            sociStatus = `❌ (عجز: ${Math.abs(sociRemainingQty).toFixed(2)} ${sociItemInfo.unit})`;
+          } else {
+            sociStatus = `✅ (يكفي بزيادة آمنة)`;
+          }
+          const sociResultItem = document.createElement('div');
+          sociResultItem.className = 'result-item';
+          sociResultItem.innerHTML = `
+<p><strong>${sociItemName}</strong></p>
+<p>الاستهلاك اليومي: <span class="value">${sociTotalDailyConsumption.toFixed(2)} ${sociItemInfo.unit}</span> | يكفي لمدة: <span class="value">${sociDaysLasting.toFixed(1)}</span> يوم</p>
+<p>مقارنة بالمدة (${sociTargetDays} يوم): المتبقي = <span class="value">${sociRemainingQty.toFixed(2)} ${sociItemInfo.unit}</span> ${sociStatus}</p>
+`;
+          sociResultsDiv.appendChild(sociResultItem);
+        }
+      });
+    });
+  }
   var UI = {};
   function initUI() {
     var bodyContainer = document.body || document.getElementsByTagName("body")[0];
