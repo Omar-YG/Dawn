@@ -5093,6 +5093,7 @@
         <span class="dot"></span>
         <span class="dot"></span>
       </div>
+      <div id="chatbotreplay" class="replay"></div>
       <div id="heavystatus" class="replay">جاهز للعمل...</div>
       <div id="resultsdisplayarea" class="replay"></div>
       <div id="memoryresultCount" class="replay"></div>
@@ -15709,9 +15710,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     }
     function generateReply() {
       const editorText = document.getElementById('editor').value.trim();
-      const replayDiv = document.getElementById('replay');
+      const replayDiv = document.getElementById('chatbotreplay');
       if (!editorText) {
-        replayDiv.innerHTML = '<span style="color: #e74c3c;">⚠️ من فضلك اكتب نص في المحرر أولاً!</span>';
         return;
       }
       const cleanedText = cleanchatbottext(editorText);
@@ -15750,15 +15750,10 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
             replyText += "\n\n" + conn + selectedPhrases[i];
           }
         }
-      } else {
-        replyText = "🤔 مفيش قاعدة مطابقة للنص ده.. أضف قاعدة جديدة في لوحة التحكم!";
-      }
+      } else { replyText = "🤔 مفيش قاعدة مطابقة للنص ده.. أضف قاعدة جديدة في لوحة التحكم!"; }
+      replayDiv.style.display = "none";
       replayDiv.innerHTML = replyText;
-      replayDiv.style.transition = 'all 0.3s';
-      replayDiv.style.backgroundColor = '#d4edda';
-      setTimeout(() => {
-        replayDiv.style.backgroundColor = '#f0f0f0';
-      }, 500);
+      showAndMove('chatbotreplay');
     }
   }
   var UI = {};
