@@ -53,6 +53,7 @@
     scroll-behavior: smooth;
     cursor: none !important;
     touch-action: manipulation;
+    transition-duration: 0.2s;
   }
   :root {
     --mainbg: rgb(250, 250, 250, 0.8);
@@ -659,6 +660,7 @@
     position: relative;
   }
   .arrow,
+  .think,
   .face {
     height: 50px;
     width: 50px;
@@ -695,6 +697,10 @@
   }
   .arrow .right {
     rotate: 40deg;
+  }
+  .think .right {
+    border-radius: 4px 5px 30px 30px;
+    height: 10px;
   }
   .Uimg {
     border-radius: var(--roundradius);
@@ -3937,6 +3943,20 @@
         </fieldset>
         <div id="tashkeel-result-Box"></div>
       </div>
+      <div id="chatbottest" class="modaltab">
+        <h2>معاينة التدريب</h2>
+        <fieldset style="margin:10px auto 30px;max-width:700px;">
+          <legend>منطقه الاختبار</legend>
+          <div class="chat-box" id="chatContainer">
+            <div class="message bot-msg">أهلاً! مستعده للإختبار. 🤖</div>
+          </div>
+          <div class="flex">
+            <input type="text" id="userInput" placeholder="هنبدأ الدردشة هنا..."
+              onkeydown="if(event.key==='Enter') sendchatbotmessage()">
+            <button onclick="sendchatbotmessage()" class="conf-btn">إرسال</button>
+          </div>
+        </fieldset>
+      </div>
       <div id="labmergego" class="modaltab">
         <h2>معمل الدمج</h2>
         <div>
@@ -4243,7 +4263,7 @@
             </center>
             <ul class="data-section flex">
               <li>الإصدار : سكون</li>
-              <li> النواه : 1.7.5</li>
+              <li> النواه : 1.7.7</li>
               <li>القدرات : <span id="totalAbilitiesCount">0</span></li>
             </ul>
           </fieldset>
@@ -5265,7 +5285,7 @@
               <path
                 d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z" />
             </svg> ملفي الشخصي</a>
-          <a onclick="openuser(event, 'mymemory')"> <svg viewBox="0 0 576 512" width="20" title="brain">
+          <a onclick="openuser(event, 'mymemory');onerun('renderAllmemory')"> <svg viewBox="0 0 576 512" width="20" title="brain">
               <path
                 d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z" />
             </svg> الذاكره والتعلم</a>
@@ -5627,6 +5647,106 @@
         </div>
       </div>
     </section>
+    <section id="chatbotbuilder" class="tab-content">
+      <h2>تدريب الرد الألي</h2>
+      <div class="app-container" style="overflow:auto;">
+        <style>
+          .chat-box {
+            height: 280px;
+            border: var(--dborder);
+            border-radius: var(--secradius);
+            overflow-y: auto;
+            padding: var(--spacepadd);
+            background: var(--focusbg);
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacepadd);
+          }
+          .message {
+            padding: 10px 14px;
+            border-radius: 10px;
+            max-width: 85%;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-line;
+          }
+          .user-msg {
+            background: var(--secbg);
+            color: var(--bcolor);
+            align-self: flex-start;
+            border: var(--dborder);
+          }
+          .bot-msg {
+            background: #e2e8f0;
+            color: #333;
+            align-self: flex-end;
+          }
+          .meta-info {
+            font-size: 11px;
+            color: #888;
+            text-align: left;
+          }
+          .rules-manager {
+            width: 100%;
+            max-width: 920px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 10px;
+          }
+          .rule-card {
+            border-bottom: 1px solid #e1e1e1;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+          }
+          .actions-group {
+            display: flex;
+            gap: 5px;
+          }
+        </style>
+        <h1 style="margin:5px 0px 30px;color:var(--dcolor);">تدريب الردود الآلية</h1>
+        <fieldset>
+          <legend id="panelTitle">إضافة قاعدة جديدة</legend>
+          <p style="margin:10px 0px 5px;">الدلالات (افصل بينها بـ فواصل ،):</p>
+          <input type="text" id="botKeywords" placeholder="مثال: سعر, تكلفة, كام">
+          <p style="margin:20px 0px 5px !important;">منطقة الردود:</p>
+          <div id="repliesContainer">
+            <textarea class="reply-field" placeholder="الرد الأول..."></textarea>
+          </div>
+          <div style="display:flex;justify-content: space-between;margin:5px auto 20px;">
+            <button class="btn btn-add" onclick="addReplyField()">+ إضافة رد آخر</button>
+            <button class="conf-btn" id="savechatbotBtn" onclick="saveOrUpdateRule()">حفظ وتدريب</button>
+          </div>
+          <details open>
+            <summary>إعدادات البيانات</summary>
+            <div class="flex">
+              <button onclick="loadTrainingData()" class="conf-btn">شحن التغذية الأولية</button>
+              <button class="btn" onclick="exportchatbotData()">📤 تصدير القواعد</button>
+              <button class="btn" onclick="document.getElementById('importchatbotFile').click()">📥 استيراد
+                قواعد</button>
+              <input type="file" id="importchatbotFile" accept=".json" style="display:none;"
+                onchange="importchatbotData(event)">
+            </div>
+          </details>
+        </fieldset>
+        <center>
+          <button class="conf-btn" style="margin:10px auto;width:90%;max-width:300px;padding:20px;"
+            onclick="opentab('chatbottest')">معاينة الدردشة</button>
+        </center>
+        <details class="rules-manager">
+          <summary> إداره مكتبة التدريب (إجمالي: <span id="rulesCount">0</span>)</summary>
+          <div id="rulesListContainer"></div>
+        </details>
+      </div>
+    </section>
   </div>
   <div id="snackbar"></div>
 </body>
@@ -5692,6 +5812,7 @@
     function input() {
       updateTypingSpeed();
       checkEditorIdle();
+      UI.mybtnd.className = UI.editor.value.trim() !== "" ? "think" : "face";
       clearTimeout(typingTimer);
       typingTimer = setTimeout(() => {
         TextProcessing();
@@ -5702,12 +5823,13 @@
         processfeel();
         detectmetro();
         checkPainwords();
+        UI.mybtnd.className = UI.editor.value.trim() !== "" ? "arrow" : "face";
         UI.colorview.style.backgroundColor = UI.editor.value;
         if (UI.colorview.style.backgroundColor !== "") { showAndMove("btncolorbox"); }
         else { UI.btncolorbox.style.display = "none"; };
         onerun('startBrainSystem');
         onerun('renderAllmemory');
-      }, 500);
+      }, 1000);
     }
   }
   //حساب النص وتحليله
@@ -5987,7 +6109,7 @@
       معالجة: ["محرك المدخلات الرئيسية", "حساب النص وتحليله", "التصحيح النصي للفرانكو ولوحه المفاتيح", "كاشف اللغات البرمجيه", "معالجه النصوص لتنظيفها للنظام", "إستخراج البيانات الرقميه من النص", "تحديد الجمل الهامه", "الذاكره الكلاميه الدائمه والمؤقته", "التدريب الكلامي للردود", "مساعد إعرابي", "النص الى كلام", "تدريب ماركوف", "كاشف المشاعر وتفاعل باللون", "كاشف الطابع الشخصي من النص", "الإملاء والتصحيح", "ضفط النصوص", "تأثير وترتيب الرسائل", "معالجه النصوص الضخمه"],
       إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه"],
       منطق: ["آله حاسبه فورية", "محول الوحدات الرياضيه", "بنك الاسئله والتدريبات", "مشتق القوانين المسجله", "ترتيب البيانات تصاعدي وتنازلي", "محلل القانون", "حساب التركه", "فاحص اللوغارتم", "مكتبه القانون والاحكام", "موزع الميزانيه", "حسابه صافي المرتب", "ميزان اتخاز القرار", "نظام التصنيف", "رسم الدوال الجبرية", "اختبار صحه علامات التشكيل", "معمل دمج العناصر"],
-      تطوير: ["تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث"],
+      تطوير: ["تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث", "محرك بناء روبوت دردشه"],
       تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر"],
       وسائط: ["لوحه الرسم", "تسجيل الصوت", "المنبه والمؤقت", "العاب وتسليه", "رسم الخريطه الشجرية", "بلاطات الالوان", "إنشاء موسيقى ونغمات", "لعبه فرقعه الأرقام", "لعبه عداد الضغطات", "لعبه الضغط بالترتيب", "قائمه مشغل الاغاني", "الألوان المتناسقه", "الحصول على اللون", "الحصول على اللون", "لعبه ركض فجر", "تسجيل الشاشه", "الفحص الطبي المبدأي", "مؤشر التحاليل الطبيه", "تسجيل أماكن الالم", "ملف القوة الشخصيه", "حامي الشاشه", "رسم بياني بالاعمده", "روتين المستخدم اليومي", "خريطه أماكن واتجاهات", "صانع الجولات الإفتراضيه", "رسم بياني", "حيوانات فجر الأليفه"]
     };
@@ -6464,12 +6586,11 @@
     const upd = () => {
       bcoin.textContent = "متاح " + light + " نقطة ";
       localStorage.light = light;
-      bcoin.style.color = light >= 1000 ? "gold" : "#444";
-      if (light >= 1000) bcoin.style.borderColor = "gold";
       const myBtn = document.getElementById("mybtn");
       myBtn.style.backgroundColor = light === 0 ? "#ccc" : "";
       myBtn.style.pointerEvents = light === 0 ? "none" : "auto";
-      document.getElementById("connect").style.background = light === 0 ? "red" : "lime";
+      const connectEl = document.getElementById("connect");
+      if (light === 0) { connectEl.style.background = "red"; } else if (light >= 1000) { connectEl.style.background = "yellow"; } else { connectEl.style.background = "lime"; }
       if (light === 0) { showAndMove('lightcoin'); }
     };
     const doT = () => {
@@ -6798,39 +6919,26 @@
   }
   //مركز تحكم الذاكرة والتخزين
   {
-    const friendlyNames = {
-      notionTasks3: "الروتين اليومي",
-      fajr_vault: "مدير الروابط",
-      fajr_universal_categories: "نظام التصنيف (التصنيفات)",
-      device_id: "دردشه الطوارئ",
-      fajr_welcome_seen: "اول رساله إستقبال",
-      my_songs: "نغمات وموسيقى",
-      userMessages: "ذاكره المحادثات",
-      fajr_app_data: "تاريخ استخدام الادوات",
-      rpg_final: "تطور المستخدم",
-      fajr_last_selection: "موقع حساب المواقيت",
-      light: "نقاط النور",
-      pomodoro_state: "ذاكره مؤقت المجهود",
-      fajr_universal_items: "نظام التصنيف (العناصر)",
-      Timer_data: "المؤقت والتنبيهات",
-      forms: "النماذج والجداول",
-      userFormData: "البيانات الشخصيه",
-      fajr_attendance: "سجل الحضور والانصراف",
-      last_played_index: "اخر الموسيقى المشغله",
-      illdata: "سجل اماكن الألم",
-      fajr_projects_v2: "رادار إنجاز المشروعات",
-    };
+    const friendlyNames={ notionTasks3: "الروتين اليومي", fajr_vault: "مدير الروابط", fajr_universal_categories: "نظام التصنيف (التصنيفات)", device_id: "دردشه الطوارئ", fajr_welcome_seen: "اول رساله إستقبال", my_songs: "نغمات وموسيقى", userMessages: "ذاكره المحادثات", fajr_app_data: "تاريخ استخدام الادوات", rpg_final: "تطور المستخدم", fajr_last_selection: "موقع حساب المواقيت", light: "نقاط النور", pomodoro_state: "ذاكره مؤقت المجهود", fajr_universal_items: "نظام التصنيف (العناصر)", Timer_data: "المؤقت والتنبيهات", forms: "النماذج والجداول", userFormData: "البيانات الشخصيه", fajr_attendance: "سجل الحضور والانصراف", last_played_index: "اخر الموسيقى المشغله", illdata: "سجل اماكن الألم", fajr_projects_v2: "رادار إنجاز المشروعات", lab_elements: "عناصر معمل الدمج", lab_recipes: "مُركبات معمل الدمج", VariableMarkovModel_v5_Final:"تدريب ماركوف", markov_bot_rules: "تدريب الردود الآلية", wiki_galaxy_date: "سجل تاريخ النجوم", wiki_galaxy_posts: "سجل محتوى النجوم", sociInventoryData:"بيانات إداره المجموعه", dashboardData:"بيانات لوحه التقارير",};
     function getStorageDetails() {
-      let keys = [];
+      let keysMap = {};
       let total = 0;
       for (let i = 0; i < localStorage.length; i++) {
         let key = localStorage.key(i);
-        if (key.startsWith("founder_")) { continue; }
+        const ignoredPrefixes = ["founder_", "data_"];
+        if (ignoredPrefixes.some(prefix => key.startsWith(prefix))) { continue; }
         let value = localStorage.getItem(key) || "";
         let size = (key.length + value.length) * 2;
         total += size;
-        keys.push({ name: key, size: (size / 1024).toFixed(2) });
+        keysMap[key] = { name: key, size: (size / 1024).toFixed(2), rawSize: size };
       }
+      for (let key in friendlyNames) {
+        if (!keysMap[key]) {
+          keysMap[key] = { name: key, size: "0.00", rawSize: 0 };
+        }
+      }
+      let keys = Object.values(keysMap);      
+      keys.sort((a, b) => b.rawSize - a.rawSize);
       return { total: (total / 1024).toFixed(2), keys: keys };
     }
     function renderAllmemory() {
@@ -10883,6 +10991,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       "@": [
         { n: "المؤسس", d: "رسالة إلى المؤسس", run: "window.open('https://wa.me/+201095404569', '_blank')" },
         { n: "رسالة طارئة", d: "رساله طارئة الى اقرب جهاز", run: "opentab('SOSCHat')" },
+        { n: "الرد المخصص", d: "الدردشه مع مكتبه مخصصه", run: "generateReply()" },
       ],
       "!": [
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
@@ -15355,12 +15464,302 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           sociResultItem.innerHTML = `
 <p><strong>${sociItemName}</strong></p>
 <p>الاستهلاك اليومي: <span class="value">${sociTotalDailyConsumption.toFixed(2)} ${sociItemInfo.unit}</span> | يكفي لمدة: <span class="value">${sociDaysLasting.toFixed(1)}</span> يوم</p>
-<p>مقارنة بالمدة (${sociTargetDays} يوم): المتبقي = <span class="value">${sociRemainingQty.toFixed(2)} ${sociItemInfo.unit}</span> ${sociStatus}</p>
-`;
+<p>مقارنة بالمدة (${sociTargetDays} يوم): المتبقي = <span class="value">${sociRemainingQty.toFixed(2)} ${sociItemInfo.unit}</span> ${sociStatus}</p>`;
           sociResultsDiv.appendChild(sociResultItem);
         }
       });
     });
+  }
+  //محرك بناء روبوت دردشه
+  {
+    let rules = JSON.parse(localStorage.getItem('markov_bot_rules')) || [];
+    let editingIndex = -1;
+    renderRulesManager();
+    function cleanchatbottext(text) {
+      if (!text) return "";
+      return text.toString()
+        .replace(/([اأإآدذرزوؤىئها])\1+/g, "$1")
+        .replace(/[أإآء]/g, "ا")
+        .replace(/ة/g, "ه")
+        .replace(/ى/g, "ي")
+        .replace(/\bال(?!\s)/g, "")
+        .trim();
+    }
+    function addReplyField(value = "") {
+      const container = document.getElementById('repliesContainer');
+      const textarea = document.createElement('textarea');
+      textarea.className = 'reply-field';
+      textarea.style.marginTop = "5px";
+      textarea.placeholder = "رد إضافي محتمل...";
+      textarea.value = value;
+      container.appendChild(textarea);
+    }
+    function saveOrUpdateRule() {
+      const keywordsInput = document.getElementById('botKeywords').value.trim();
+      const replyFields = document.querySelectorAll('.reply-field');
+      let replies = [];
+      replyFields.forEach(f => {
+        if (f.value.trim()) replies.push(f.value.trim());
+      });
+      if (!keywordsInput || replies.length === 0) {
+        return showToast("يا هندسة حط دلالة ورد واحد على الأقل! 😅");
+      }
+      const keywords = keywordsInput.split(',').map(k => cleanchatbottext(k.trim()));
+      if (keywords.some(k => k === "")) {
+        return showToast("الدلالات لا يمكن أن تكون فارغة!");
+      }
+      if (editingIndex === -1) {
+        rules.push({ keywords, replies });
+      } else {
+        rules[editingIndex] = { keywords, replies };
+        editingIndex = -1;
+        document.getElementById('panelTitle').innerText = "🛠️ إضافة قاعدة جديدة";
+        document.getElementById('savechatbotBtn').innerText = "حفظ القاعدة في المحرك 📥";
+        document.getElementById('savechatbotBtn').style.background = "var(--accent)";
+      }
+      localStorage.setItem('markov_bot_rules', JSON.stringify(rules));
+      resetForm();
+      renderRulesManager();
+      showToast("تم حفظ وتحديث القاعدة بنجاح يا فنان! 🚀");
+    }
+    function resetForm() {
+      document.getElementById('botKeywords').value = "";
+      document.getElementById('repliesContainer').innerHTML = '<textarea class="reply-field" placeholder="الرد الأول..."></textarea>';
+    }
+    function editRule(index) {
+      const rule = rules[index];
+      editingIndex = index;
+      document.getElementById('botKeywords').value = rule.keywords.join('، ');
+      const container = document.getElementById('repliesContainer');
+      container.innerHTML = "";
+      rule.replies.forEach((rep, i) => {
+        addReplyField(rep);
+      });
+      document.getElementById('panelTitle').innerText = "✏️ تعديل القاعدة الحالية";
+      document.getElementById('savechatbotBtn').innerText = "تحديث القاعدة 🔄";
+      document.getElementById('savechatbotBtn').style.background = "var(--warning)";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function deleteRule(index) {
+      openSystemConfirm(
+        "حذف القاعدة",
+        "أكيد مطلوب إني أنسى القاعدة دي؟",
+        () => {
+          rules.splice(index, 1);
+          localStorage.setItem('markov_bot_rules', JSON.stringify(rules));
+          if (editingIndex === index) {
+            editingIndex = -1;
+            resetForm();
+            document.getElementById('panelTitle').innerText = "🛠️ إضافة قاعدة جديدة";
+            document.getElementById('savechatbotBtn').innerText = "حفظ القاعدة في المحرك 📥";
+            document.getElementById('savechatbotBtn').style.background = "var(--gcolor)";
+          }
+          renderRulesManager();
+        }
+      );
+    }
+    function renderRulesManager() {
+      const container = document.getElementById('rulesListContainer');
+      container.innerHTML = "";
+      document.getElementById('rulesCount').innerText = rules.length;
+      if (rules.length === 0) {
+        container.innerHTML = "<p style='color: #888; text-align: center;'>مفيش قواعد مسجلة حالياً.. اضيف قواعد أو اشحن التغذية الجاهزة!</p>";
+        return;
+      }
+      rules.forEach((rule, index) => {
+        const div = document.createElement('div');
+        div.className = 'rule-card';
+        div.innerHTML = `
+                <div class="rule-details" style="flex: 1;">
+                    <div><strong>الدلالات:</strong> <font>${rule.keywords.join(' ، ')}</font></div>
+                    <div style="margin-top: 5px; font-size: 13px;"><strong>الردود:</strong> ${rule.replies.join(' | ')}</div>
+                </div>
+                <div class="actions-group">
+                    <button class="conf-btn" onclick="editRule(${index})">تعديل</button>
+                    <button class="red-btn-sec" onclick="deleteRule(${index})">حذف</button>
+                </div>
+            `;
+        container.appendChild(div);
+      });
+    }
+    function sendchatbotmessage() {
+      const inputField = document.getElementById('userInput');
+      const text = inputField.value.trim();
+      if (!text) return;
+      appendMessage(text, 'user-msg');
+      inputField.value = "";
+      const cleanedUserText = cleanchatbottext(text);
+      let matchedFound = [];
+      rules.forEach((rule) => {
+        let earliestIndex = Infinity;
+        let matchedRuleObj = null;
+        rule.keywords.forEach(kw => {
+          let pos = cleanedUserText.indexOf(kw);
+          if (pos !== -1 && pos < earliestIndex) {
+            earliestIndex = pos;
+            matchedRuleObj = rule;
+          }
+        });
+        if (matchedRuleObj && earliestIndex !== Infinity) {
+          if (!matchedFound.some(item => item.rule === matchedRuleObj)) {
+            matchedFound.push({ rule: matchedRuleObj, index: earliestIndex });
+          }
+        }
+      });
+      matchedFound.sort((a, b) => a.index - b.index);
+      let finalResponse = "";
+      let metaText = "";
+      if (matchedFound.length > 0) {
+        let selectedPhrases = [];
+        matchedFound.forEach(item => {
+          let randomReply = item.rule.replies[Math.floor(Math.random() * item.rule.replies.length)];
+          selectedPhrases.push(randomReply);
+        });
+        if (selectedPhrases.length === 1) {
+          finalResponse = selectedPhrases[0];
+        } else {
+          let connectors = [" وبالنسبة لسؤالك: ", " وكمان: ", " وعشان تبقى عارف برضه: "];
+          finalResponse = selectedPhrases[0];
+          for (let i = 1; i < selectedPhrases.length; i++) {
+            let conn = connectors[(i - 1) % connectors.length];
+            finalResponse += "\n\n" + conn + selectedPhrases[i];
+          }
+        }
+        metaText = `تم الرد بترتيب ورود الدلالات في السؤال (${matchedFound.length}) 🧬`;
+      } else {
+        finalResponse = "معلش يا مؤسس، مش لاقي دلالة واضحة في السيستم للنص ده.. اضيف لها دلالة من لوحة التحكم! 🤔";
+        metaText = "بدون مطابقة ❌";
+      }
+      setTimeout(() => {
+        appendMessage(finalResponse, 'bot-msg', metaText);
+      }, 300);
+    }
+    function appendMessage(text, className, meta = "") {
+      const chatContainer = document.getElementById('chatContainer');
+      const div = document.createElement('div');
+      div.className = `message ${className}`;
+      div.innerText = text;
+      chatContainer.appendChild(div);
+      if (meta) {
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'meta-info';
+        metaDiv.innerText = `[${meta}]`;
+        chatContainer.appendChild(metaDiv);
+      }
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    function loadTrainingData() {
+      const trainingData = [
+        { keywords: ["سلام", "مرحب", "اهلا", "هاي"], replies: ["أهلاً وسهلاً بك ! ☕️", "يا هلا ! 🚀"] },
+        { keywords: ["سعر", "تكلفه", "كام", "فلوس"], replies: ["الخدمة عندنا مجانية بالكامل ومفيش أي مصاريف خفية! 🎉", "نظامنا مفتوح وبدون أي اشتراكات."] },
+        { keywords: ["تواصل", "واتس", "رقم"], replies: ["تقدر تتواصل معانا عبر الواتساب المباشر."] }
+      ];
+      let newCount = 0;
+      trainingData.forEach(newRule => {
+        const isDuplicate = rules.some(existingRule => { return existingRule.keywords.every(kw => newRule.keywords.includes(kw)) && newRule.keywords.every(kw => existingRule.keywords.includes(kw)); });
+        if (!isDuplicate) { rules.push(newRule); newCount++; }
+      });
+      if (newCount > 0) {
+        localStorage.setItem('markov_bot_rules', JSON.stringify(rules));
+        renderRulesManager();
+        showToast(`✅ تم شحن ${newCount} قاعدة جديدة! (تم تخطي المكرر)`);
+      } else {
+        showToast("ℹ️ كل القواعد موجودة بالفعل، مفيش حاجة جديدة!");
+      }
+    }
+    function exportchatbotData() {
+      if (rules.length === 0) {
+        return showToast("مفيش قواعد للتصدير! 😅");
+      }
+      const dataStr = JSON.stringify(rules, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `chatbot_rules_${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("✅ تم تصدير القواعد بنجاح!");
+    }
+    function importchatbotData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const importedRules = JSON.parse(e.target.result);
+          if (!Array.isArray(importedRules) || importedRules.length === 0) {
+            return showToast("❌ الملف غير صالح أو فارغ!");
+          }
+          let mergedCount = 0;
+          let newCount = 0;
+          importedRules.forEach(importedRule => {
+            const isDuplicate = rules.some(existingRule => { return existingRule.keywords.every(kw => importedRule.keywords.includes(kw)) && importedRule.keywords.every(kw => existingRule.keywords.includes(kw)); });
+            if (!isDuplicate) { rules.push(importedRule); newCount++; } else { mergedCount++; }
+          });
+          localStorage.setItem('markov_bot_rules', JSON.stringify(rules));
+          renderRulesManager();
+          showToast(`✅ تم الاستيراد بنجاح!\n📦 قواعد جديدة: ${newCount}\n🔄 مدمجة (مكررة): ${mergedCount}`);
+        } catch (error) {
+          showToast("❌ خطأ في قراءة الملف: " + error.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+    function generateReply() {
+      const editorText = document.getElementById('editor').value.trim();
+      const replayDiv = document.getElementById('replay');
+      if (!editorText) {
+        replayDiv.innerHTML = '<span style="color: #e74c3c;">⚠️ من فضلك اكتب نص في المحرر أولاً!</span>';
+        return;
+      }
+      const cleanedText = cleanchatbottext(editorText);
+      let matchedFound = [];
+      rules.forEach((rule) => {
+        let earliestIndex = Infinity;
+        let matchedRuleObj = null;
+        rule.keywords.forEach(kw => {
+          let pos = cleanedText.indexOf(kw);
+          if (pos !== -1 && pos < earliestIndex) {
+            earliestIndex = pos;
+            matchedRuleObj = rule;
+          }
+        });
+        if (matchedRuleObj && earliestIndex !== Infinity) {
+          if (!matchedFound.some(item => item.rule === matchedRuleObj)) {
+            matchedFound.push({ rule: matchedRuleObj, index: earliestIndex });
+          }
+        }
+      });
+      matchedFound.sort((a, b) => a.index - b.index);
+      let replyText = "";
+      if (matchedFound.length > 0) {
+        let selectedPhrases = [];
+        matchedFound.forEach(item => {
+          let randomReply = item.rule.replies[Math.floor(Math.random() * item.rule.replies.length)];
+          selectedPhrases.push(randomReply);
+        });
+        if (selectedPhrases.length === 1) {
+          replyText = `🎯 ${selectedPhrases[0]}`;
+        } else {
+          let connectors = [" وبالنسبة لسؤالك: ", " وكمان: ", " وعشان تبقى عارف برضه: "];
+          replyText = `🎯 ${selectedPhrases[0]}`;
+          for (let i = 1; i < selectedPhrases.length; i++) {
+            let conn = connectors[(i - 1) % connectors.length];
+            replyText += "\n\n" + conn + selectedPhrases[i];
+          }
+        }
+      } else {
+        replyText = "🤔 مفيش قاعدة مطابقة للنص ده.. أضف قاعدة جديدة في لوحة التحكم!";
+      }
+      replayDiv.innerHTML = replyText;
+      replayDiv.style.transition = 'all 0.3s';
+      replayDiv.style.backgroundColor = '#d4edda';
+      setTimeout(() => {
+        replayDiv.style.backgroundColor = '#f0f0f0';
+      }, 500);
+    }
   }
   var UI = {};
   function initUI() {
@@ -15390,5 +15789,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   window.onload = initUI;
   document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
   (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 48)) { return true; } if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) { return false; } }; })();
+  //const functions={}; for (let key in window){ try{ if (typeof window[key]==='function'){ let funcStr=window[key].toString();}} catch (e){}} const scripts=document.querySelectorAll('script'); let allFuncNames=[]; scripts.render=scripts.forEach(script=>{ let matches=script.innerText.match(/function\s+([a-zA-Z0-9_$]+)/g); if (matches){ matches.forEach(m=>{ let fName=m.replace('function', '').trim(); allFuncNames.push(fName);});}}); let duplicateFuncs=allFuncNames.filter((name, index)=>allFuncNames.indexOf(name) !==index); console.log("الدوال المكررة:", [...new Set(duplicateFuncs)]);
 </script>
 </html>
