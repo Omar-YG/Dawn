@@ -3339,6 +3339,7 @@
     gap: 4px;
     padding: 5px;
   }
+  .suggestbtn{padding:var(--spadd);}
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
       width: 80vw;
@@ -15740,12 +15741,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       container.innerHTML = "";
       toolsData.forEach((tool, index) => {
         let btn = document.createElement("button");
-        btn.className = "form-btn";
+        btn.className="conf-btn"; btn.style.padding="10px 15px"; btn.style.borderRadius="30px"; btn.style.margin="5px";
         btn.textContent = tool.n;
         btn.id = `tool-btn-${index}`;
         btn.onclick = () => {
-          const message = responsesLibrary[tool.a] || "لا مش عارفه بصراحه";
-          showToast(message);
+          const message = responsesLibrary[tool.a] || "لا مش عارفه بصراحه"; showToast(message);
         };
         container.appendChild(btn);
       });
