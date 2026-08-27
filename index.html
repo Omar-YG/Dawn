@@ -474,7 +474,7 @@
     white-space: nowrap;
     justify-content: flex-end;
     gap: var(--secpadd);
-    border-radius:var(--minradius);
+    border-radius: var(--minradius);
   }
   .app {
     position: relative;
@@ -3339,7 +3339,42 @@
     gap: 4px;
     padding: 5px;
   }
-  .suggestbtn{padding:var(--spadd);}
+  .suggestbtn {
+    padding: var(--spadd);
+  }
+  #imagePreview {
+    width: 100px;
+    height: 100px;
+    border: var(--cborder);
+    outline: 0;
+    border-radius: var(--minradius);
+  }
+  .stickers-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .sticker-item {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 2px solid var(--gcolor);
+    transition: transform 0.2s;
+  }
+  .sticker-item:hover {
+    transform: scale(1.05);
+    border-color: var(--dcolor);
+  }
+  .bot-sticker-msg img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  }
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
       width: 80vw;
@@ -4069,6 +4104,41 @@
             </details>
           </div>
         </div>
+      </div>
+      <div id="mystickeraddtab" class="modaltab">
+        <h2>إدارة الستيكرات</h2>
+        <fieldset class="flex-center" style="height:290px;flex-direction:column;">
+          <legend>إنشاء الملصقات</legend>
+          <div id="previewContainer">
+            <div class="flex-center"
+              style="width:150px;height:150px;border:var(--cborder);margin:0 auto 20px;padding:1px;position:relative;border-radius:var(--roundradius);"
+              onclick="document.getElementById('mystickerInput').click();">
+              <svg viewBox="0 0 512 512" title="plus-circle"
+                style="position:absolute;right:0;left:0;bottom:-13px;margin:auto;width:35px;height:35px;"
+                onclick="document.getElementById('mystickerInput').click();">
+                <circle cx="256" cy="256" r="248" style="fill:var(--gcolor);" />
+                <g transform="rotate(0 256 256)">
+                  <rect x="136" y="224" width="240" height="64" rx="32" fill="var(--wcolor)" />
+                  <rect x="224" y="136" width="64" height="240" rx="32" fill="var(--wcolor)" />
+                </g>
+              </svg>
+              <canvas id="resizeCanvas" width="200" height="200" style="display:none;border:0;"></canvas>
+              <img id="imagePreview" />
+            </div>
+            <p style="color:var(--gcolor);font-size:var(--mfont);text-align:center;">ضغطه على الإطار علشان تختار صورة
+            </p>
+            <div class="flex" style="width:100vw;max-width:500px;">
+              <input type="text" id="mystickerPrompt" placeholder="كلمات علشان أرد عليها (مثلاً: وقعت، صباح الخير...)">
+              <button id="createStickerBtn" class="conf-btn">حفظ</button>
+            </div>
+          </div>
+        </fieldset>
+        <details>
+          <summary>الملصقات المتاحة</summary>
+          <p style="color:var(--gcolor);font-size:var(--mfont);">علشان نحذف ملصق بنضغط كليك يمين او ضغطه طويله على
+            الموبايل</p>
+          <div id="stickersGrid" class="stickers-grid"></div>
+        </details>
       </div>
       <div id="myrandompicktab" class="modaltab">
         <h2>الإختيار العشوائي</h2>
@@ -5381,7 +5451,7 @@
           onclick="onerun('readymetro');opentab('metroplaces')">يلا نحدد المكان</button>
       </div>
       <div id="memorySummary" class="replay"></div>
-      <div id="welcome-modal" class="replay" style="display:none;" ondblclick="startTour()">
+      <div id="welcome-modal" class="replay" ondblclick="startTour()">
         أنا فجر! 👋
         <br>
         نظام ذكاء رمزي عربي مصري وخفيفة جداً بقدر أشتغل أوفلاين تماماً ومن غير أي سيرفرات. يعني خصوصيتك محمية 100% لأن
@@ -5414,6 +5484,7 @@
         <p id="display-startext"></p>
       </div>
       <div id="responseText" class="replay"></div>
+      <div id="mystickerchatBox" class="replay"></div>
       <div id="typing-indicator" class="typing-indicator">
         <span class="dot"></span>
         <span class="dot"></span>
@@ -5429,6 +5500,7 @@
         <input type="file" id="imageInput" accept="image/*">
         <input type="file" id="importFile" accept=".json">
         <input type="file" id="filesosInput" multiple accept=".json">
+        <input type="file" id="mystickerInput" accept="image/*">
         <input type="file" id="upload" accept="image/*">
         <input type="file" id="deepInput" webkitdirectory onchange="startBulldozer(this.files)">
         <input type="file" id="htmlFiles" multiple accept=".html">
@@ -6230,11 +6302,11 @@
   //رادار قائمة قدرات فجر
   {
     const fajrabilityLibrary = {
-      معالجة: ["محرك المدخلات الرئيسية", "حساب النص وتحليله", "التصحيح النصي للفرانكو ولوحه المفاتيح", "كاشف اللغات البرمجيه", "معالجه النصوص لتنظيفها للنظام", "إستخراج البيانات الرقميه من النص", "تحديد الجمل الهامه", "الذاكره الكلاميه الدائمه والمؤقته", "التدريب الكلامي للردود", "مساعد إعرابي", "النص الى كلام", "تدريب ماركوف", "كاشف المشاعر وتفاعل باللون", "كاشف الطابع الشخصي من النص", "الإملاء والتصحيح", "ضفط النصوص", "تأثير وترتيب الرسائل", "معالجه النصوص الضخمه","إقتراح الأدوات"],
-      إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه","صانع محاكاه محادثات"],
+      معالجة: ["محرك المدخلات الرئيسية", "حساب النص وتحليله", "التصحيح النصي للفرانكو ولوحه المفاتيح", "كاشف اللغات البرمجيه", "معالجه النصوص لتنظيفها للنظام", "إستخراج البيانات الرقميه من النص", "تحديد الجمل الهامه", "الذاكره الكلاميه الدائمه والمؤقته", "التدريب الكلامي للردود", "مساعد إعرابي", "النص الى كلام", "تدريب ماركوف", "كاشف المشاعر وتفاعل باللون", "كاشف الطابع الشخصي من النص", "الإملاء والتصحيح", "ضفط النصوص", "تأثير وترتيب الرسائل", "معالجه النصوص الضخمه", "إقتراح الأدوات"],
+      إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه", "صانع محاكاه محادثات"],
       منطق: ["آله حاسبه فورية", "محول الوحدات الرياضيه", "بنك الاسئله والتدريبات", "مشتق القوانين المسجله", "ترتيب البيانات تصاعدي وتنازلي", "محلل القانون", "حساب التركه", "فاحص اللوغارتم", "مكتبه القانون والاحكام", "موزع الميزانيه", "حسابه صافي المرتب", "ميزان اتخاز القرار", "نظام التصنيف", "رسم الدوال الجبرية", "اختبار صحه علامات التشكيل", "معمل دمج العناصر"],
       تطوير: ["تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث", "محرك بناء روبوت دردشه"],
-      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر","محرك الإختيارات العشوائيه"],
+      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر", "محرك الإختيارات العشوائيه"],
       وسائط: ["لوحه الرسم", "تسجيل الصوت", "المنبه والمؤقت", "العاب وتسليه", "رسم الخريطه الشجرية", "بلاطات الالوان", "إنشاء موسيقى ونغمات", "لعبه فرقعه الأرقام", "لعبه عداد الضغطات", "لعبه الضغط بالترتيب", "قائمه مشغل الاغاني", "الألوان المتناسقه", "الحصول على اللون", "الحصول على اللون", "لعبه ركض فجر", "تسجيل الشاشه", "الفحص الطبي المبدأي", "مؤشر التحاليل الطبيه", "تسجيل أماكن الالم", "ملف القوة الشخصيه", "حامي الشاشه", "رسم بياني بالاعمده", "روتين المستخدم اليومي", "خريطه أماكن واتجاهات", "صانع الجولات الإفتراضيه", "رسم بياني", "حيوانات فجر الأليفه"]
     };
     function drawFajrRadar() {
@@ -6550,7 +6622,7 @@
   }
   //مواعيد اليوم حسب الصلاه
   {
-    const db={ "مصر 🇪🇬": "30.04,31.23,3", "السعودية 🇸🇦": "21.38,39.85,3", "الإمارات 🇦🇪": "24.45,54.37,4", "فلسطين 🇵🇸": "31.76,35.21,3", "الأردن 🇯🇴": "31.94,35.92,3", "لبنان 🇱🇧": "33.89,35.50,3", "العراق 🇮🇶": "33.31,44.36,3", "قطر 🇶🇦": "25.28,51.53,3", "الكويت 🇰🇼": "29.37,47.97,3", "البحرين 🇧🇭": "26.22,50.58,3", "عُمان 🇴🇲": "23.58,58.40,4", "اليمن 🇾🇪": "15.36,44.19,3", "سوريا 🇸🇾": "33.51,36.27,3", "السودان 🇸🇩": "15.50,32.55,2", "ليبيا 🇱🇾": "32.88,13.19,2", "تونس 🇹🇳": "36.80,10.18,1", "الجزائر 🇩🇿": "36.75,3.05,1", "المغرب 🇲🇦": "34.02,-6.84,1", "موريتانيا 🇲🇷": "18.07,-15.95,0", "الصومال 🇸🇴": "2.04,45.31,3", "جيبوتي 🇩🇯": "11.58,43.14,3", "جزر القمر 🇰🇲": "-11.71,43.24,3",};
+    const db = { "مصر 🇪🇬": "30.04,31.23,3", "السعودية 🇸🇦": "21.38,39.85,3", "الإمارات 🇦🇪": "24.45,54.37,4", "فلسطين 🇵🇸": "31.76,35.21,3", "الأردن 🇯🇴": "31.94,35.92,3", "لبنان 🇱🇧": "33.89,35.50,3", "العراق 🇮🇶": "33.31,44.36,3", "قطر 🇶🇦": "25.28,51.53,3", "الكويت 🇰🇼": "29.37,47.97,3", "البحرين 🇧🇭": "26.22,50.58,3", "عُمان 🇴🇲": "23.58,58.40,4", "اليمن 🇾🇪": "15.36,44.19,3", "سوريا 🇸🇾": "33.51,36.27,3", "السودان 🇸🇩": "15.50,32.55,2", "ليبيا 🇱🇾": "32.88,13.19,2", "تونس 🇹🇳": "36.80,10.18,1", "الجزائر 🇩🇿": "36.75,3.05,1", "المغرب 🇲🇦": "34.02,-6.84,1", "موريتانيا 🇲🇷": "18.07,-15.95,0", "الصومال 🇸🇴": "2.04,45.31,3", "جيبوتي 🇩🇯": "11.58,43.14,3", "جزر القمر 🇰🇲": "-11.71,43.24,3", };
     const list = document.getElementById('locations');
     Object.keys(db).forEach(name => {
       let opt = document.createElement('option');
@@ -6663,8 +6735,8 @@
   //نقاط النور
   {
     const cats = {
-      spiritual: [ "سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم ارحمني", "اللهم اغفر لي", "لا حول ولا قوة إلا بالله", "اللهم صلِّ على محمد" ],
-      mental: [ "أنا الأقوى", "أنا الأفضل", "كل شيء ممكن", "أنا أستحق السعادة", "النهارده أجمل", "أنا ممتن" ]
+      spiritual: ["سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم ارحمني", "اللهم اغفر لي", "لا حول ولا قوة إلا بالله", "اللهم صلِّ على محمد"],
+      mental: ["أنا الأقوى", "أنا الأفضل", "كل شيء ممكن", "أنا أستحق السعادة", "النهارده أجمل", "أنا ممتن"]
     };
     let light = parseInt(localStorage.light !== undefined ? localStorage.light : 150),
       can = true;
@@ -6973,10 +7045,12 @@
       }
       const hasMemoryReply = respond(userInput).trim().length > 0;
       if (window.sorryTimer) clearTimeout(window.sorryTimer);
-      if (matched.length < 4 && !hasMemoryReply) {
+      const hasEmoji = /\p{Extended_Pictographic}/u.test(userInput);
+      if (matched.length < 4 && !hasMemoryReply && !hasEmoji) {
         window.sorryTimer = setTimeout(() => {
           const currentMemoryCheck = respond(userInput).trim().length > 0;
-          if (matched.length < 4 && !currentMemoryCheck) {
+          const currentEmojiCheck = /\p{Extended_Pictographic}/u.test(userInput);
+          if (matched.length < 4 && !currentMemoryCheck && !currentEmojiCheck) {
             showAndMove('sorrymass');
           }
         }, 2500);
@@ -8373,12 +8447,12 @@ ${analyticsHTML}
   //معالجه النصوص لتنظيفها للنظام
   {
     function normalizeDate(proctext) {
-      const monthsMap={ يناير: "01", فبراير: "02", مارس: "03", ابريل: "04", مايو: "05", يونيو: "06", يوليو: "07", اغسطس: "08", سبتمبر: "09", اكتوبر: "10", نوفمبر: "11", ديسمبر: "12"};
+      const monthsMap = { يناير: "01", فبراير: "02", مارس: "03", ابريل: "04", مايو: "05", يونيو: "06", يوليو: "07", اغسطس: "08", سبتمبر: "09", اكتوبر: "10", نوفمبر: "11", ديسمبر: "12" };
       proctext = proctext.replace(/[٠-٩۰-۹]/g, (d) =>
         "0123456789".charAt("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷٨٩".indexOf(d))
       );
       const pattern = /(\d{1,2})\s*(يناير|فبراير|مارس|ابريل|مايو|يونيو|يوليو|اغسطس|سبتمبر|اكتوبر|نوفمبر|ديسمبر)\s*(\d{4})?/gi;
-      return proctext.replace( pattern, (m, d, mName, y)=>`${y || new Date().getFullYear()}/${monthsMap[mName]}/${d.padStart( 2, "0" )}` );
+      return proctext.replace(pattern, (m, d, mName, y) => `${y || new Date().getFullYear()}/${monthsMap[mName]}/${d.padStart(2, "0")}`);
     }
     function TextProcessing() {
       let proctext = UI.editor.value;
@@ -8686,7 +8760,7 @@ ${analyticsHTML}
       return [];
     }
     const toText = (t) => t.map((x) => idW[x] || x).join(" ");
-    function renderChips(){ UI.chipsBox.innerHTML=laws .map( (l, i)=>`<div class="lawchip" ondblclick="delLaw(${i})">${toText(l)}</div>` ) .join("");}
+    function renderChips() { UI.chipsBox.innerHTML = laws.map((l, i) => `<div class="lawchip" ondblclick="delLaw(${i})">${toText(l)}</div>`).join(""); }
     function lawsradarSearch() {
       let txt = UI.myInput.value.trim();
       let out = UI.replay;
@@ -8701,7 +8775,7 @@ ${analyticsHTML}
       laws.forEach((f) => {
         let matches = foundIds.filter((id) => f.includes(id));
         if (matches.length >= 2) {
-          let d = derive(f) .map( (x)=>`<span class="derive-txt" onclick="opentab('Lawsepector');parseFormula(this)">↩ اشتقاق: ${toText(x)}</span>` ) .join("");
+          let d = derive(f).map((x) => `<span class="derive-txt" onclick="opentab('Lawsepector');parseFormula(this)">↩ اشتقاق: ${toText(x)}</span>`).join("");
           out.innerHTML += `<details class="res-card"><summary class="lawget">📌 لقيت قانون: ${toText(f)}</summary><span class="derive-txt" onclick="opentab('Lawsepector');parseFormula(this)">↩ اشتقاق: ${toText(f)}</span> ${d}</details>`;
         }
       });
@@ -8709,7 +8783,7 @@ ${analyticsHTML}
   }
   //تحديد الجمل الهامه
   {
-    const impkeywords=[ "خلاصه", "باختصار", "بالتالي", "لذلك", "نتيجه", "مهم", "رئيسي", "جوهري", "اساسي", "اولويه", "نسعي", "نهدف", "مستقبل", "يجب", "ضروري", "اهم", "دراسه", "بحث", "علم", "تعلم", "فكره", "تطوير", "نجاح", "هدف", "خطه", "استراتيجيه", "تنفيذ", "اداء", "عمل", "مبادره", "صحه", "غذاء", "نظام", "رياضه", "بدن", "حياه", "توازن", "طاقه", "راحه", "عقل", "وعي", "تغيير", "فرصه", "تحدي", "قيمه", "تاثير", "نمو", "استمرار", "دعم", "حل" ];
+    const impkeywords = ["خلاصه", "باختصار", "بالتالي", "لذلك", "نتيجه", "مهم", "رئيسي", "جوهري", "اساسي", "اولويه", "نسعي", "نهدف", "مستقبل", "يجب", "ضروري", "اهم", "دراسه", "بحث", "علم", "تعلم", "فكره", "تطوير", "نجاح", "هدف", "خطه", "استراتيجيه", "تنفيذ", "اداء", "عمل", "مبادره", "صحه", "غذاء", "نظام", "رياضه", "بدن", "حياه", "توازن", "طاقه", "راحه", "عقل", "وعي", "تغيير", "فرصه", "تحدي", "قيمه", "تاثير", "نمو", "استمرار", "دعم", "حل"];
     let isFocusMode = false;
     function processText() {
       const input = UI.editor.value.trim();
@@ -8895,7 +8969,7 @@ ${analyticsHTML}
       if (noRecordingsItem) {
         noRecordingsItem.remove();
       }
-      const newRecordingHTML=`<div class="container" style="padding:0;"><div class="name" style="padding:0;"><audio controls src="${audioUrl}"></audio></div><div class="type upload" style="margin:5px;">${recordingName}</div></div>`;
+      const newRecordingHTML = `<div class="container" style="padding:0;"><div class="name" style="padding:0;"><audio controls src="${audioUrl}"></audio></div><div class="type upload" style="margin:5px;">${recordingName}</div></div>`;
       recordingsList.insertAdjacentHTML("afterbegin", newRecordingHTML);
     }
     async function startRecording() {
@@ -9365,8 +9439,11 @@ ${analyticsHTML}
       }
       let callName = "";
       if (moodPoints > 0) {
+        document.getElementById('mystickerchatBox').style.display = "none";
         callName = petNames[Math.floor(Math.random() * petNames.length)];
+        suggeststicker();
       } else {
+        document.getElementById('mystickerchatBox').style.display = "none";
         callName = formalNames[Math.floor(Math.random() * formalNames.length)];
       }
       const randomResponse =
@@ -9535,7 +9612,7 @@ ${analyticsHTML}
     };
     loadData();
     function checkPainwords() {
-      const painKeywords=[ "صداع", "مغص", "وجع", "الم", "حراره", "سعال", "زكام", "دوخه", "خمول", "ارهاق", "حساسيه", "حكه", "تورم", "غثيان", "اسهال", "امساك", "عطس", "ضيق تنفس", "تعب", "رعشه" ];
+      const painKeywords = ["صداع", "مغص", "وجع", "الم", "حراره", "سعال", "زكام", "دوخه", "خمول", "ارهاق", "حساسيه", "حكه", "تورم", "غثيان", "اسهال", "امساك", "عطس", "ضيق تنفس", "تعب", "رعشه"];
       const input2 = document.getElementById("myInput").value.toLowerCase();
       if (painKeywords.some(keyword => input2.includes(keyword))) {
         showAndMove('checkpain');
@@ -9661,7 +9738,7 @@ ${analyticsHTML}
   //الذاكره الكلاميه الدائمه والمؤقته
   {
     const KEY = "userMessages";
-    const IMPORTANCE=[ "هام", "ضروري", "عاجل", "اولويه", "مهم", "تنبيه", "فوري", "خطر", "اساسي", "تحذير", "حفظ", "سجل", "ذكر", "تذكر", "ملاحظه", "احتفاظ", "ارشفه", "موعد", "مناسبه", "عيد", "ميلاد", "زفاف", "خطوبه", "ذكرى", "احتفال", "اجتماع", "لقاء", "مقابله", "عمل", "مشروع", "فكره", "خطة", "هدف", "انجاز", "شخصي", "عائله", "صديق", "اهل", "نصيحه", "تحفيز", "قراءه", "كتاب", "دراسه", "بحث", "امتحان", "شهاده", "تخرج", "تطوير", "مهاره", "تعلم", "مال", "دفع", "شراء", "سعر", "ميزانيه", "بنك", "رصيد", "حساب", "ديون", "ادخار", "صحه", "طبيب", "دواء", "علاج", "فحص", "تحليل", "نوم", "راحه", "غذاء", "وزن", "سفر", "تذكره", "حقيبه", "جواز", "تأشيره", "فندق", "مطار", "وصول", "مغادره", "حجز", "بيت", "صيانه", "اصلاح", "شراء", "ادوات", "مطبخ", "غرفه", "اثاث", "كهرباء", "انترنت", "سر", "خاص", "مهم", "جوهري", "رئيسي", "مستقبل", "حياه", "عقل", "قلب", "انتباه" ];
+    const IMPORTANCE = ["هام", "ضروري", "عاجل", "اولويه", "مهم", "تنبيه", "فوري", "خطر", "اساسي", "تحذير", "حفظ", "سجل", "ذكر", "تذكر", "ملاحظه", "احتفاظ", "ارشفه", "موعد", "مناسبه", "عيد", "ميلاد", "زفاف", "خطوبه", "ذكرى", "احتفال", "اجتماع", "لقاء", "مقابله", "عمل", "مشروع", "فكره", "خطة", "هدف", "انجاز", "شخصي", "عائله", "صديق", "اهل", "نصيحه", "تحفيز", "قراءه", "كتاب", "دراسه", "بحث", "امتحان", "شهاده", "تخرج", "تطوير", "مهاره", "تعلم", "مال", "دفع", "شراء", "سعر", "ميزانيه", "بنك", "رصيد", "حساب", "ديون", "ادخار", "صحه", "طبيب", "دواء", "علاج", "فحص", "تحليل", "نوم", "راحه", "غذاء", "وزن", "سفر", "تذكره", "حقيبه", "جواز", "تأشيره", "فندق", "مطار", "وصول", "مغادره", "حجز", "بيت", "صيانه", "اصلاح", "شراء", "ادوات", "مطبخ", "غرفه", "اثاث", "كهرباء", "انترنت", "سر", "خاص", "مهم", "جوهري", "رئيسي", "مستقبل", "حياه", "عقل", "قلب", "انتباه"];
     let sessionStream = [];
     const input2 = document.getElementById("editor");
     const memory = document.getElementById("memoryContent");
@@ -9995,7 +10072,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
     }
     function addpracticeMessage(text, cls) {
       const div = document.createElement("div");
-      div.className = "message " + cls;
+      div.className = "messager " + cls;
       div.innerHTML = formatLinks(text);
       UI.replay.insertAdjacentHTML("beforeend", div.outerHTML);
     }
@@ -10184,7 +10261,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
   }
   //مساعد إعرابي
   {
-    const particles=[ "من", "إلى", "في", "على", "عن", "ب", "ل", "ك", "يا", "سوف", "س", "قد", "أن", "لن", "كي", "حتى", "لم", "لما", "لا", "و", "ف" ];
+    const particles = ["من", "إلى", "في", "على", "عن", "ب", "ل", "ك", "يا", "سوف", "س", "قد", "أن", "لن", "كي", "حتى", "لم", "لما", "لا", "و", "ف"];
     function superAnalyze() {
       const input = document.getElementById("myInput").value;
       const arabicRegex = /[\u0600-\u06FF]/;
@@ -10193,9 +10270,9 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       if (!arabicRegex.test(input) || !hasIntent) { return; }
       const words = input.split(/\s+/).filter((w) => w.length > 0);
       const groups = {
-        "الحروف والأدوات":{ words: [], reminder: "⚠️ <b>القاعدة:</b>الحروف كلمات لا يظهر معناها إلا مع غيرها. تذكر أن حروف الجر (من، إلى...) تجر الأسماء، وأدوات النصب (أن، لن...) تنصب المضارع، وأدوات الجزم (لم، لا الناهية) تجزمه."},
-        الأفعال:{ words: [], reminder: "⚠️ <b>القاعدة:</b>الفعل يدل على حدث وزمن. الماضي بيبني على الفتح (غالباً)، والمضارع بيبدأ بـ (أ، ي، ت، ن) ومرفوع بالضمة مالم يسبقه ناصب أو جازم، والأمر بيدل على الطلب ومبني على السكون."},
-        الأسماء:{ words: [], reminder: "⚠️ <b>القاعدة:</b>الاسم يقبل (الـ) التعريف، التنوين، التاء المربوطة، ويقع بعد حروف الجر أو النداء. الأسماء هي ركيزة الجملة الاسمية (مبتدأ وخبر) أو ركيزة الجملة الفعلية (فاعل ومفعول)."}
+        "الحروف والأدوات": { words: [], reminder: "⚠️ <b>القاعدة:</b>الحروف كلمات لا يظهر معناها إلا مع غيرها. تذكر أن حروف الجر (من، إلى...) تجر الأسماء، وأدوات النصب (أن، لن...) تنصب المضارع، وأدوات الجزم (لم، لا الناهية) تجزمه." },
+        الأفعال: { words: [], reminder: "⚠️ <b>القاعدة:</b>الفعل يدل على حدث وزمن. الماضي بيبني على الفتح (غالباً)، والمضارع بيبدأ بـ (أ، ي، ت، ن) ومرفوع بالضمة مالم يسبقه ناصب أو جازم، والأمر بيدل على الطلب ومبني على السكون." },
+        الأسماء: { words: [], reminder: "⚠️ <b>القاعدة:</b>الاسم يقبل (الـ) التعريف، التنوين، التاء المربوطة، ويقع بعد حروف الجر أو النداء. الأسماء هي ركيزة الجملة الاسمية (مبتدأ وخبر) أو ركيزة الجملة الفعلية (فاعل ومفعول)." }
       };
       words.forEach((word) => {
         let clean = word.replace(/[.,؟!:;،"()]/g, "").trim();
@@ -10258,7 +10335,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
     const synth = window.speechSynthesis;
     function convertToPhonetic(arabic) {
       let text = arabic;
-      const chars={ ب: "b", ت: "t", ث: "th", ج: "j", ح: "hh", خ: "kh", د: "d", ذ: "z", ر: "r", ز: "z", س: "s", ش: "sh", ص: "ss", ض: "d", ط: "t", ظ: "z", ع: "aa", غ: "gh", ف: "f", ق: "q", ك: "k", ل: "l", م: "m", ن: "n", ه: "h", و: "oo", ي: "ee", أ: "a", ا: "a", إ: "e", ة: "h"};
+      const chars = { ب: "b", ت: "t", ث: "th", ج: "j", ح: "hh", خ: "kh", د: "d", ذ: "z", ر: "r", ز: "z", س: "s", ش: "sh", ص: "ss", ض: "d", ط: "t", ظ: "z", ع: "aa", غ: "gh", ف: "f", ق: "q", ك: "k", ل: "l", م: "m", ن: "n", ه: "h", و: "oo", ي: "ee", أ: "a", ا: "a", إ: "e", ة: "h" };
       Object.keys(chars).forEach((ar) => {
         const en = chars[ar];
         text = text
@@ -10522,7 +10599,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       "وحدة": ["وحد", "وحيد", "انعزال", "بعد", "لوحدي", "منعزل", "محدش جنبي", "مهجور", "مُهمل"],
       "شهوة": sensitiveRoots
     };
-    const emotionColors={ "حب": "#ffe5a9", "سعادة": "#b3f7d3", "مفاجأة": "#b3ecff", "حزن": "#9fb8ff", "غضب": "#e1bee7", "خوف": "#ffcdd2", "كتمان": "#e0e0e0", "ارتباك": "#fff9c4", "وحدة": "#cfd8dc", "شهوة": "#f8bbd0"};
+    const emotionColors = { "حب": "#ffe5a9", "سعادة": "#b3f7d3", "مفاجأة": "#b3ecff", "حزن": "#9fb8ff", "غضب": "#e1bee7", "خوف": "#ffcdd2", "كتمان": "#e0e0e0", "ارتباك": "#fff9c4", "وحدة": "#cfd8dc", "شهوة": "#f8bbd0" };
     function detectEmotions(text) {
       const words = new Set(text.split(/\s+/));
       return Object.entries(emotionMap).flatMap(([emo, roots]) =>
@@ -10930,6 +11007,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "تقسيم الميزانيه", d: "تقسيم الميزانيه حسب النسب", run: "showAndMove('smart-budget-app')" },
         { n: "دمج العناصر", d: "إنشاء ودمج المركبات", run: "onerun('lapmergeRender');opentab('labmergego')" },
         { n: "تدريب التشكيل", d: "تقييم تشكيل الجمل العربية", run: "onerun('tashkeelInitGame');opentab('tashkeeltab')" },
+        { n: "ملصقات فجر", d: "انشاء وتعديل ملصقات الردود", run: "opentab('mystickeraddtab')" }
         //{ n: "تحديد صحه الفعل", d: "تحديد اذا كان الفعل صح او لا", run: "onerun('ahkamrenderHome');showAndMove('ahkamcontent')"},
       ],
       "@": [
@@ -10939,7 +11017,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       ],
       "!": [
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
-        { n: "تنزيل فَجر", d: "حفظ نسخه على جهازك", run: "downloadDawnOS()"},
+        { n: "تنزيل فَجر", d: "حفظ نسخه على جهازك", run: "downloadDawnOS()" },
         { n: "جولة شرح", d: "شرح مبسط لأهم استخداماتي", run: "startTour()" },
         { n: "استعاده ذاكرتي", d: "استعاده عن طريق ملف الذاكره", run: " document.getElementById('importmemoryFile').click()" },
         { n: "ميتا فجر", d: "إنشاء وصف صفحه الويب", run: "opentab('DawnMeta')" },
@@ -12011,7 +12089,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     function linkrender(cat) {
       const list = document.getElementById('list');
       list.innerHTML = '';
-      vault.forEach(l => { if (cat === 'الكل' || l.category === cat) { list.innerHTML += `<div class="link-item"  oncontextmenu="deleteLink(${l.id})" onclick="window.open('${l.link}', '_blank')"><svg viewBox="0 0 512 512" width="12" fill="#555" title="link"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z" /></svg> ${l.title} <small>[${l.category}]</small></div>`; }});
+      vault.forEach(l => { if (cat === 'الكل' || l.category === cat) { list.innerHTML += `<div class="link-item"  oncontextmenu="deleteLink(${l.id})" onclick="window.open('${l.link}', '_blank')"><svg viewBox="0 0 512 512" width="12" fill="#555" title="link"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z" /></svg> ${l.title} <small>[${l.category}]</small></div>`; } });
     }
     function linkbtn() { document.getElementById('linkbtn').click(); }
   }
@@ -12684,7 +12762,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     let attendanceData = JSON.parse(localStorage.getItem('fajr_attendance')) || [];
     function renderLogs() {
       const list = document.getElementById('log-list');
-      list.innerHTML=attendanceData.map(item=>` <tr><td>${item.date}</td><td>${item.time}</td><td><b>${item.name}</b></td><td>${item.status}</td></tr>`).join('');
+      list.innerHTML = attendanceData.map(item => ` <tr><td>${item.date}</td><td>${item.time}</td><td><b>${item.name}</b></td><td>${item.status}</td></tr>`).join('');
     }
     function log() {
       const input = document.getElementById('log-in');
@@ -14160,12 +14238,13 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         }
       }
     }, { passive: false });
-    function downloadDawnOS(){ const htmlContent=document.documentElement.outerHTML; const blob=new Blob([htmlContent],{ type: 'text/html;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='DawnOS.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-}
+    function downloadDawnOS() {
+      const htmlContent = document.documentElement.outerHTML; const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'DawnOS.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
   }
   //تعليمات للمستخدم داخل حقل الكتابه
   {
-    const tips = ["نكتب ! للأوامر", "نكتب @ للجهات", "نستخدم # للأدوات", "يلا ندردش...","أهدافنا أكتر",];
+    const tips = ["نكتب ! للأوامر", "نكتب @ للجهات", "نستخدم # للأدوات", "يلا ندردش...", "أهدافنا أكتر",];
     let currentTipIndex = 0;
     const editor = document.getElementById('editor');
     if (editor) {
@@ -14898,7 +14977,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           document.getElementById('contentstarsbox').style.display = "none";
           showAndMove('contentstarsbox');
           displayText.style.opacity = 0;
-          setTimeout(()=>{ displayText.innerHTML=postText; displayText.style.opacity=1; }, 150);
+          setTimeout(() => { displayText.innerHTML = postText; displayText.style.opacity = 1; }, 150);
         });
         galaxy.appendChild(star);
       });
@@ -15741,7 +15820,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       container.innerHTML = "";
       toolsData.forEach((tool, index) => {
         let btn = document.createElement("button");
-        btn.className="conf-btn"; btn.style.padding="10px 15px"; btn.style.borderRadius="30px"; btn.style.margin="5px";
+        btn.className = "conf-btn"; btn.style.padding = "10px 15px"; btn.style.borderRadius = "30px"; btn.style.margin = "5px";
         btn.textContent = tool.n;
         btn.id = `tool-btn-${index}`;
         btn.onclick = () => {
@@ -15858,7 +15937,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   {
     let audioCtx;
     function initAudio() {
-      if (!audioCtx) {audioCtx = new (window.AudioContext || window.webkitAudioContext)();}
+      if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
       if (audioCtx.state === 'suspended') audioCtx.resume();
     }
     function playSentPop() {
@@ -15952,7 +16031,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const randpicText = document.getElementById('randpicInput').value;
       const randpicItems = randpicText.split('\n').map(randpicItem => randpicItem.trim()).filter(randpicItem => randpicItem !== '');
       const randpicResultDiv = document.getElementById('randpicResult');
-      if (randpicItems.length===0){ randpicResultDiv.innerText='لازم مدخلات الأول!'; return;}
+      if (randpicItems.length === 0) { randpicResultDiv.innerText = 'لازم مدخلات الأول!'; return; }
       let randpicCounter = 0;
       const randpicInterval = setInterval(() => {
         const randpicRandomIndex = Math.floor(Math.random() * randpicItems.length);
@@ -15965,6 +16044,159 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         }
       }, 70);
     });
+  }
+  //الرد بإستخدام ملصقات
+  {
+    let db;
+    let processedBlob = null;
+    const request = indexedDB.open('DawnOS_StickersDB', 1);
+    request.onerror = (event) => {
+      console.error("IndexedDB error:", event.target.error);
+    };
+    request.onsuccess = (event) => {
+      db = event.target.result;
+      loadStickers();
+    };
+    request.onupgradeneeded = (event) => {
+      const dbInstance = event.target.result;
+      if (!dbInstance.objectStoreNames.contains('stickers')) {
+        dbInstance.createObjectStore('stickers', {
+          keyPath: 'id',
+          autoIncrement: true
+        });
+      }
+    };
+    document.getElementById('mystickerInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.getElementById('resizeCanvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = 200;
+          canvas.height = 200;
+          ctx.clearRect(0, 0, 200, 200);
+          ctx.drawImage(img, 0, 0, 200, 200);
+          canvas.toBlob((blob) => {
+            processedBlob = blob;
+            document.getElementById('imagePreview').src = URL.createObjectURL(blob);
+          }, 'image/webp', 0.85);
+        }
+        img.src = event.target.result;
+      }
+      reader.readAsDataURL(file);
+    });
+    document.getElementById('createStickerBtn').addEventListener('click', function () {
+      const promptText = document.getElementById('mystickerPrompt').value.trim();
+      if (!processedBlob || !promptText) {
+        alert('يا باشمهندس نسيت تكتب دلالات أو الصورة لسه معملتش لها پردازنج!');
+        return;
+      }
+      const transaction = db.transaction(['stickers'], 'readwrite');
+      const store = transaction.objectStore('stickers');
+      const newSticker = {
+        image: processedBlob,
+        keywords: promptText.toLowerCase().split(' '),
+        createdAt: new Date().getTime()
+      };
+      const addReq = store.add(newSticker);
+      addReq.onsuccess = () => {
+        document.getElementById('mystickerInput').value = '';
+        document.getElementById('mystickerPrompt').value = '';
+        processedBlob = null;
+        loadStickers();
+      };
+    });
+    function loadStickers() {
+      const grid = document.getElementById('stickersGrid');
+      grid.innerHTML = '';
+      const transaction = db.transaction(['stickers'], 'readonly');
+      const store = transaction.objectStore('stickers');
+      const request = store.openCursor();
+      request.onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          const sticker = cursor.value;
+          const imgElement = document.createElement('img');
+          imgElement.src = URL.createObjectURL(sticker.image);
+          imgElement.className = 'sticker-item';
+          imgElement.title = `الكلمات: ${sticker.keywords.join(', ')}`;
+          imgElement.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            if (confirm('متأكد يا مؤسس إنك عايز تمسح الاستيكر ده؟')) {
+              deleteSticker(cursor.key);
+            }
+          });
+          grid.appendChild(imgElement);
+          cursor.continue();
+        }
+      };
+    }
+    function deleteSticker(id) {
+      const transaction = db.transaction(['stickers'], 'readwrite');
+      const store = transaction.objectStore('stickers');
+      const req = store.delete(id);
+      req.onsuccess = () => {
+        loadStickers();
+      };
+    }
+    function suggeststicker() {
+      const editor = document.getElementById('editor');
+      const messageText = editor.value.trim();
+      if (!messageText) return;
+      editor.value = '';
+      checkForStickerMatch(messageText);
+    }
+    function appendStickerMessage(blob) {
+      const chatBox = document.getElementById('mystickerchatBox');
+      chatBox.innerHTML = '';
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message bot-sticker-msg';
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(blob);
+      msgDiv.appendChild(img);
+      chatBox.appendChild(msgDiv);
+    }
+    function checkForStickerMatch(text) {
+      const userWords = text.toLowerCase().split(' ');
+      const transaction = db.transaction(['stickers'], 'readonly');
+      const store = transaction.objectStore('stickers');
+      const request = store.openCursor();
+      let bestMatchSticker = null;
+      let maxScore = 0;
+      request.onsuccess = (event) => {
+        const cursor = event.target.result;
+        if (cursor) {
+          const sticker = cursor.value;
+          let score = 0;
+          sticker.keywords.forEach(kw => {
+            userWords.forEach(uWord => {
+              if (uWord.includes(kw) || kw.includes(uWord)) {
+                score++;
+              }
+            });
+          });
+          if (score > maxScore) {
+            maxScore = score;
+            bestMatchSticker = sticker;
+          }
+          cursor.continue();
+        } else {
+          if (maxScore > 0 && bestMatchSticker) {
+            setTimeout(() => {
+              document.getElementById('mystickerchatBox').style.display = "none";
+              appendStickerMessage(bestMatchSticker.image);
+              showAndMove('mystickerchatBox');
+            }, 300);
+          } else {
+            const chatBox = document.getElementById('mystickerchatBox');
+            if (chatBox) chatBox.style.display = "none";
+          }
+        }
+      };
+    }
   }
   var UI = {};
   function initUI() {
