@@ -474,6 +474,7 @@
     white-space: nowrap;
     justify-content: flex-end;
     gap: var(--secpadd);
+    border-radius:var(--minradius);
   }
   .app {
     position: relative;
@@ -776,7 +777,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    padding: 5px 5px 3px 15px;
+    padding: 5px 5px 5px 15px;
     width: calc(100% - 160px);
     overflow-y: auto;
     max-height: 53vh;
@@ -3052,7 +3053,7 @@
   }
   .tour-highlight {
     z-index: 9999 !important;
-    box-shadow: 0 0 0 4px #4CAF50, 0 0 20px rgba(76, 175, 80, 0.5) !important;
+    box-shadow: 0 0 0 4px var(--dcolor), 0 0 20px rgba(76, 175, 80, 0.5) !important;
     transition: all 0.3s ease;
   }
   #tour-card {
@@ -3068,7 +3069,7 @@
   }
   #tour-card h3 {
     margin: 0 auto 5px;
-    color: #4CAF50;
+    color: var(--dcolor);
     font-size: 1.1rem;
   }
   #tour-card p {
@@ -3091,7 +3092,7 @@
     font-size: 0.85rem;
   }
   .tour-buttons button.next-btn {
-    background: #4CAF50;
+    background: var(--dcolor);
   }
   .anacard {
     border: var(--cborder);
