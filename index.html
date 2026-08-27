@@ -473,7 +473,7 @@
     overflow-y: hidden;
     white-space: nowrap;
     justify-content: flex-end;
-    gap: var(--spacepadd);
+    gap: var(--secpadd);
   }
   .app {
     position: relative;
@@ -482,7 +482,7 @@
     aspect-ratio: 1;
     background: var(--focusbg);
     border-radius: var(--roundradius);
-    margin: 0 10px 25px;
+    margin: 0 15px 25px;
     justify-content: center;
     align-items: center;
     vertical-align: middle;
@@ -518,7 +518,7 @@
     display: flex;
     width: 100%;
     padding: var(--secpadd);
-    margin: 8px 0;
+    margin: 10px 0;
     background-color: var(--focusbg);
     border-radius: var(--minradius);
     box-shadow: var(--shadow);
@@ -2905,6 +2905,12 @@
     margin: 0 2px;
     animation: bounce 1.4s infinite ease-in-out both;
   }
+  .dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
   .qusetiontools {
     overflow: auto;
     white-space: nowrap;
@@ -3231,6 +3237,107 @@
     padding: 10px;
     margin: 10px 0;
   }
+  .chat-box {
+    height: 280px;
+    border: var(--dborder);
+    border-radius: var(--secradius);
+    overflow-y: auto;
+    padding: var(--spacepadd);
+    background: var(--focusbg);
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacepadd);
+  }
+  .message {
+    padding: 10px 14px;
+    border-radius: 10px;
+    max-width: 85%;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+  .user-msg {
+    background: var(--secbg);
+    color: var(--bcolor);
+    align-self: flex-start;
+    border: var(--dborder);
+  }
+  .bot-msg {
+    background: #e2e8f0;
+    color: #333;
+    align-self: flex-end;
+  }
+  .meta-info {
+    font-size: 11px;
+    color: #888;
+    text-align: left;
+  }
+  .rule-card {
+    border-bottom: 1px solid #e1e1e1;
+    padding: 12px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .actions-group {
+    display: flex;
+    gap: 5px;
+  }
+  #chat-device {
+    width: 100%;
+    max-width: 380px;
+    height: calc(75vh - 60px);
+    background: var(--secbg);
+    display: flex;
+    margin: 20px auto 40px;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    border: 8px solid var(--gcolor);
+    border-radius: 40px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 0 2px #ddd;
+  }
+  #messages {
+    flex: 1;
+    padding: var(--mainpadd);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+  }
+  .msg {
+    width: auto;
+    padding: var(--mainpadd);
+    font-size: var(--dfont);
+    border-radius: var(--secradius);
+    line-height: 1.5;
+    max-width: 85%;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+  .sent {
+    align-self: flex-start;
+    background: linear-gradient(135deg, #1e90ff, #0072ff);
+    color: #fff;
+    border-bottom-right-radius: 2px;
+    border-radius: 30px 30px 5px 30px;
+  }
+  .received {
+    align-self: flex-end;
+    border-radius: 30px 30px 30px 5px;
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    color: #333;
+    border: var(--cborder);
+    border-bottom-left-radius: 2px;
+  }
+  .typing-dots {
+    display: flex;
+    gap: 4px;
+    padding: 5px;
+  }
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
       width: 80vw;
@@ -3362,12 +3469,11 @@
   }
   @keyframes bounce {
     0%,
-    80%,
     100% {
-      transform: scale(0);
+      opacity: 0.3;
     }
-    40% {
-      transform: scale(1.0);
+    50% {
+      opacity: 1;
     }
   }
   @keyframes slideIn {
@@ -3390,6 +3496,19 @@
     }
     75% {
       transform: translateX(10px);
+    }
+  }
+  @keyframes pop {
+    0% {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    70% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
     }
   }
   @keyframes fadeIn {
@@ -3827,6 +3946,27 @@
                 </svg>
                 <b>موارد مجموعه</b>
               </div>
+              <div data-id="16" class="app" onclick="switchTab('chatbotbuilder')">
+                <svg viewBox="0 0 640 512" title="robot">
+                  <path
+                    d="M32,224H64V416H32A31.96166,31.96166,0,0,1,0,384V256A31.96166,31.96166,0,0,1,32,224Zm512-48V448a64.06328,64.06328,0,0,1-64,64H160a64.06328,64.06328,0,0,1-64-64V176a79.974,79.974,0,0,1,80-80H288V32a32,32,0,0,1,64,0V96H464A79.974,79.974,0,0,1,544,176ZM264,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,264,256Zm-8,128H192v32h64Zm96,0H288v32h64ZM456,256a40,40,0,1,0-40,40A39.997,39.997,0,0,0,456,256Zm-8,128H384v32h64ZM640,256V384a31.96166,31.96166,0,0,1-32,32H576V224h32A31.96166,31.96166,0,0,1,640,256Z" />
+                </svg>
+                <b>ربوت دردشه</b>
+              </div>
+              <div data-id="17" class="app" onclick="opentab('mychatinamtiontab')">
+                <svg viewBox="0 0 576 512" title="comments">
+                  <path
+                    d="M416 192c0-88.4-93.1-160-208-160S0 103.6 0 192c0 34.3 14.1 65.9 38 92-13.4 30.2-35.5 54.2-35.8 54.5-2.2 2.3-2.8 5.7-1.5 8.7S4.8 352 8 352c36.6 0 66.9-12.3 88.7-25 32.2 15.7 70.3 25 111.3 25 114.9 0 208-71.6 208-160zm122 220c23.9-26 38-57.7 38-92 0-66.9-53.5-124.2-129.3-148.1.9 6.6 1.3 13.3 1.3 20.1 0 105.9-107.7 192-240 192-10.8 0-21.3-.8-31.7-1.9C207.8 439.6 281.8 480 368 480c41 0 79.1-9.2 111.3-25 21.8 12.7 52.1 25 88.7 25 3.2 0 6.1-1.9 7.3-4.8 1.3-2.9.7-6.3-1.5-8.7-.3-.3-22.4-24.2-35.8-54.5z" />
+                </svg>
+                <b>محاكي محادثه</b>
+              </div>
+              <div data-id="18" class="app" onclick="opentab('myrandompicktab')">
+                <svg viewBox="0 0 480 512" title="dice-d20">
+                  <path
+                    d="M106.75 215.06L1.2 370.95c-3.08 5 .1 11.5 5.93 12.14l208.26 22.07-108.64-190.1zM7.41 315.43L82.7 193.08 6.06 147.1c-2.67-1.6-6.06.32-6.06 3.43v162.81c0 4.03 5.29 5.53 7.41 2.09zM18.25 423.6l194.4 87.66c5.3 2.45 11.35-1.43 11.35-7.26v-65.67l-203.55-22.3c-4.45-.5-6.23 5.59-2.2 7.57zm81.22-257.78L179.4 22.88c4.34-7.06-3.59-15.25-10.78-11.14L17.81 110.35c-2.47 1.62-2.39 5.26.13 6.78l81.53 48.69zM240 176h109.21L253.63 7.62C250.5 2.54 245.25 0 240 0s-10.5 2.54-13.63 7.62L130.79 176H240zm233.94-28.9l-76.64 45.99 75.29 122.35c2.11 3.44 7.41 1.94 7.41-2.1V150.53c0-3.11-3.39-5.03-6.06-3.43zm-93.41 18.72l81.53-48.7c2.53-1.52 2.6-5.16.13-6.78l-150.81-98.6c-7.19-4.11-15.12 4.08-10.78 11.14l79.93 142.94zm79.02 250.21L256 438.32v65.67c0 5.84 6.05 9.71 11.35 7.26l194.4-87.66c4.03-1.97 2.25-8.06-2.2-7.56zm-86.3-200.97l-108.63 190.1 208.26-22.07c5.83-.65 9.01-7.14 5.93-12.14L373.25 215.06zM240 208H139.57L240 383.75 340.43 208H240z" />
+                </svg>
+                <b>الإختيار العشوائي</b>
+              </div>
             </div>
             <div class="divider"></div>
             <div class="search-container">
@@ -3927,6 +4067,29 @@
             </details>
           </div>
         </div>
+      </div>
+      <div id="myrandompicktab" class="modaltab">
+        <h2>الإختيار العشوائي</h2>
+        <fieldset>
+          <legend>الاختيارات العشوائية</legend>
+          <textarea id="randpicInput" placeholder="هنا هنكتب الإختيارات كل إختيار في سطر تحت بعض."></textarea>
+          <button id="randpicBtn" class="conf-btn">اختيار</button>
+        </fieldset>
+        <p style="text-align:center;width:100%;" id="randpicResult"></p>
+      </div>
+      <div id="mychatinamtiontab" class="modaltab">
+        <h2>بناء المحادثه</h2>
+        <fieldset>
+          <legend>تكوين رسايل المحادثه</legend>
+          <textarea id="script-input">
+# يا Dawn EDU، أنا تايه في أنواع الخبر! 😫
+- ببساطة: الخبر 3 أنواع (مفرد، جملة، شبه جملة). 🌳
+# إزاي زي الشجر؟
+- المفرد كلمة، الجملة فروع، وشبه الجملة ظرف أو جار ومجرور. 💡</textarea>
+          <button id="start-btn" class="conf-btn">تشغيل</button>
+        </fieldset>
+        <p style="text-align:center;width:100%;">ملاحظه: بنستخدم رمز # للرساله المُرسلة (الازرق) و بنستخدم - للرساله
+          المُستلمه (الرمادي)</p>
       </div>
       <div id="soci-results" class="modaltab">
         <h2 id="soci-title4">النتائج والتقارير 📊</h2>
@@ -4263,7 +4426,7 @@
             </center>
             <ul class="data-section flex">
               <li>الإصدار : سكون</li>
-              <li> النواه : 1.7.7</li>
+              <li> النواه : 1.7.8</li>
               <li>القدرات : <span id="totalAbilitiesCount">0</span></li>
             </ul>
           </fieldset>
@@ -4325,7 +4488,6 @@
       <div id="timesetting" class="modaltab">
         <h2>تخصيص التوقيت</h2>
         <p>تحديد الدولة:</p>
-        <div id="smartAlert"><span id="alertText"></span></div>
         <div class="flex">
           <div style="min-width:70%;">
             <input list="locations" id="locationInput" value="مصر 🇪🇬" oninput="checkInput()"
@@ -4449,7 +4611,7 @@
                   <th>العملية</th>
                   <th>الكمية</th>
                   <th>القيمة</th>
-                  <th>حذف</th>
+                  <th>نسيان</th>
                 </tr>
               </thead>
               <tbody id="transactions-list"></tbody>
@@ -4488,7 +4650,7 @@
             <tr style="background: #eee;">
               <th>البند</th>
               <th>القيمة</th>
-              <th>حذف</th>
+              <th>نسيان</th>
             </tr>
           </thead>
           <tbody id="expense-list"></tbody>
@@ -5094,6 +5256,10 @@
         <span class="dot"></span>
       </div>
       <div id="chatbotreplay" class="replay"></div>
+      <div id="mytoolsuggest" class="replay">
+        <div id="suggestsresultsCount"></div>
+        <div class="tools-container" id="suggestedtoolsContainer"></div>
+      </div>
       <div id="heavystatus" class="replay">جاهز للعمل...</div>
       <div id="resultsdisplayarea" class="replay"></div>
       <div id="memoryresultCount" class="replay"></div>
@@ -5111,6 +5277,9 @@
             <option value="mental">النفس</option>
           </select>
         </div>
+      </div>
+      <div id="mytimeattention" class="replay">
+        <div id="smartAlert"><span id="alertText"></span></div>
       </div>
       <div id="quesbtncontainer" class="replay">
         <p>هنذاكر إزاي دلوقتي؟</p>
@@ -5286,7 +5455,8 @@
               <path
                 d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z" />
             </svg> ملفي الشخصي</a>
-          <a onclick="openuser(event, 'mymemory');onerun('renderAllmemory')"> <svg viewBox="0 0 576 512" width="20" title="brain">
+          <a onclick="openuser(event, 'mymemory');onerun('renderAllmemory')"> <svg viewBox="0 0 576 512" width="20"
+              title="brain">
               <path
                 d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z" />
             </svg> الذاكره والتعلم</a>
@@ -5485,7 +5655,7 @@
           </select>
           <button class="btn-play" onclick="togglePlaytone()" id="pBtn">▶️ تشغيل</button>
           <button onclick="savetone()">حفظ</button>
-          <button id="delBtn" style="display:none; background:#f44" onclick="del()">🗑️ حذف</button>
+          <button id="delBtn" style="display:none; background:#f44" onclick="del()">🗑️ نسيان</button>
           <button id="rndBtn" onclick="random()" ondblclick="toggleAuto()" style="background:#9b59b6">🎲
             عشوائي (2-Click للمايسترو)</button>
           <button onclick="clearG()">🧹 مسح</button>
@@ -5651,68 +5821,6 @@
     <section id="chatbotbuilder" class="tab-content">
       <h2>تدريب الرد الألي</h2>
       <div class="app-container" style="overflow:auto;">
-        <style>
-          .chat-box {
-            height: 280px;
-            border: var(--dborder);
-            border-radius: var(--secradius);
-            overflow-y: auto;
-            padding: var(--spacepadd);
-            background: var(--focusbg);
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacepadd);
-          }
-          .message {
-            padding: 10px 14px;
-            border-radius: 10px;
-            max-width: 85%;
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-line;
-          }
-          .user-msg {
-            background: var(--secbg);
-            color: var(--bcolor);
-            align-self: flex-start;
-            border: var(--dborder);
-          }
-          .bot-msg {
-            background: #e2e8f0;
-            color: #333;
-            align-self: flex-end;
-          }
-          .meta-info {
-            font-size: 11px;
-            color: #888;
-            text-align: left;
-          }
-          .rules-manager {
-            width: 100%;
-            max-width: 920px;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-top: 10px;
-          }
-          .rule-card {
-            border-bottom: 1px solid #e1e1e1;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-          }
-          .actions-group {
-            display: flex;
-            gap: 5px;
-          }
-        </style>
         <h1 style="margin:5px 0px 30px;color:var(--dcolor);">تدريب الردود الآلية</h1>
         <fieldset>
           <legend id="panelTitle">إضافة قاعدة جديدة</legend>
@@ -5720,7 +5828,7 @@
           <input type="text" id="botKeywords" placeholder="مثال: سعر, تكلفة, كام">
           <p style="margin:20px 0px 5px !important;">منطقة الردود:</p>
           <div id="repliesContainer">
-            <textarea class="reply-field" placeholder="الرد الأول..."></textarea>
+            <textarea class="reply-field" name="replay-field" placeholder="الرد الأول..."></textarea>
           </div>
           <div style="display:flex;justify-content: space-between;margin:5px auto 20px;">
             <button class="btn btn-add" onclick="addReplyField()">+ إضافة رد آخر</button>
@@ -5746,6 +5854,18 @@
           <summary> إداره مكتبة التدريب (إجمالي: <span id="rulesCount">0</span>)</summary>
           <div id="rulesListContainer"></div>
         </details>
+      </div>
+    </section>
+    <section id="chatanimationmaker" class="tab-content">
+      <h2>محاكي الدردشات</h2>
+      <div class="app-container" style="overflow:auto;">
+        <div id="chat-device">
+          <div id="messages"></div>
+        </div>
+        <center>
+          <button onclick="opentab('mychatinamtiontab')" class="conf-btn"
+            style="width:30%;min-width:150px;padding:20px;">تعديل المحادثه</button>
+        </center>
       </div>
     </section>
   </div>
@@ -5776,7 +5896,7 @@
       if (abortController.signal.aborted) break;
       try {
         if (file.type.startsWith('image/')) {
-          status.innerText = `معالجة: ${file.name}`;
+          status.innerText = `حاليا بقرأ: ${file.name}`;
           const { data: { text } } = await tWorker.recognize(file);
           result.value += `--- ${file.name} ---\n${text}\n\n`;
         } else if (file.type === 'application/pdf') {
@@ -5793,17 +5913,17 @@
             result.value += `--- ${file.name} (صفحة ${i}) ---\n${text}\n\n`;
           }
         }
-      } catch (err) { status.innerText = "خطأ!"; }
+      } catch (err) { status.innerText = "حصلت غلطة!"; }
     }
     if (status && files.length > 0) {
       let lastFile = files[files.length - 1];
-      status.innerText = `معالجة: ${lastFile.name}`;
+      status.innerText = `حاليا بقرأ: ${lastFile.name}`;
     }
     status.innerText = "انتهت المهمة!";
   };
   document.getElementById('drop-zone').onclick = () => uploader.click();
   uploader.onchange = (e) => process(e.target.files);
-  document.getElementById('stop-btn').onclick = () => { abortController.abort(); status.innerText = "🛑 تم الإيقاف!"; };
+  document.getElementById('stop-btn').onclick = () => { abortController.abort(); status.innerText = "🛑 تمام وقفت!"; };
 </script>
 <script>
   { }
@@ -5816,6 +5936,7 @@
       UI.mybtnd.className = UI.editor.value.trim() !== "" ? "think" : "face";
       clearTimeout(typingTimer);
       typingTimer = setTimeout(() => {
+        handlesuggestCommand(event);
         TextProcessing();
         calculateExpression(event);
         sostime();
@@ -5842,7 +5963,7 @@
     let lastWordCount = 0;
     function analyzeText() {
       const text = UI.editor.value.trim();
-      if (!text) { showToast("اكتب حاجة الأول!"); return; }
+      if (!text) { showToast("لازم نكتب حاجة الأول!"); return; }
       const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
       const charCount = text.replace(/\s/g, '').length;
       const charWithSpace = text.length;
@@ -5882,7 +6003,7 @@
                 <div><span style="color: var(--gcolor);">⏱️ وقت الكتابة:</span> <strong>${typingTimeDisplay}</strong></div>
             </div>
             <div style="margin-top: 10px; font-size: 12px; color: var(--gcolor); border-top: 1px solid #ddd; padding-top: 8px;">
-                ⚡ سرعة قراءة افتراضية: 200 كلمة/دقيقة | 💡 سرعة الكتابة تحسب من أول حرف
+                ⚡ سرعة قراءة افتراضية: 200 كلمة/دقيقة | 💡 سرعة الكتابة بحسبها من أول حرف
             </div>
         </div>
     `;
@@ -5918,7 +6039,7 @@
       totalTypingTime = 0;
       lastWordCount = 0;
       typingStartTime = 0;
-      showToast("🔄 تم إعادة تعيين سرعة الكتابة");
+      showToast("🔄 سرعه الكتابه رجعت من الصفر");
     }
   }
   //صوره المستخدم
@@ -6100,18 +6221,18 @@
         }
       } catch (err) {
         console.error("فشل تنفيذ العملية: ", err);
-        if (type === "paste") showToast("المتصفح محتاج إذن للوصول للحافظة!");
+        if (type === "paste") showToast("أنا محتاجة إذن للوصول للحافظة من المتصفح!");
       }
     }
   }
   //رادار قائمة قدرات فجر
   {
     const fajrabilityLibrary = {
-      معالجة: ["محرك المدخلات الرئيسية", "حساب النص وتحليله", "التصحيح النصي للفرانكو ولوحه المفاتيح", "كاشف اللغات البرمجيه", "معالجه النصوص لتنظيفها للنظام", "إستخراج البيانات الرقميه من النص", "تحديد الجمل الهامه", "الذاكره الكلاميه الدائمه والمؤقته", "التدريب الكلامي للردود", "مساعد إعرابي", "النص الى كلام", "تدريب ماركوف", "كاشف المشاعر وتفاعل باللون", "كاشف الطابع الشخصي من النص", "الإملاء والتصحيح", "ضفط النصوص", "تأثير وترتيب الرسائل", "معالجه النصوص الضخمه"],
-      إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه"],
+      معالجة: ["محرك المدخلات الرئيسية", "حساب النص وتحليله", "التصحيح النصي للفرانكو ولوحه المفاتيح", "كاشف اللغات البرمجيه", "معالجه النصوص لتنظيفها للنظام", "إستخراج البيانات الرقميه من النص", "تحديد الجمل الهامه", "الذاكره الكلاميه الدائمه والمؤقته", "التدريب الكلامي للردود", "مساعد إعرابي", "النص الى كلام", "تدريب ماركوف", "كاشف المشاعر وتفاعل باللون", "كاشف الطابع الشخصي من النص", "الإملاء والتصحيح", "ضفط النصوص", "تأثير وترتيب الرسائل", "معالجه النصوص الضخمه","إقتراح الأدوات"],
+      إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه","صانع محاكاه محادثات"],
       منطق: ["آله حاسبه فورية", "محول الوحدات الرياضيه", "بنك الاسئله والتدريبات", "مشتق القوانين المسجله", "ترتيب البيانات تصاعدي وتنازلي", "محلل القانون", "حساب التركه", "فاحص اللوغارتم", "مكتبه القانون والاحكام", "موزع الميزانيه", "حسابه صافي المرتب", "ميزان اتخاز القرار", "نظام التصنيف", "رسم الدوال الجبرية", "اختبار صحه علامات التشكيل", "معمل دمج العناصر"],
       تطوير: ["تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث", "محرك بناء روبوت دردشه"],
-      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر"],
+      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر","محرك الإختيارات العشوائيه"],
       وسائط: ["لوحه الرسم", "تسجيل الصوت", "المنبه والمؤقت", "العاب وتسليه", "رسم الخريطه الشجرية", "بلاطات الالوان", "إنشاء موسيقى ونغمات", "لعبه فرقعه الأرقام", "لعبه عداد الضغطات", "لعبه الضغط بالترتيب", "قائمه مشغل الاغاني", "الألوان المتناسقه", "الحصول على اللون", "الحصول على اللون", "لعبه ركض فجر", "تسجيل الشاشه", "الفحص الطبي المبدأي", "مؤشر التحاليل الطبيه", "تسجيل أماكن الالم", "ملف القوة الشخصيه", "حامي الشاشه", "رسم بياني بالاعمده", "روتين المستخدم اليومي", "خريطه أماكن واتجاهات", "صانع الجولات الإفتراضيه", "رسم بياني", "حيوانات فجر الأليفه"]
     };
     function drawFajrRadar() {
@@ -6258,7 +6379,7 @@
           const formattedResult = Number.isInteger(result)
             ? result
             : parseFloat(result.toFixed(8));
-          UI.resultDisplay.textContent = "الناتج = " + formattedResult;
+          UI.resultDisplay.textContent = "الناتج هيساوي " + formattedResult;
           showAndMove('resultDisplay');
         } else {
           throw new Error();
@@ -6427,30 +6548,7 @@
   }
   //مواعيد اليوم حسب الصلاه
   {
-    const db = {
-      "مصر 🇪🇬": "30.04,31.23,3",
-      "السعودية 🇸🇦": "21.38,39.85,3",
-      "الإمارات 🇦🇪": "24.45,54.37,4",
-      "فلسطين 🇵🇸": "31.76,35.21,3",
-      "الأردن 🇯🇴": "31.94,35.92,3",
-      "لبنان 🇱🇧": "33.89,35.50,3",
-      "العراق 🇮🇶": "33.31,44.36,3",
-      "قطر 🇶🇦": "25.28,51.53,3",
-      "الكويت 🇰🇼": "29.37,47.97,3",
-      "البحرين 🇧🇭": "26.22,50.58,3",
-      "عُمان 🇴🇲": "23.58,58.40,4",
-      "اليمن 🇾🇪": "15.36,44.19,3",
-      "سوريا 🇸🇾": "33.51,36.27,3",
-      "السودان 🇸🇩": "15.50,32.55,2",
-      "ليبيا 🇱🇾": "32.88,13.19,2",
-      "تونس 🇹🇳": "36.80,10.18,1",
-      "الجزائر 🇩🇿": "36.75,3.05,1",
-      "المغرب 🇲🇦": "34.02,-6.84,1",
-      "موريتانيا 🇲🇷": "18.07,-15.95,0",
-      "الصومال 🇸🇴": "2.04,45.31,3",
-      "جيبوتي 🇩🇯": "11.58,43.14,3",
-      "جزر القمر 🇰🇲": "-11.71,43.24,3",
-    };
+    const db={ "مصر 🇪🇬": "30.04,31.23,3", "السعودية 🇸🇦": "21.38,39.85,3", "الإمارات 🇦🇪": "24.45,54.37,4", "فلسطين 🇵🇸": "31.76,35.21,3", "الأردن 🇯🇴": "31.94,35.92,3", "لبنان 🇱🇧": "33.89,35.50,3", "العراق 🇮🇶": "33.31,44.36,3", "قطر 🇶🇦": "25.28,51.53,3", "الكويت 🇰🇼": "29.37,47.97,3", "البحرين 🇧🇭": "26.22,50.58,3", "عُمان 🇴🇲": "23.58,58.40,4", "اليمن 🇾🇪": "15.36,44.19,3", "سوريا 🇸🇾": "33.51,36.27,3", "السودان 🇸🇩": "15.50,32.55,2", "ليبيا 🇱🇾": "32.88,13.19,2", "تونس 🇹🇳": "36.80,10.18,1", "الجزائر 🇩🇿": "36.75,3.05,1", "المغرب 🇲🇦": "34.02,-6.84,1", "موريتانيا 🇲🇷": "18.07,-15.95,0", "الصومال 🇸🇴": "2.04,45.31,3", "جيبوتي 🇩🇯": "11.58,43.14,3", "جزر القمر 🇰🇲": "-11.71,43.24,3",};
     const list = document.getElementById('locations');
     Object.keys(db).forEach(name => {
       let opt = document.createElement('option');
@@ -6533,8 +6631,9 @@
       for (let p in times) {
         let diff = times[p] - currentMin;
         if (diff > 0 && diff <= 15) {
+          showAndMove('mytimeattention');
           alertDiv.style.display = 'block';
-          document.getElementById('alertText').innerText = `نحن في نطاق وقت صلاة ${p}. استعد!`;
+          document.getElementById('alertText').innerText = `دخلنا في حدود وقت ${p}. استعداد!`;
           return;
         }
       }
@@ -6562,30 +6661,13 @@
   //نقاط النور
   {
     const cats = {
-      spiritual: [
-        "سبحان الله",
-        "الحمد لله",
-        "لا إله إلا الله",
-        "الله أكبر",
-        "أستغفر الله",
-        "اللهم ارحمني",
-        "اللهم اغفر لي",
-        "لا حول ولا قوة إلا بالله",
-        "اللهم صلِّ على محمد"
-      ],
-      mental: [
-        "أنا الأقوى",
-        "أنا الأفضل",
-        "كل شيء ممكن",
-        "أنا أستحق السعادة",
-        "النهارده أجمل",
-        "أنا ممتن"
-      ]
+      spiritual: [ "سبحان الله", "الحمد لله", "لا إله إلا الله", "الله أكبر", "أستغفر الله", "اللهم ارحمني", "اللهم اغفر لي", "لا حول ولا قوة إلا بالله", "اللهم صلِّ على محمد" ],
+      mental: [ "أنا الأقوى", "أنا الأفضل", "كل شيء ممكن", "أنا أستحق السعادة", "النهارده أجمل", "أنا ممتن" ]
     };
     let light = parseInt(localStorage.light !== undefined ? localStorage.light : 150),
       can = true;
     const upd = () => {
-      bcoin.textContent = "متاح " + light + " نقطة ";
+      bcoin.textContent = "مُتاح " + light + " نقطة ";
       localStorage.light = light;
       const myBtn = document.getElementById("mybtn");
       myBtn.style.backgroundColor = light === 0 ? "#ccc" : "";
@@ -6620,7 +6702,7 @@
     };
     document.getElementById("mybtnd").addEventListener("click", decreasePoint);
     bcoin.onclick = doT;
-    scoin.onchange = () => (dcoin.textContent = "لنبدأ شحن الطاقه");
+    scoin.onchange = () => (dcoin.textContent = "يلا نبدأ شحن ضاقتنا");
     upd();
   }
   //وضع شاشه الطورائ
@@ -6668,7 +6750,7 @@
       if (typeof openmodal === "function")
         if (typeof opentab === "function") showAndMove("sosAction");
       if (UI.sosAction) {
-        UI.sosAction.innerText = "رصدت إشاره خطر! لو مفيش مشكلة حصلت هحتاج ضغطه واحده بس على رسالتي علشان اتطمن خلال 9ث";
+        UI.sosAction.innerText = "رصدت إشاره خطر! لو مفيش مشكلة عندك هحتاجة ضغطه واحده بس على رسالتي علشان اتطمن خلال 9ث";
         UI.sosAction.onclick = () => {
           isLocked = true;
           resetSystem();
@@ -6683,7 +6765,7 @@
       clicks = 0;
       const overlay = document.getElementById('sosOverlay');
       overlay.style.display = 'flex';
-      overlay.innerText = `تم تفعيل وضع طوارئ! اضغط 5 مرات للإلغاء (0/5)`;
+      overlay.innerText = `فتحت وضع طوارئ! عايزه 5 ضغطات علشان اقفله (0/5)`;
       alarmInstance = playAlarmSound();
       clearInterval(flashInterval);
       flashInterval = setInterval(() => {
@@ -6693,7 +6775,7 @@
       }, 500);
       overlay.onclick = () => {
         clicks++;
-        overlay.innerText = `هحتاج ضغط ${5 - clicks} مرات للإلغاء`;
+        overlay.innerText = `هحتاجة ${5 - clicks} ضغطات للإلغاء`;
         if (clicks >= 5) {
           isLocked = true;
           resetSystem();
@@ -6777,12 +6859,12 @@
     }
     function deleteMode(name, event) {
       event.stopPropagation();
-      openSystemConfirm("تأكيد الحذف", `أنسى الوضع دا ؟ "${name}"`, () => {
+      openSystemConfirm("تأكيد نسيان", `أنسى الوضع دا ؟ "${name}"`, () => {
         const saved = JSON.parse(localStorage.getItem("myCustomModes") || "{}");
         delete saved[name];
         localStorage.setItem("myCustomModes", JSON.stringify(saved));
         loadSavedModes();
-        showToast("تم حذف الوضع! 🗑️");
+        showToast("تمام أنا خلاص نسيته! 🗑️");
       });
     }
     function attachRadioEvents() {
@@ -6824,7 +6906,7 @@
                 saved[name] = selected.join(",");
                 localStorage.setItem("myCustomModes", JSON.stringify(saved));
                 loadSavedModes();
-                showToast("تم حفظ الوضع بنجاح! 🚀");
+                showToast("تم انا حفظت الوضع الجديد بنجاح! 🚀");
               }
             }
           );
@@ -6837,7 +6919,7 @@
           if (!activeDalalat.length) {
             activeDalalat = autoSelectDalalat();
             if (!activeDalalat.length) {
-              return showToast("أنا مش قادرة أحدد المهمة المطلوبة، ممكن نغير صياغة الكلام علشان أقدر أساعدك؟ 🥺");
+              return showToast("أنا مش قادرة أحدد المهمة المطلوبة، ممكن نستخدم كلمات اسهل علشان أقدر أساعدك؟ 🥺");
             }
           }
           const indicator = document.getElementById('typing-indicator2');
@@ -6920,7 +7002,7 @@
   }
   //مركز تحكم الذاكرة والتخزين
   {
-    const friendlyNames={ notionTasks3: "الروتين اليومي", fajr_vault: "مدير الروابط", fajr_universal_categories: "نظام التصنيف (التصنيفات)", device_id: "دردشه الطوارئ", fajr_welcome_seen: "اول رساله إستقبال", my_songs: "نغمات وموسيقى", userMessages: "ذاكره المحادثات", fajr_app_data: "تاريخ استخدام الادوات", rpg_final: "تطور المستخدم", fajr_last_selection: "موقع حساب المواقيت", light: "نقاط النور", pomodoro_state: "ذاكره مؤقت المجهود", fajr_universal_items: "نظام التصنيف (العناصر)", Timer_data: "المؤقت والتنبيهات", forms: "النماذج والجداول", userFormData: "البيانات الشخصيه", fajr_attendance: "سجل الحضور والانصراف", last_played_index: "اخر الموسيقى المشغله", illdata: "سجل اماكن الألم", fajr_projects_v2: "رادار إنجاز المشروعات", lab_elements: "عناصر معمل الدمج", lab_recipes: "مُركبات معمل الدمج", VariableMarkovModel_v5_Final:"تدريب ماركوف", markov_bot_rules: "تدريب الردود الآلية", wiki_galaxy_date: "سجل تاريخ النجوم", wiki_galaxy_posts: "سجل محتوى النجوم", sociInventoryData:"بيانات إداره المجموعه", dashboardData:"بيانات لوحه التقارير",};
+    const friendlyNames = { notionTasks3: "الروتين اليومي", fajr_vault: "مدير الروابط", fajr_universal_categories: "نظام التصنيف (التصنيفات)", device_id: "دردشه الطوارئ", fajr_welcome_seen: "اول رساله إستقبال", my_songs: "نغمات وموسيقى", userMessages: "ذاكره المحادثات", fajr_app_data: "تاريخ استخدام الادوات", rpg_final: "تطور المستخدم", fajr_last_selection: "موقع حساب المواقيت", light: "نقاط النور", pomodoro_state: "ذاكره مؤقت المجهود", fajr_universal_items: "نظام التصنيف (العناصر)", Timer_data: "المؤقت والتنبيهات", forms: "النماذج والجداول", userFormData: "البيانات الشخصيه", fajr_attendance: "سجل الحضور والانصراف", last_played_index: "اخر الموسيقى المشغله", illdata: "سجل اماكن الألم", fajr_projects_v2: "رادار إنجاز المشروعات", lab_elements: "عناصر معمل الدمج", lab_recipes: "مُركبات معمل الدمج", VariableMarkovModel_v5_Final: "تدريب ماركوف", markov_bot_rules: "تدريب الردود الآلية", wiki_galaxy_date: "سجل تاريخ النجوم", wiki_galaxy_posts: "سجل محتوى النجوم", sociInventoryData: "بيانات إداره المجموعه", dashboardData: "بيانات لوحه التقارير", };
     function getStorageDetails() {
       let keysMap = {};
       let total = 0;
@@ -6933,12 +7015,8 @@
         total += size;
         keysMap[key] = { name: key, size: (size / 1024).toFixed(2), rawSize: size };
       }
-      for (let key in friendlyNames) {
-        if (!keysMap[key]) {
-          keysMap[key] = { name: key, size: "0.00", rawSize: 0 };
-        }
-      }
-      let keys = Object.values(keysMap);      
+      for (let key in friendlyNames) { if (!keysMap[key]) { keysMap[key] = { name: key, size: "0.00", rawSize: 0 }; } }
+      let keys = Object.values(keysMap);
       keys.sort((a, b) => b.rawSize - a.rawSize);
       return { total: (total / 1024).toFixed(2), keys: keys };
     }
@@ -6952,7 +7030,7 @@
       UI.keysList.innerHTML = "";
       if (data.keys.length === 0) {
         UI.keysList =
-          '<p style="text-align:center;color:#64748b;">عقلي فاضي من كل حاجة دلوقتي</p>';
+          '<p style="text-align:center;color:#64748b;">عقلي فاضي من كل حاجة دلوقتي 🤡</p>';
         return;
       }
       data.keys.forEach((item) => {
@@ -6964,17 +7042,17 @@
       });
     }
     function deleteKey(key) {
-      openSystemConfirm("تأكيد الحذف", `أنسى [${friendlyNames[key] || key}]؟`, () => {
+      openSystemConfirm("تأكيد النسيان", `أنسى [${friendlyNames[key] || key}]؟`, () => {
         localStorage.removeItem(key);
         renderAllmemory();
-        showToast("تم حذف المفتاح بنجاح! ✅");
+        showToast("تمام خلاص نسيت! ✅");
       });
     }
     function clearAllmemory() {
       openSystemConfirm("مسح الذاكرة بالكامل", "أنسى كل حاجه؟ ممكن نفكر في الخطوة دي مره كمان؟", () => {
         localStorage.clear();
         renderAllmemory();
-        showToast("تم تنظيف الذاكرة بالكامل! 🧼");
+        showToast("تمام انا كدا نسيت كل حاجه بالكامل! 🧼");
       });
     }
     function exportLocalStorage() {
@@ -7016,7 +7094,7 @@
           location.reload();
         } catch (err) {
           console.error(err);
-          showToast('الملف ضرب يا هندسة أو مش بصيغة JSON سليمة! ⚠️');
+          showToast('الملف ضرب أو مش بصيغة JSON سليمة! ⚠️');
         }
       };
       reader.readAsText(file);
@@ -7680,12 +7758,12 @@
         .filter((f) => f.name);
       if (!fields.length) return showToast("محتاجه حقل واحد على الأقل!");
       const data = JSON.parse(localStorage.getItem("forms") || "[]");
-      if (data.some((x) => x.id === id)) return showToast("الـID مستخدم بالفعل!");
+      if (data.some((x) => x.id === id)) return showToast("الـID مستخدمينه أصلا!");
       data.push({ id, name, fields });
       localStorage.setItem("forms", JSON.stringify(data));
       renderButtons();
       clearBuilder();
-      showToast("تم الحفظ 🎉");
+      showToast("خلاص حفظته 🎉");
     }
     function updateForm() {
       const name = UI.formName.value.trim();
@@ -7704,10 +7782,10 @@
       localStorage.setItem("forms", JSON.stringify(data));
       renderButtons();
       clearBuilder();
-      showToast("قمت بتحديث النموذج");
+      showToast("خلاص انا حدثت النموذج");
     }
     function deleteForm(id) {
-      openSystemConfirm("حذف النموذج", "أحذف النموذج تماماً ؟", () => {
+      openSystemConfirm("نسيان النموذج", "أنسى النموذج تماماً ؟", () => {
         const data = JSON.parse(localStorage.getItem("forms") || "[]").filter(
           (f) => f.id !== id
         );
@@ -7718,7 +7796,7 @@
         closeNav();
         openuser(event, "file_manager");
         document.getElementById('openBtn').style.display = "none";
-        showToast("تم حذف النموذج! 🗑️");
+        showToast("خلاص نسيت النموذج! 🗑️");
       });
     }
     function renderButtons() {
@@ -7757,7 +7835,7 @@
       let analyticsHTML = `
 <div class="flex" class="no-print">
     <select id="calcColumn">
-        <option value="" disabled selected>اختر الحقل للحساب...</option>
+        <option value="" disabled selected>اى هو الحقل للحساب؟...</option>
         ${form.fields.map(f => `<option value="${f.name}">${f.name}</option>`).join("")}
     </select>
     <select id="calcOperation">
@@ -7767,7 +7845,7 @@
         <option value="max">أكبر قيمة (Max)</option>
         <option value="min">أقل قيمة (Min)</option>
     </select>
-    <button onclick="runColumnCalculation('${form.id}')" class="conf-btn">حساب 📊</button>
+    <button onclick="runColumnCalculation('${form.id}')" class="conf-btn">حساب</button>
 </div>
 <div id="calcResultDisplay" style="margin-top: 10px; font-weight: bold; color: var(--text-color);"></div>
 `;
@@ -7799,15 +7877,15 @@ ${analyticsHTML}
             .join("");
           fieldHTML += `<select name="${f.name}" style="width:100%"><option value="">اختيار...</option>${opts}</select>`;
         } else if (f.type === "textarea") {
-          fieldHTML += `<textarea name="${f.name}" placeholder="اكتب ${f.name}..." style="width:100%"></textarea>`;
+          fieldHTML += `<textarea name="${f.name}" placeholder="هنكتب ${f.name}..." style="width:100%"></textarea>`;
         } else {
-          fieldHTML += `<input type="${f.type}" name="${f.name}" placeholder="أدخل ${f.name}..." style="width:100%">`;
+          fieldHTML += `<input type="${f.type}" name="${f.name}" placeholder="هندخل ${f.name}..." style="width:100%">`;
         }
         formEl.insertAdjacentHTML("beforeend", `<div>${fieldHTML}</div>`);
       });
       formEl.insertAdjacentHTML(
         "beforeend",
-        `<button type="submit" style="grid-column: 1 / -1; margin-top:5px; width:100%; background:#007bff; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">+ أضف للجدول</button>`
+        `<button type="submit" style="grid-column: 1 / -1; margin-top:5px; width:100%; background:#007bff; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer;">+ أضافه للجدول</button>`
       );
       formEl.onsubmit = (e) => {
         e.preventDefault();
@@ -7856,7 +7934,7 @@ ${analyticsHTML}
 <td style="text-align:center">
 <button hidden onclick='convertRowToDoc("${form.name}", ${JSON.stringify(data)})'>طباعة</button>
 <button onclick="copyRow(this)" class="conf-btn">نسخ</button>
-<button onclick="deleteRow(this,'${form.id}')" class="red-btn-sec">حذف</button>
+<button onclick="deleteRow(this,'${form.id}')" class="red-btn-sec">نسيان</button>
 </td>
 </tr>`
       );
@@ -7875,7 +7953,7 @@ ${analyticsHTML}
       }
     }
     function deleteRow(btn, fID) {
-      openSystemConfirm("تأكيد الحذف", "حذف هذا السطر؟", () => {
+      openSystemConfirm("تأكيد النسيان", "أنسى السطر دا؟", () => {
         const tr = btn.closest("tr");
         const index = [...tr.parentNode.children].indexOf(tr);
         tr.remove();
@@ -7883,7 +7961,7 @@ ${analyticsHTML}
         const saved = JSON.parse(localStorage.getItem(key) || "[]");
         saved.splice(index, 1);
         localStorage.setItem(key, JSON.stringify(saved));
-        showToast("تم حذف السطر! 🗑️");
+        showToast("خلاص نسيت السطر! 🗑️");
       });
     }
     function copyRow(btn) {
@@ -7976,7 +8054,7 @@ ${analyticsHTML}
       const colName = document.getElementById('calcColumn').value;
       const op = document.getElementById('calcOperation').value;
       const resultDiv = document.getElementById('calcResultDisplay');
-      if (!colName) return showToast("اختر الحقل الأول!");
+      if (!colName) return showToast("لازم نختار الحقل الأول!");
       const data = JSON.parse(localStorage.getItem(`data_${fID}`) || "[]");
       if (!data.length) return resultDiv.textContent = "مفيش بيانات في الجدول للحساب!";
       const values = data.map(row => parseFloat(row[colName])).filter(val => !isNaN(val));
@@ -7985,9 +8063,9 @@ ${analyticsHTML}
       let label = "";
       if (op === "count") {
         result = allValues.length;
-        label = `عدد المدخلات غير الفارغة لـ (${colName})`;
+        label = `عدد المدخلات المليانه لـ (${colName})`;
       } else {
-        if (!values.length) return resultDiv.textContent = `الحقل "${colName}" لا يحتوي على أقسام رقمية لتطبيق (${op})!`;
+        if (!values.length) return resultDiv.textContent = `الحقل "${colName}" مش لاقيه أقسام رقمية لتطبيق (${op})!`;
         if (op === "sum") {
           result = values.reduce((a, b) => a + b, 0);
           label = `مجموع (${colName})`;
@@ -8086,7 +8164,7 @@ ${analyticsHTML}
       refreshCourses();
       updateTotals();
       showManage();
-      showToast("تم إضافة السؤال لـ بنك الأسئلة");
+      showToast("حفظت السؤال في بنك الأسئلة");
     }
     function showManage() {
       if (!UI.manageContent) return;
@@ -8096,7 +8174,7 @@ ${analyticsHTML}
           (q) => `
 <details class="questionsm">
 <summary>
-<button onclick="deleteQuestion('${q.id}')" class="quesdell">حذف</button>
+<button onclick="deleteQuestion('${q.id}')" class="quesdell">نسيان</button>
 <strong>${q.question}</strong>
 </summary>
 <div style="padding:10px; border:var(--dborder); margin-top:5px;">
@@ -8111,13 +8189,13 @@ ${analyticsHTML}
         .join("");
     }
     function deleteQuestion(id) {
-      openSystemConfirm("حذف سؤال", "أكيد أحذف السؤال دا ؟", () => {
+      openSystemConfirm("نسبان سؤال", "أكيد أنسى السؤال دا ؟", () => {
         const filtered = loadQuestions().filter((q) => q.id !== id);
         saveQuestions(filtered);
         showManage();
         updateTotals();
         refreshCourses();
-        showToast("تم حذف السؤال بنجاح! 🗑️");
+        showToast("تمام نسيت السؤال بنجاح! 🗑️");
       });
     }
     function startExam() {
@@ -8144,7 +8222,7 @@ ${analyticsHTML}
             )
             .join("");
         } else {
-          inputHtml = `<input type="text" id="manualInput${i}" class="exam-input" placeholder="اكتب إجابتك هنا...">`;
+          inputHtml = `<input type="text" id="manualInput${i}" class="exam-input" placeholder="هنكتب إجابتك هنا...">`;
         }
         UI.examContent.innerHTML += `
 <div class="exam-q-box" id="box${i}" style="margin-bottom:20px; padding:15px; border-right:4px solid #607d8b; background:#f9f9f9;">
@@ -8189,7 +8267,7 @@ ${analyticsHTML}
       feedbackDiv.innerHTML = `
 <strong>${isCorrect ? "✅ إجابة صحيحة!" : "❌ للأسف غلط!"}</strong><br>
 <span>الإجابة الصحيحة هي: <b style="color:green">${correct}</b></span><br>
-<p style="margin-top:5px; font-style:italic; font-size:0.9em;">💡 الشرح: ${explanation || "لا يوجد شرح متوفر."
+<p style="margin-top:5px; font-style:italic; font-size:0.9em;">💡 الشرح: ${explanation || "مفيش شرح متوفر."
         }</p>
 `;
       if (hasOptions)
@@ -8218,7 +8296,7 @@ ${analyticsHTML}
               refreshCourses();
               updateTotals();
               showManage();
-              showToast("تم استيراد بنك الأسئلة بنجاح! 📂");
+              showToast("إستلمت بنك الأسئلة بنجاح! 📂");
             } catch (err) {
               showToast("الملف ده مش مظبوط!");
             }
@@ -8248,12 +8326,12 @@ ${analyticsHTML}
       let section = getSection(t, "ضغط").join(" ");
       return [...section.matchAll(/(\d{2,3})\s*\/\s*(\d{2,3})/g)].map(m => [m[1], m[2]]);
     };
-    const pulseEval = (b) => (b < 60 ? "منخفض" : b <= 100 ? "طبيعي" : "مرتفع");
+    const pulseEval = (b) => (b < 60 ? "واطي" : b <= 100 ? "طبيعي" : "عالي");
     const sugarEval = (s) => s < 70 ? "واطي (حاجه مسكره بسرعه!)" : s <= 99 ? "فل الفل (لو لسه بدون اكل)" : s <= 140 ? "تمام (طبيعي كمان لو بعد لقمة حلوة)" : s <= 199 ? "عالي شوية (لازم نخف الحوادق والنشويات ونشرب قرفه او جنزبيل)" : "خطر (لازم نكلم الدكتور فوراً!)";
-    const tempEval = (t) => (t < 35.5 ? "منخفض" : t <= 37.5 ? "طبيعي" : t <= 38.5 ? "مرتفع قليلًا" : "مرتفع");
-    const oxEval = (o) => (o >= 95 ? "طبيعي" : o >= 90 ? "منخفض قليلًا" : "منخفض");
-    const respEval = (r) => (r < 12 ? "منخفض" : r <= 20 ? "طبيعي" : "مرتفع");
-    const bpEval = (s, d) => (s >= 180 || d >= 120 ? "شديد الارتفاع" : s > 140 || d > 90 ? "مرتفع" : s > 120 || d > 80 ? "مرتفع قليلًا" : s >= 90 && d >= 60 ? "طبيعي" : "منخفض");
+    const tempEval = (t) => (t < 35.5 ? "واطي" : t <= 37.5 ? "طبيعي" : t <= 38.5 ? "عالي شوية" : "عالي");
+    const oxEval = (o) => (o >= 95 ? "طبيعي" : o >= 90 ? "واطي شوية" : "واطي");
+    const respEval = (r) => (r < 12 ? "واطي" : r <= 20 ? "طبيعي" : "عالي");
+    const bpEval = (s, d) => (s >= 180 || d >= 120 ? "عالي أول " : s > 140 || d > 90 ? "عالي" : s > 120 || d > 80 ? "عالي شوية" : s >= 90 && d >= 60 ? "طبيعي" : "واطي");
     window.delayedAnalyze = function () {
       try {
         let text = UI.myInput.value;
@@ -8282,7 +8360,7 @@ ${analyticsHTML}
           out.push(`BMI: ${bmi}`);
         }
         if (out.length > 0) {
-          let finalHtml = `<div class="result-item" style="border-top:var(--cborder); margin-top:10px; padding: var(--spacepadd);"><b>نتائج التحليل الطبي:</b><br>${out.join("<br>")}</div>`;
+          let finalHtml = `<div class="result-item" style="padding: var(--spacepadd);"><b>بالنسبه للقياسات الطبية</b><br>${out.join("<br>")}</div>`;
           UI.replay.insertAdjacentHTML("beforeend", finalHtml);
         }
       } catch (err) {
@@ -8293,32 +8371,12 @@ ${analyticsHTML}
   //معالجه النصوص لتنظيفها للنظام
   {
     function normalizeDate(proctext) {
-      const monthsMap = {
-        يناير: "01",
-        فبراير: "02",
-        مارس: "03",
-        ابريل: "04",
-        مايو: "05",
-        يونيو: "06",
-        يوليو: "07",
-        اغسطس: "08",
-        سبتمبر: "09",
-        اكتوبر: "10",
-        نوفمبر: "11",
-        ديسمبر: "12"
-      };
+      const monthsMap={ يناير: "01", فبراير: "02", مارس: "03", ابريل: "04", مايو: "05", يونيو: "06", يوليو: "07", اغسطس: "08", سبتمبر: "09", اكتوبر: "10", نوفمبر: "11", ديسمبر: "12"};
       proctext = proctext.replace(/[٠-٩۰-۹]/g, (d) =>
         "0123456789".charAt("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷٨٩".indexOf(d))
       );
       const pattern = /(\d{1,2})\s*(يناير|فبراير|مارس|ابريل|مايو|يونيو|يوليو|اغسطس|سبتمبر|اكتوبر|نوفمبر|ديسمبر)\s*(\d{4})?/gi;
-      return proctext.replace(
-        pattern,
-        (m, d, mName, y) =>
-          `${y || new Date().getFullYear()}/${monthsMap[mName]}/${d.padStart(
-            2,
-            "0"
-          )}`
-      );
+      return proctext.replace( pattern, (m, d, mName, y)=>`${y || new Date().getFullYear()}/${monthsMap[mName]}/${d.padStart( 2, "0" )}` );
     }
     function TextProcessing() {
       let proctext = UI.editor.value;
@@ -8456,7 +8514,7 @@ ${analyticsHTML}
         const count = data[p.name].matches.length;
         return `<span class="word-tag" onclick="switchTab('dataextraction')"><strong>${p.name}:</strong> ${count}<span>`;
       }).join(' | ');
-      total.innerHTML += `<details>
+      total.innerHTML += `<details style='min-width:220px;'>
   <summary>لقيت (${totalMatches}) عنصر في (${activePatterns.length}) نوع:</summary>
   <div style="overflow:auto;white-space:nowrap;padding:5px;"> ${summaryDetails} </div>
 </details>`;
@@ -8502,7 +8560,7 @@ ${analyticsHTML}
       if (type === "link") {
         actionBtn = `<button class="action-btn link" onclick="window.open('${content}', '_blank')">🔗 فتح الرابط</button>`;
       } else if (type === "email") {
-        actionBtn = `<button class="action-btn" onclick="location.href='mailto:${content}'">✉️ إرسال إيميل</button>`;
+        actionBtn = `<button class="action-btn" onclick="location.href='mailto:${content}'">✉️ إيميل</button>`;
       } else if (type === "phone") {
         const phone = content.replace(/\s/g, "");
         actionBtn = `<button class="action-btn phone" onclick="location.href='tel:${phone}'">📞 اتصال</button>`;
@@ -8587,12 +8645,12 @@ ${analyticsHTML}
       showToast("إتعلمت القانون الجديد");
     }
     function delLaw(i) {
-      openSystemConfirm("تأكيد الحذف", "حذف؟", () => {
+      openSystemConfirm("تأكيد النسيان", "أنسى؟", () => {
         laws.splice(i, 1);
         saveAll();
         renderChips();
         lawsradarSearch();
-        showToast("تم الحذف! 🗑️");
+        showToast("تمام نسيت 🗑️");
       });
     }
     function derive(f) {
@@ -8626,15 +8684,7 @@ ${analyticsHTML}
       return [];
     }
     const toText = (t) => t.map((x) => idW[x] || x).join(" ");
-    function renderChips() {
-      UI.chipsBox.innerHTML = laws
-        .map(
-          (l, i) => `
-<div class="lawchip" ondblclick="delLaw(${i})">${toText(l)}</div>
-`
-        )
-        .join("");
-    }
+    function renderChips(){ UI.chipsBox.innerHTML=laws .map( (l, i)=>`<div class="lawchip" ondblclick="delLaw(${i})">${toText(l)}</div>` ) .join("");}
     function lawsradarSearch() {
       let txt = UI.myInput.value.trim();
       let out = UI.replay;
@@ -8649,12 +8699,7 @@ ${analyticsHTML}
       laws.forEach((f) => {
         let matches = foundIds.filter((id) => f.includes(id));
         if (matches.length >= 2) {
-          let d = derive(f)
-            .map(
-              (x) =>
-                `<span class="derive-txt" onclick="opentab('Lawsepector');parseFormula(this)">↩ اشتقاق: ${toText(x)}</span>`
-            )
-            .join("");
+          let d = derive(f) .map( (x)=>`<span class="derive-txt" onclick="opentab('Lawsepector');parseFormula(this)">↩ اشتقاق: ${toText(x)}</span>` ) .join("");
           out.innerHTML += `<details class="res-card"><summary class="lawget">📌 لقيت قانون: ${toText(f)}</summary><span class="derive-txt" onclick="opentab('Lawsepector');parseFormula(this)">↩ اشتقاق: ${toText(f)}</span> ${d}</details>`;
         }
       });
@@ -8662,13 +8707,7 @@ ${analyticsHTML}
   }
   //تحديد الجمل الهامه
   {
-    const impkeywords = [
-      "خلاصه", "باختصار", "بالتالي", "لذلك", "نتيجه", "مهم", "رئيسي", "جوهري", "اساسي", "اولويه",
-      "نسعي", "نهدف", "مستقبل", "يجب", "ضروري", "اهم", "دراسه", "بحث", "علم", "تعلم",
-      "فكره", "تطوير", "نجاح", "هدف", "خطه", "استراتيجيه", "تنفيذ", "اداء", "عمل", "مبادره",
-      "صحه", "غذاء", "نظام", "رياضه", "بدن", "حياه", "توازن", "طاقه", "راحه", "عقل",
-      "وعي", "تغيير", "فرصه", "تحدي", "قيمه", "تاثير", "نمو", "استمرار", "دعم", "حل"
-    ];
+    const impkeywords=[ "خلاصه", "باختصار", "بالتالي", "لذلك", "نتيجه", "مهم", "رئيسي", "جوهري", "اساسي", "اولويه", "نسعي", "نهدف", "مستقبل", "يجب", "ضروري", "اهم", "دراسه", "بحث", "علم", "تعلم", "فكره", "تطوير", "نجاح", "هدف", "خطه", "استراتيجيه", "تنفيذ", "اداء", "عمل", "مبادره", "صحه", "غذاء", "نظام", "رياضه", "بدن", "حياه", "توازن", "طاقه", "راحه", "عقل", "وعي", "تغيير", "فرصه", "تحدي", "قيمه", "تاثير", "نمو", "استمرار", "دعم", "حل" ];
     let isFocusMode = false;
     function processText() {
       const input = UI.editor.value.trim();
@@ -8756,7 +8795,7 @@ ${analyticsHTML}
       if (!name) return;
       currentProj = name;
       UI.richeditor.innerText = "";
-      UI.activeprojname.innerText = "المشروع: " + name;
+      UI.activeprojname.innerText = "المستند: " + name;
       localStorage.setItem("founder_" + name, "");
       UI.newprojinput.value = "";
       loadProjects();
@@ -8778,18 +8817,18 @@ ${analyticsHTML}
     function openProj(name) {
       currentProj = name;
       UI.richeditor.innerText = localStorage.getItem("founder_" + name);
-      UI.activeprojname.innerText = "المشروع: " + name;
+      UI.activeprojname.innerText = "المستند: " + name;
       autoSaveAndRender();
     }
     function deleteCurrentProj() {
       if (!currentProj) return;
-      openSystemConfirm("حذف المشروع", `هل أنسى مشروع "${currentProj}" نهائياً؟`, () => {
+      openSystemConfirm("نسيان المستند", `هل أنسى مستند "${currentProj}" نهائياً؟`, () => {
         localStorage.removeItem("founder_" + currentProj);
         currentProj = "";
         UI.richeditor.innerText = "";
-        UI.activeprojname.innerText = "مفيش مشروع مفتوح";
+        UI.activeprojname.innerText = "مفيش مستند مفتوح";
         loadProjects();
-        showToast("تم مسح المشروع من الذاكرة! 🗑️");
+        showToast("خلاص نسيت المستند 🗑️");
       });
     }
     function loadProjects() {
@@ -8805,7 +8844,7 @@ ${analyticsHTML}
       });
     }
     function downloadFile() {
-      if (!currentProj) return showToast("لازم نفتح مشروع الأول!");
+      if (!currentProj) return showToast("لازم نفتح مستند الأول!");
       const content = UI.richeditor.innerText;
       const blob = new Blob([content], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
@@ -8833,7 +8872,7 @@ ${analyticsHTML}
     const recordings = [];
     const rPRButton = document.getElementById("recordPauseResumeButton");
     const initialInstruction =
-      '<span id="instructionText" style="font-size: 10px; color: #777;">ضغطة للبدء، مرتين للإيقاف.</span>';
+      '<span id="instructionText" style="font-size: 10px; color: #777;">ضغطة للبدء، ضغطتين علشان أوقف.</span>';
     const recordingsList = document.getElementById("recordingsList");
     function formatrecTime(seconds) {
       const minutes = Math.floor(seconds / 60);
@@ -8854,13 +8893,7 @@ ${analyticsHTML}
       if (noRecordingsItem) {
         noRecordingsItem.remove();
       }
-      const newRecordingHTML = `
-<div class="container" style="padding:0;">
-<div class="name" style="padding:0;">
-<audio controls src="${audioUrl}"></audio>
-</div>
-<div class="type upload" style="margin:5px;">${recordingName}</div>
-</div>`;
+      const newRecordingHTML=`<div class="container" style="padding:0;"><div class="name" style="padding:0;"><audio controls src="${audioUrl}"></audio></div><div class="type upload" style="margin:5px;">${recordingName}</div></div>`;
       recordingsList.insertAdjacentHTML("afterbegin", newRecordingHTML);
     }
     async function startRecording() {
@@ -8940,7 +8973,7 @@ ${analyticsHTML}
       lines.forEach((line, index) => {
         const lineNum = index + 1;
         if (/\bvar\b/.test(line)) {
-          errors.push(`سطر ${lineNum}: بلاش var.. خليك مودرن واستخدم let أو const!`);
+          errors.push(`سطر ${lineNum}: بلاش var.. خلينا مودرن ونستخدم let أو const!`);
         }
         openBraces += (line.match(/{/g) || []).length;
         closeBraces += (line.match(/}/g) || []).length;
@@ -9107,7 +9140,7 @@ ${analyticsHTML}
         }
       });
       if (!foundAny) {
-        reportText += "فحص نظيف: لم يتم العثور على أي أنماط مشبوهة.";
+        reportText += "فحص نظيف: ملقتش أي أنماط مشبوهة.";
       }
       reportOutput.value = reportText;
     }
@@ -9138,13 +9171,13 @@ ${analyticsHTML}
       if (!title) return showToast("لازم نكتب عنوان للمهمة الأول!");
       if (type === "timer") {
         const mins = parseFloat(document.getElementById("durationInput").value);
-        if (!mins || mins <= 0) return showToast("حدد المدة بالدقائق!");
+        if (!mins || mins <= 0) return showToast("تحديد المدة بالدقائق!");
         targetTime = Date.now() + (mins * 60 * 1000);
       } else {
         const dateVal = document.getElementById("dateInput").value;
-        if (!dateVal) return showToast("حدد التاريخ والوقت!");
+        if (!dateVal) return showToast("تحديد التاريخ والوقت!");
         targetTime = new Date(dateVal).getTime();
-        if (targetTime <= Date.now()) return showToast("التاريخ ده في الماضي!");
+        if (targetTime <= Date.now()) return showToast("التاريخ ده حصل خلاص!");
       }
       items.push({
         id: Date.now() + Math.floor(Math.random() * 1000),
@@ -9386,7 +9419,7 @@ ${analyticsHTML}
       } else if (data.includes("pdf")) {
         displayDiv.innerHTML = `<embed src="${data}" width="100%" height="500px">`;
       } else {
-        displayDiv.innerHTML = `<p style="word-break: break-all; color: #888;">تم تحديث الكود المعالج بنجاح ✅</p>`;
+        displayDiv.innerHTML = `<p style="word-break: break-all; color: #888;">قمت بتحديث الكود المعالج بنجاح ✅</p>`;
       }
     }
   }
@@ -9418,7 +9451,7 @@ ${analyticsHTML}
     };
     const renderHistory = (history) => {
       if (!history || history.length === 0) {
-        historyList.innerHTML = '<p style="color:#666; text-align:center; font-size:0.8rem;">لا توجد سجلات. أضف أول سجل الآن!</p>';
+        historyList.innerHTML = '<p style="color:#666; text-align:center; font-size:0.8rem;">مفيش سجلات. يلا نضيف أول سجل دلوقتي!</p>';
         return;
       }
       historyList.innerHTML = history.map((item, index) => `
@@ -9500,11 +9533,7 @@ ${analyticsHTML}
     };
     loadData();
     function checkPainwords() {
-      const painKeywords = [
-        "صداع", "مغص", "وجع", "الم", "حراره", "سعال", "زكام",
-        "دوخه", "خمول", "ارهاق", "حساسيه", "حكه", "تورم",
-        "غثيان", "اسهال", "امساك", "عطس", "ضيق تنفس", "تعب", "رعشه"
-      ];
+      const painKeywords=[ "صداع", "مغص", "وجع", "الم", "حراره", "سعال", "زكام", "دوخه", "خمول", "ارهاق", "حساسيه", "حكه", "تورم", "غثيان", "اسهال", "امساك", "عطس", "ضيق تنفس", "تعب", "رعشه" ];
       const input2 = document.getElementById("myInput").value.toLowerCase();
       if (painKeywords.some(keyword => input2.includes(keyword))) {
         showAndMove('checkpain');
@@ -9551,7 +9580,7 @@ ${analyticsHTML}
     function handleSort() {
       let input = document.getElementById("myInput").value;
       let type = document.getElementById("sortTypeSelect").value;
-      if (!input) return showToast("دخل بيانات يا هندسة! 😉");
+      if (!input) return showToast("لازم ندخل بيانات الاول ! 😉");
       let data = input.split(/[|,\-،\s]+/).filter(w => w.length > 0).map((item) => {
         return {
           val: item.trim(),
@@ -9613,7 +9642,7 @@ ${analyticsHTML}
             "battery-info"
           ).innerHTML = `<span>البطارية: </span>${(battery.level * 100).toFixed(
             0
-          )}% </span>${battery.charging ? "يشحن" : "لا يشحن"}`;
+          )}% </span>${battery.charging ? "يشحن" : "مش بيشحن"}`;
         };
         update();
         battery.onlevelchange = update;
@@ -9624,24 +9653,13 @@ ${analyticsHTML}
     function loadpagetime() {
       const loadTime = ((performance.now() - startTime) / 1000).toFixed(3);
       document.getElementById("loadtime").innerHTML =
-        "<b>سرعة تحميل الصفحة: </b>" + loadTime + " ثانية";
+        "<b>سرعة تحميل النظام: </b>" + loadTime + " ثانية";
     }
   }
   //الذاكره الكلاميه الدائمه والمؤقته
   {
     const KEY = "userMessages";
-    const IMPORTANCE = [
-      "هام", "ضروري", "عاجل", "اولويه", "مهم", "تنبيه", "فوري", "خطر", "اساسي", "تحذير",
-      "حفظ", "سجل", "ذكر", "تذكر", "ملاحظه", "احتفاظ", "ارشفه", "موعد", "مناسبه", "عيد",
-      "ميلاد", "زفاف", "خطوبه", "ذكرى", "احتفال", "اجتماع", "لقاء", "مقابله", "عمل", "مشروع",
-      "فكره", "خطة", "هدف", "انجاز", "شخصي", "عائله", "صديق", "اهل", "نصيحه", "تحفيز",
-      "قراءه", "كتاب", "دراسه", "بحث", "امتحان", "شهاده", "تخرج", "تطوير", "مهاره", "تعلم",
-      "مال", "دفع", "شراء", "سعر", "ميزانيه", "بنك", "رصيد", "حساب", "ديون", "ادخار",
-      "صحه", "طبيب", "دواء", "علاج", "فحص", "تحليل", "نوم", "راحه", "غذاء", "وزن",
-      "سفر", "تذكره", "حقيبه", "جواز", "تأشيره", "فندق", "مطار", "وصول", "مغادره", "حجز",
-      "بيت", "صيانه", "اصلاح", "شراء", "ادوات", "مطبخ", "غرفه", "اثاث", "كهرباء", "انترنت",
-      "سر", "خاص", "مهم", "جوهري", "رئيسي", "مستقبل", "حياه", "عقل", "قلب", "انتباه"
-    ];
+    const IMPORTANCE=[ "هام", "ضروري", "عاجل", "اولويه", "مهم", "تنبيه", "فوري", "خطر", "اساسي", "تحذير", "حفظ", "سجل", "ذكر", "تذكر", "ملاحظه", "احتفاظ", "ارشفه", "موعد", "مناسبه", "عيد", "ميلاد", "زفاف", "خطوبه", "ذكرى", "احتفال", "اجتماع", "لقاء", "مقابله", "عمل", "مشروع", "فكره", "خطة", "هدف", "انجاز", "شخصي", "عائله", "صديق", "اهل", "نصيحه", "تحفيز", "قراءه", "كتاب", "دراسه", "بحث", "امتحان", "شهاده", "تخرج", "تطوير", "مهاره", "تعلم", "مال", "دفع", "شراء", "سعر", "ميزانيه", "بنك", "رصيد", "حساب", "ديون", "ادخار", "صحه", "طبيب", "دواء", "علاج", "فحص", "تحليل", "نوم", "راحه", "غذاء", "وزن", "سفر", "تذكره", "حقيبه", "جواز", "تأشيره", "فندق", "مطار", "وصول", "مغادره", "حجز", "بيت", "صيانه", "اصلاح", "شراء", "ادوات", "مطبخ", "غرفه", "اثاث", "كهرباء", "انترنت", "سر", "خاص", "مهم", "جوهري", "رئيسي", "مستقبل", "حياه", "عقل", "قلب", "انتباه" ];
     let sessionStream = [];
     const input2 = document.getElementById("editor");
     const memory = document.getElementById("memoryContent");
@@ -9760,7 +9778,7 @@ ${analyticsHTML}
       }
       const count = results.length;
       if (count === 0) {
-        summaryDiv.innerHTML = `🔍 مش لاقي حاجة عن "<strong>${query}</strong>"`;
+        summaryDiv.innerHTML = `🔍 مش فاكرة حاجة عن "<strong>${query}</strong>"`;
         summaryDiv.style.display = 'none';
         return;
       }
@@ -9921,11 +9939,11 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
     };
     const handleForget = () => {
       if (!currentId) return;
-      openSystemConfirm("مسح الذكرى", "أكيد تمسح الذكرى دي؟", () => {
+      openSystemConfirm("نسيان الذكرى", "أكيد أنسى الذكرى دي؟", () => {
         const remaining = getMessages().filter((m) => m.id != currentId);
         localStorage.setItem(KEY, JSON.stringify(remaining));
         performSearch("");
-        showToast("تم نسيان الذكرى بنجاح! 🧠✨");
+        showToast("خلاص.. نسيت الذكرى دي! 🧠✨");
       });
     };
     forget.addEventListener("click", handleForget);
@@ -9946,11 +9964,11 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       localStorage.setItem("fajr_patterns", JSON.stringify(chatpatterns));
     }
     function clearMemoryAll() {
-      openSystemConfirm("حذف الذاكرة", "هل أنت متأكد من حذف الذاكرة بالكامل؟", () => {
+      openSystemConfirm("نسيان الذاكرة", "هل أكيد لازم أنسي الذاكرة بالكامل؟", () => {
         localStorage.removeItem("fajr_patterns");
         chatpatterns = {};
         renderMemory();
-        showToast("🧹 تم حذف الذاكرة بالكامل!");
+        showToast("🧹 خلاص نسيت الذاكرة بالكامل!");
       });
     }
     function normalize(text) {
@@ -10069,11 +10087,11 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
             });
           }
           savePatterns();
-          showToast("✅ تم استيراد الأنماط من JSON بنجاح!");
+          showToast("✅ خلاص تم استيراد الأنماط من JSON بنجاح!");
           return;
         }
       } catch (e) {
-        console.warn("مش JSON، بنحاول بصيغة تانية...");
+        console.warn("مش JSON، بحاول بصيغة تانية...");
       }
       try {
         if (/^[A-Za-z0-9+/=]+$/.test(text)) {
@@ -10100,12 +10118,12 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       });
       savePatterns();
       renderMemory();
-      showToast("✅ تم استيراد الأنماط بصيغة Markdown بنجاح!");
+      showToast("✅ خلاص تم استيراد الأنماط بصيغة Markdown بنجاح!");
     }
     function importlearnData() {
       importTraining(UI.trainingInput.value);
       UI.trainingInput.value = "";
-      showToast("✅ تم استيراد الأنماط بنجاح!");
+      showToast("✅ خلاص تم استيراد الأنماط بنجاح!");
     }
     function exportlearnData() {
       const data = JSON.stringify(chatpatterns, null, 2);
@@ -10152,41 +10170,19 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
         showToast("✅ تم حفظ التعديل!");
       };
       window.handleDelete = (key, i) => {
-        openSystemConfirm("تأكيد", "تحذف الرد ده؟", () => {
+        openSystemConfirm("تأكيد", "تنسيان الرد ده؟", () => {
           chatpatterns[key].splice(i, 1);
           if (chatpatterns[key].length === 0) delete chatpatterns[key];
           savePatterns();
           renderMemory();
-          showToast("تم حذف الرد! 🗑️");
+          showToast("تم نسيان الرد! 🗑️");
         });
       };
     }
   }
   //مساعد إعرابي
   {
-    const particles = [
-      "من",
-      "إلى",
-      "في",
-      "على",
-      "عن",
-      "ب",
-      "ل",
-      "ك",
-      "يا",
-      "سوف",
-      "س",
-      "قد",
-      "أن",
-      "لن",
-      "كي",
-      "حتى",
-      "لم",
-      "لما",
-      "لا",
-      "و",
-      "ف"
-    ];
+    const particles=[ "من", "إلى", "في", "على", "عن", "ب", "ل", "ك", "يا", "سوف", "س", "قد", "أن", "لن", "كي", "حتى", "لم", "لما", "لا", "و", "ف" ];
     function superAnalyze() {
       const input = document.getElementById("myInput").value;
       const arabicRegex = /[\u0600-\u06FF]/;
@@ -10195,21 +10191,9 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       if (!arabicRegex.test(input) || !hasIntent) { return; }
       const words = input.split(/\s+/).filter((w) => w.length > 0);
       const groups = {
-        "الحروف والأدوات": {
-          words: [],
-          reminder:
-            "⚠️ <b>القاعدة:</b> الحروف كلمات لا يظهر معناها إلا مع غيرها. تذكر أن حروف الجر (من، إلى...) تجر الأسماء، وأدوات النصب (أن، لن...) تنصب المضارع، وأدوات الجزم (لم، لا الناهية) تجزمه."
-        },
-        الأفعال: {
-          words: [],
-          reminder:
-            "⚠️ <b>القاعدة:</b> الفعل يدل على حدث وزمن. الماضي بيبني على الفتح (غالباً)، والمضارع بيبدأ بـ (أ، ي، ت، ن) ومرفوع بالضمة مالم يسبقه ناصب أو جازم، والأمر بيدل على الطلب ومبني على السكون."
-        },
-        الأسماء: {
-          words: [],
-          reminder:
-            "⚠️ <b>القاعدة:</b> الاسم يقبل (الـ) التعريف، التنوين، التاء المربوطة، ويقع بعد حروف الجر أو النداء. الأسماء هي ركيزة الجملة الاسمية (مبتدأ وخبر) أو ركيزة الجملة الفعلية (فاعل ومفعول)."
-        }
+        "الحروف والأدوات":{ words: [], reminder: "⚠️ <b>القاعدة:</b>الحروف كلمات لا يظهر معناها إلا مع غيرها. تذكر أن حروف الجر (من، إلى...) تجر الأسماء، وأدوات النصب (أن، لن...) تنصب المضارع، وأدوات الجزم (لم، لا الناهية) تجزمه."},
+        الأفعال:{ words: [], reminder: "⚠️ <b>القاعدة:</b>الفعل يدل على حدث وزمن. الماضي بيبني على الفتح (غالباً)، والمضارع بيبدأ بـ (أ، ي، ت، ن) ومرفوع بالضمة مالم يسبقه ناصب أو جازم، والأمر بيدل على الطلب ومبني على السكون."},
+        الأسماء:{ words: [], reminder: "⚠️ <b>القاعدة:</b>الاسم يقبل (الـ) التعريف، التنوين، التاء المربوطة، ويقع بعد حروف الجر أو النداء. الأسماء هي ركيزة الجملة الاسمية (مبتدأ وخبر) أو ركيزة الجملة الفعلية (فاعل ومفعول)."}
       };
       words.forEach((word) => {
         let clean = word.replace(/[.,؟!:;،"()]/g, "").trim();
@@ -10272,39 +10256,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
     const synth = window.speechSynthesis;
     function convertToPhonetic(arabic) {
       let text = arabic;
-      const chars = {
-        ب: "b",
-        ت: "t",
-        ث: "th",
-        ج: "j",
-        ح: "hh",
-        خ: "kh",
-        د: "d",
-        ذ: "z",
-        ر: "r",
-        ز: "z",
-        س: "s",
-        ش: "sh",
-        ص: "ss",
-        ض: "d",
-        ط: "t",
-        ظ: "z",
-        ع: "aa",
-        غ: "gh",
-        ف: "f",
-        ق: "q",
-        ك: "k",
-        ل: "l",
-        م: "m",
-        ن: "n",
-        ه: "h",
-        و: "oo",
-        ي: "ee",
-        أ: "a",
-        ا: "a",
-        إ: "e",
-        ة: "h"
-      };
+      const chars={ ب: "b", ت: "t", ث: "th", ج: "j", ح: "hh", خ: "kh", د: "d", ذ: "z", ر: "r", ز: "z", س: "s", ش: "sh", ص: "ss", ض: "d", ط: "t", ظ: "z", ع: "aa", غ: "gh", ف: "f", ق: "q", ك: "k", ل: "l", م: "m", ن: "n", ه: "h", و: "oo", ي: "ee", أ: "a", ا: "a", إ: "e", ة: "h"};
       Object.keys(chars).forEach((ar) => {
         const en = chars[ar];
         text = text
@@ -10336,7 +10288,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
         utter.volume = 0.7;
         synth.speak(utter);
       } else {
-        console.warn("مفيش نص عشان أنطقه! 🤫");
+        console.warn("مفيش كلام عشان أنطقه! 🤫");
       }
     }
   }
@@ -10388,7 +10340,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
     }
     function clearmarcovMemory() {
       openSystemConfirm(
-        "مسح ذاكرة التدريب",
+        "نسيان التدريب",
         "لحظة! أنا كدا هنسى كل تدريبنا اللي عملناه لحد دلوقتي. أكيد أنسى؟",
         () => {
           localStorage.removeItem(STORAGE_KEY);
@@ -10397,7 +10349,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
           outputArea.innerHTML = `<p style="color: #f44336;">أنا نسيت كل تدريبنا، يلا نبدأ من جديد</p>`;
           stopGeneration();
           updateStatus();
-          showToast("تم مسح الذاكرة بالكامل! 🧹");
+          showToast("نسيت التدريب بالكامل! 🧹");
         }
       );
     }
@@ -10432,7 +10384,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
     function trainAndClearInput() {
       const msg = trainingInput.value.trim();
       if (msg.length < 10) {
-        showToast("ممكن تخلي كلامك أطول شوية؟ ١٠ حروف علشان أقدر أتعلم كويس! 😉");
+        showToast("ممكن تخلي كلامك أطول شوية؟ ١٠ حروف على الاقل علشان أقدر أتعلم كويس! 😉");
         return;
       }
       train(msg);
@@ -10568,18 +10520,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       "وحدة": ["وحد", "وحيد", "انعزال", "بعد", "لوحدي", "منعزل", "محدش جنبي", "مهجور", "مُهمل"],
       "شهوة": sensitiveRoots
     };
-    const emotionColors = {
-      "حب": "#ffe5a9",
-      "سعادة": "#b3f7d3",
-      "مفاجأة": "#b3ecff",
-      "حزن": "#9fb8ff",
-      "غضب": "#e1bee7",
-      "خوف": "#ffcdd2",
-      "كتمان": "#e0e0e0",
-      "ارتباك": "#fff9c4",
-      "وحدة": "#cfd8dc",
-      "شهوة": "#f8bbd0"
-    };
+    const emotionColors={ "حب": "#ffe5a9", "سعادة": "#b3f7d3", "مفاجأة": "#b3ecff", "حزن": "#9fb8ff", "غضب": "#e1bee7", "خوف": "#ffcdd2", "كتمان": "#e0e0e0", "ارتباك": "#fff9c4", "وحدة": "#cfd8dc", "شهوة": "#f8bbd0"};
     function detectEmotions(text) {
       const words = new Set(text.split(/\s+/));
       return Object.entries(emotionMap).flatMap(([emo, roots]) =>
@@ -10698,11 +10639,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     }
     function deletetreeNode(lineIndex, e) {
       e.stopPropagation();
-      openSystemConfirm("حذف فرع", "حذف هذا الفرع؟", () => {
+      openSystemConfirm("نسيان فرع", "نسيان الفرع دا؟", () => {
         linesArray.splice(lineIndex, 1);
         document.getElementById("treetextInput").value = linesArray.join("\n");
         generate();
-        showToast("تم حذف الفرع! 🌳");
+        showToast("تمام نسيت الفرع! 🌳");
       });
     }
     function handleNodeClick(el, e) {
@@ -10965,7 +10906,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       navigator.clipboard
         .writeText(textToCopy)
         .then(() => {
-          showToast("تم نسخ ناتج التشفير", false);
+          showToast("نسخت ناتج التشفير", false);
         })
         .catch((err) => {
           showToast("فشل النسخ", true);
@@ -10996,6 +10937,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       ],
       "!": [
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
+        { n: "تنزيل فَجر", d: "حفظ نسخه على جهازك", run: "downloadDawnOS()"},
         { n: "جولة شرح", d: "شرح مبسط لأهم استخداماتي", run: "startTour()" },
         { n: "استعاده ذاكرتي", d: "استعاده عن طريق ملف الذاكره", run: " document.getElementById('importmemoryFile').click()" },
         { n: "ميتا فجر", d: "إنشاء وصف صفحه الويب", run: "opentab('DawnMeta')" },
@@ -11209,7 +11151,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     }
     function savetone() {
-      openSystemPrompt("حفظ الرنة", "اكتب اسم الرنة هنا...", (n) => {
+      openSystemPrompt("حفظ الرنة", "لازم نكتب اسم الرنة هنا...", (n) => {
         if (!n) return;
         songs.push({
           id: Date.now(),
@@ -11220,7 +11162,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         });
         localStorage.setItem("my_songs", JSON.stringify(songs));
         tonerender();
-        showToast("تم حفظ الرنة بنجاح! 🎵");
+        showToast("خلاص حفظت الرنة بنجاح! 🎵");
       });
     }
     function tonerender() {
@@ -11249,11 +11191,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       });
     }
     function del() {
-      openSystemConfirm("تأكيد", "حذف؟", () => {
+      openSystemConfirm("تأكيد", "نسيان؟", () => {
         songs = songs.filter((s) => s.id !== selId);
         localStorage.setItem("my_songs", JSON.stringify(songs));
         clearG();
-        showToast("تم حذف الرنة بنجاح! 🎵");
+        showToast("تمام، نسيت الرنة بنجاح! 🎵");
       });
     }
     init();
@@ -11681,11 +11623,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       isPlaying = false;
       clearInterval(timerInterval);
       if (reason === "WIN") {
-        showToast("🎯 أداء ملكي! ضغطت بالظبط.");
+        showToast("🎯 أداء ملكي! الضفط بالظبط.");
       } else if (reason === "OVER") {
-        showToast("💥 خسرت! زدت ضغطة عن المطلوب.. اللعنة أصابتك.");
+        showToast("💥 خسارة! زادت ضغطة عن المطلوب.. اللعنة ضربتك.");
       } else {
-        showToast(`⌛ خلص الوقت! عملت ${current} من أصل ${target}.`);
+        showToast(`⌛ خلص الوقت! عملنا ${current} من أصل ${target}.`);
       }
       setupGame();
     }
@@ -11717,7 +11659,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         currentTarget++;
         updateTargetDisplay();
         if (currentTarget > 9) {
-          showToast("عبقري! رتبت الأحجار بنجاح.");
+          showToast("تحفة! الأحجار اترتبت بنجاح.");
           startarrngeGame();
         }
       } else {
@@ -12032,7 +11974,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const file = document.getElementById('filenameInput').files[0];
       const newName = document.getElementById('newName').value.replace(/[^a-z0-9\u0621-\u064A\u0660-\u0669]/gi, '_') || 'file';
       const ext = document.getElementById('extSelect').value;
-      if (!file || !ext) return showToast("يرجى اختيار ملف وصيغة صحيحة!");
+      if (!file || !ext) return showToast("لازم نعمل اختيار ملف وصيغة صحيحة!");
       const blob = new Blob([file], { type: file.type });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -12067,13 +12009,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     function linkrender(cat) {
       const list = document.getElementById('list');
       list.innerHTML = '';
-      vault.forEach(l => {
-        if (cat === 'الكل' || l.category === cat) {
-          list.innerHTML += `<div class="link-item"  oncontextmenu="deleteLink(${l.id})" onclick="window.open('${l.link}', '_blank')"><svg viewBox="0 0 512 512" width="12" fill="#555" title="link">
-  <path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z" />
-</svg> ${l.title} <small>[${l.category}]</small></div>`;
-        }
-      });
+      vault.forEach(l => { if (cat === 'الكل' || l.category === cat) { list.innerHTML += `<div class="link-item"  oncontextmenu="deleteLink(${l.id})" onclick="window.open('${l.link}', '_blank')"><svg viewBox="0 0 512 512" width="12" fill="#555" title="link"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z" /></svg> ${l.title} <small>[${l.category}]</small></div>`; }});
     }
     function linkbtn() { document.getElementById('linkbtn').click(); }
   }
@@ -12114,7 +12050,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           const end = performance.now();
           self.postMessage(end - start);
         } else {
-          throw new Error("لم يتم العثور على دالة باسم 'myAlgorithm'. تأكد من تعريفها!");
+          throw new Error("ملقتش دالة بإسم 'myAlgorithm'. لازم نتأكد من تعريفها!");
         }
       } catch (err) {
         self.postMessage({ error: err.message });
@@ -12135,7 +12071,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           worker.terminate();
           URL.revokeObjectURL(workerUrl);
           const complexity = estimateComplexity(sizes, times);
-          output.innerHTML = "<div>جاري تحليل اللوغاريتم... 🔍</div>";
+          output.innerHTML = "<div>بحاول أعمل تحليل لـ اللوغاريتم... 🔍</div>";
           output.innerHTML = `
   <div class="result-card">
     <div class="big-o">${complexity.label}</div>
@@ -12172,7 +12108,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       return {
         label: "O(n²)",
         desc: "تربيعي.. الكود بيبطأ جداً مع زيادة البيانات. ⚠️",
-        advice: "راجع الـ Nested Loops، شكلك عامل كارثة جوه!"
+        advice: "لازم نراجع الـ Nested Loops، شكلك كدا في كارثة جوه!"
       };
     }
   }
@@ -12180,11 +12116,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   {
     const labTests = { "WBC": { name: "كريات الدم البيضاء", min: 4.3, max: 13.8 }, "HGB": { name: "الهيموجلوبين", min: 11.1, max: 15.85 }, "PLT": { name: "الصفائح الدموية", min: 150, max: 450 }, "ALT": { name: "إنزيم ALT", min: 10, max: 40 }, "AST": { name: "إنزيم AST", min: 10, max: 35 }, "ALP": { name: "الفوسفاتاز القلوية", min: 90, max: 270 }, "BUN": { name: "يوريا الدم (BUN)", min: 6, max: 19 }, "CRE": { name: "الكرياتينين", min: 0.45, max: 0.95 }, "GLU": { name: "سكر الدم الصائم", min: 65, max: 102.5 }, "CRP": { name: "البروتين المتفاعل C", min: 0, max: 0.8 }, "TSH": { name: "الهرمون المحفز للغدة الدرقية", min: 0.4, max: 4.0 }, "HCT": { name: "الهيماتوكريت", min: 36, max: 48 }, "RBC": { name: "كرات الدم الحمراء", min: 3.9, max: 5.55 }, "MCV": { name: "متوسط حجم الكريات", min: 79, max: 97 }, "MCH": { name: "متوسط الهيموغلوبين بالكريات", min: 25, max: 31.5 }, "MCHC": { name: "تركيز الهيموغلوبين بالكريات", min: 320, max: 360 }, "RDW": { name: "توزيع حجم الكريات", min: 11, max: 14.5 }, "Na": { name: "الصوديوم", min: 136, max: 142 }, "K": { name: "البوتاسيوم", min: 3.5, max: 5.0 }, "Ca": { name: "الكالسيوم", min: 8.9, max: 10.35 }, "NEU": { name: "عدلات (Neutrophils)", min: 1.6, max: 6.3 }, "LYM": { name: "لمفاويات (Lymphocytes)", min: 1.25, max: 7.15 }, "MON": { name: "وحيدات (Monocytes)", min: 0.1, max: 1.6 }, "EOS": { name: "حمضات (Eosinophils)", min: 0.0, max: 0.5 }, "BAS": { name: "قاعديات (Basophils)", min: 0.0, max: 0.25 }, "BIL_T": { name: "بيلي‌روبين كلي (Bilirubin total)", min: 0.3, max: 1.0 }, "BIL_D": { name: "بيلي‌روبين المباشر (Bilirubin direct)", min: 0.1, max: 0.3 }, "ALB": { name: "ألبومين (Albumin)", min: 3.8, max: 5.0 }, "TP": { name: "بروتين كلي (Total protein)", min: 5.6, max: 8.0 }, "PHOS": { name: "فوسفات (Phosphorus)", min: 3.0, max: 5.15 }, "UA": { name: "حمض البوليك (Uric acid)", min: 3.0, max: 6.5 }, "TG": { name: "دهون ثلاثية (Triglycerides)", min: 77.5, max: 147.5 }, "CHOLE": { name: "كولسترول كلي (Total cholesterol)", min: 150, max: 200 }, "HDL": { name: "كولسترول HDL", min: 50, max: 65 }, "LDL": { name: "كولسترول LDL", min: 100, max: 130 }, "CK": { name: "كرياتين كيناز (CK)", min: 40, max: 150 }, "LDH": { name: "لاكتات ديهيدروجيناز (LDH)", min: 100, max: 200 }, "AMYL": { name: "أميليز (Amylase)", min: 27, max: 131 }, "LIPA": { name: "ليبيز (Lipase)", min: 3, max: 216 }, "Mg": { name: "مغنيسيوم (Magnesium)", min: 1.4, max: 2.2 }, "TS": { name: "ثيروكسين (T4)", min: 8, max: 18 }, "FT4": { name: "ثيروكسين حر (Free T4)", min: 0.8, max: 1.8 }, "FT3": { name: "ثلاثي يود الثيرونين (Free T3)", min: 2.5, max: 4.5 }, "PTH": { name: "هرمون جارات الغدة (PTH)", min: 10, max: 65 }, "25OHVD": { name: "فيتامين D (25-OH)", min: 20, max: 50 }, "FE": { name: "حديد (Iron)", min: 50, max: 150 }, "TIBC": { name: "السعة الكلية لنقل الحديد (TIBC)", min: 250, max: 450 }, "FERR": { name: "فيريتين (Ferritin)", min: 20, max: 200 }, "VITB12": { name: "فيتامين B12", min: 200, max: 900 }, "FOL": { name: "حمض الفوليك (Folate)", min: 4, max: 20 }, "CR": { name: "كرياتين (Cr)", min: 0.45, max: 0.95 }, "GFR": { name: "معدل الترشيح الكبيبي (eGFR)", min: 90, max: 120 }, "UA_U": { name: "حمض اليوريك في البول", min: 250, max: 750 }, "Na_U": { name: "الصوديوم في البول", min: 40, max: 220 }, "K_U": { name: "البوتاسيوم في البول", min: 25, max: 125 }, "Osm_U": { name: "أوسمولارية البول", min: 300, max: 900 }, "Ca_U": { name: "كالسيوم في البول", min: 100, max: 300 }, "MG_U": { name: "مغنيسيوم في البول", min: 3, max: 9 }, "P_U": { name: "فوسفور في البول", min: 0.4, max: 1.3 }, "Pro_U": { name: "بروتين في البول", min: 0, max: 150 }, "HbA1c": { name: "هيموجلوبين A1c", min: 4, max: 6 }, "INS": { name: "إنسولين صائم", min: 2.5, max: 25 }, "C_PEPTIDE": { name: "C‑peptide", min: 0.5, max: 2.0 }, "TSH_RECEPT": { name: "مستقبلات TSH", min: 50, max: 150 }, "AFP": { name: "ألفا فيتو بروتين (AFP)", min: 0, max: 10 }, "CEA": { name: "Antigen سرطاني (CEA)", min: 0, max: 5 }, "PSA": { name: "Antigen البروستاتا (PSA)", min: 0, max: 4 }, "CA125": { name: "Antigen ova (CA125)", min: 0, max: 35 }, "CA19_9": { name: "Antigen البنكرياس (CA19‑9)", min: 0, max: 37 }, "CRP_US": { name: "CRP عالي الحساسية", min: 0, max: 3 }, "LDL_U": { name: "كوليسترول LDL داخل البلازما", min: 0, max: 70 }, "Ammonia": { name: "أمونيا", min: 10, max: 50 }, "CK_MB": { name: "كرياتين كيناز MB", min: 0, max: 25 }, "Troponin": { name: "تروبونين I", min: 0, max: 0.04 }, "BNP": { name: "البروبيتين (BNP)", min: 0, max: 100 }, "Prolactin": { name: "بروإكتين", min: 5, max: 20 }, "LH": { name: "هرمون LH", min: 1.8, max: 8.6 }, "FSH": { name: "هرمون FSH", min: 1.5, max: 12.4 }, "Estradiol": { name: "إستراديول", min: 15, max: 350 }, "Testosterone": { name: "تستوستيرون", min: 300, max: 1000 }, "PG": { name: "بيونجينيريتور (Progastrin)", min: 0, max: 1 }, "AFP_U": { name: "ألفا فيتو بروتين في البول", min: 0, max: 10 }, "β-HCG": { name: "هيرمون HCG (حمل)", min: 0, max: 5 }, "TSH_US": { name: "TSH عالي الحساسية", min: 0.4, max: 4.0 }, "IgA": { name: "غلوبولين مناعي A", min: 70, max: 400 }, "IgG": { name: "غلوبولين مناعي G", min: 700, max: 1600 }, "IgM": { name: "غلوبولين مناعي M", min: 40, max: 250 }, "Complement_C3": { name: "مكملات C3", min: 90, max: 180 }, "Complement_C4": { name: "مكملات C4", min: 10, max: 40 }, "Rheumatoid_Factor": { name: "عامل الروماتويد", min: 0, max: 20 }, "ANA": { name: "مضاد النواة (ANA)", min: 0, max: 1 }, "Urea_U": { name: "يوريا في البول محسوب", min: 12, max: 20 }, "Creat_U": { name: "كرياتينين في البول محسوب", min: 0.5, max: 1.5 }, "Microalbumin": { name: "مايكرو ألبومين", min: 0, max: 30 }, "Procalcitonin": { name: "بروكالسيطونين", min: 0, max: 0.5 }, "Lithium": { name: "ليثيوم", min: 0.5, max: 1.5 }, "Theophylline": { name: "ثيوفيللين", min: 10, max: 20 }, "Phenobarbital": { name: "فينوباربيتال", min: 10, max: 40 }, "Digoxin": { name: "ديجوكسين", min: 0.8, max: 2.0 }, "Valproate": { name: "فالبرويت", min: 50, max: 100 }, "CRP_hs": { name: "CRP عالي الحساسية", min: 0, max: 3 }, "VLDL": { name: "كوليسترول VLDL", min: 2, max: 30 }, "ApoA1": { name: "أبوبروتين A1", min: 110, max: 180 }, "ApoB": { name: "أبوبروتين B", min: 60, max: 120 }, "Lipoprotein_a": { name: "ليبوبروتين (a)", min: 0, max: 30 }, "OGTT": { name: "اختبار تحمل الجلوكوز", min: 70, max: 140 }, "Insulin": { name: "الأنسولين الصائم", min: 2, max: 25 }, "Homocysteine": { name: "هوموسيستين", min: 5, max: 15 }, "Ferritin": { name: "الفيريتين", min: 30, max: 400 }, "Vitamin_B1": { name: "فيتامين B1", min: 70, max: 180 }, "Vitamin_B6": { name: "فيتامين B6", min: 20, max: 150 }, "Zinc": { name: "الزنك", min: 60, max: 120 }, "Copper": { name: "النحاس", min: 70, max: 150 }, "Magnesium": { name: "الماغنسيوم", min: 1.5, max: 2.5 }, "Lead_Blood": { name: "رصاص في الدم", min: 0, max: 5 }, "Arsenic_Urine": { name: "زرنيخ في البول", min: 0, max: 35 }, "Cortisol_PM": { name: "كورتيزول مساءً", min: 2, max: 10 } };
     function getLevel(pct) {
-      if (pct < 20) return "منخفض جدًا";
-      else if (pct < 40) return "شبه منخفض";
-      else if (pct < 60) return "معتدل";
-      else if (pct < 80) return "شبه مرتفع";
-      else return "مرتفع";
+      if (pct < 20) return "واطي جدًا";
+      else if (pct < 40) return "واطي شوية";
+      else if (pct < 60) return "طبيعي";
+      else if (pct < 80) return "عالي شوية";
+      else return "عالي";
     }
     function analyzelab() {
       const input = UI.myInput.value.trim().toUpperCase();
@@ -12206,7 +12142,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       if (results.length === 0) {
         return;
       } else {
-        const formattedResults = "<details open><summary>نتائج التحاليل التقريبيه</summary>" + results + "</details>";
+        const formattedResults = "<details open style='min-width:220px;'><summary>نتائج التحاليل التقريبيه</summary>" + results + "</details>";
         UI.replay.insertAdjacentHTML("beforeend", formattedResults);
       }
     }
@@ -12323,10 +12259,10 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       executeJustice();
     }
     function clearAlllaws() {
-      openSystemConfirm("إفراغ القاعدة", "هل تريد إفراغ قاعدة البيانات بالكامل؟", () => {
+      openSystemConfirm("نسيان القاعدة", "هل بجد أنسى القوانين بالكامل؟", () => {
         laws = [];
         saveAndRefresh();
-        showToast("تم إفراغ قاعدة البيانات! 💾✨");
+        showToast("خلاص نسيت قاعدة الفوانين والأحكام! 💾✨");
       });
     }
     function saveAndRefresh() {
@@ -12375,17 +12311,17 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         }
       });
       if (selectedLaws.length === 0) {
-        previewArea.innerHTML = "<p style='color:#a4b0be; font-size:14px; text-align:center;'>لم يتم العثور على نتائج مطابقة.</p>";
+        previewArea.innerHTML = "<p style='color:#a4b0be; font-size:14px; text-align:center;'> ملقتش نتائج مطابقة.</p>";
         resultsArea.innerHTML = "";
         return;
       }
       previewArea.innerHTML = `
         <div style="background: #eef5ff; border: 1px dashed var(--dcolor); padding: 15px; border-radius: var(--secradius); text-align: center; margin-bottom: 15px; animation: fadeIn 0.3s;">
             <p style="margin: 0 0 10px 0; color: var(--text-main); font-weight: bold;">
-                🔍 تم العثور على (${selectedLaws.length}) مواد ملتقطة..
+                🔍  قدرت الأقي (${selectedLaws.length}) مواد ملتقطة..
             </p>
             <button class="btn" style="background: var(--dcolor); font-size: 13px;" id="showBtn" onclick='renderFinalResults(${JSON.stringify(selectedLaws).replace(/'/g, "&apos;")})'>
-                هل ترغب في عرضهم؟ 👁️
+                هل أعرضهم؟ 👁️
             </button>
         </div>
     `;
@@ -12421,7 +12357,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     function openGuard() {
       guard.style.display = 'flex';
       if (localStorage.getItem('fajr_sleep_key')) {
-        guardtext.textContent = 'اكتب الرمز لفك الحمايه';
+        guardtext.textContent = 'لازم نكتب الرمز لفك الحمايه';
       } else {
         guardtext.textContent = 'اى هو رمز الحمايه ؟';
       }
@@ -12438,7 +12374,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           if (enteredPin === savedPin) {
             exitSleep();
           } else {
-            guardtext.textContent = "الرمز خاطئ! حاول تاني";
+            guardtext.textContent = "الرمز غلط! خلينا نحاول تاني";
             pinInp.value = '';
             guard.style.animation = "shake 0.3s";
             setTimeout(() => guard.style.animation = "", 300);
@@ -12447,7 +12383,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     });
     function enterSleep() {
-      guardtext.textContent = 'تم! مره كمان للفتح';
+      guardtext.textContent = 'تمام! مره كمان للفتح';
       pinInp.value = '';
       pinInp.placeholder = "****";
     }
@@ -12485,7 +12421,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
       function renderChat() {
         if (!allMessages.length) {
-          chatDiv.innerHTML = '<div style="color:#6f8a9f; text-align:center; padding:20px;">السجل فارغ</div>';
+          chatDiv.innerHTML = '<div style="color:#6f8a9f; text-align:center; padding:20px;">السجل فاضي</div>';
           unreadBadge.innerText = '0 جديد';
           return;
         }
@@ -12551,7 +12487,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
               title: '🆘 طوارئ: ' + title,
               text: `📌 العنوان: ${title}\n📝 التفاصيل: ${msgObj.content}\n🔑 كود الاستعادة: ${jsonStr}`
             });
-            console.log("تمت المشاركة النصية بنجاح");
+            console.log("شاركتها بنجاح");
             mergeIncoming([msgObj]);
           } catch (e) {
             try {
@@ -12562,13 +12498,13 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
                 });
                 mergeIncoming([msgObj]);
               } else {
-                throw new Error("لا يمكن مشاركة ملفات");
+                throw new Error("مينفعش نشاركه ملفات");
               }
             } catch (fileErr) {
-              console.log("المشاركة فشلت تماماً، يتم التحميل...");
+              console.log("المشاركة فشلت تماماً، هقوم بالتحميل...");
               downloadBlob(blob, fileName);
               mergeIncoming([msgObj]);
-              showToast('تم حفظ الرسالة كملف في التنزيلات لعدم دعم المشاركة المباشرة.');
+              showToast('حفظت الرسالة كملف في التنزيلات لعدم دعم المشاركة المباشرة.');
             }
           }
         } else {
@@ -12604,10 +12540,10 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         downloadBlob(new Blob([JSON.stringify(data, null, 2)]), `سجل_طوارئ_${Date.now()}.json`);
       });
       document.getElementById('clearBtn').addEventListener('click', () => {
-        openSystemConfirm("تأكيد الحذف", "سيتم حذف كل السجل؟", () => {
+        openSystemConfirm("تأكيد النسيان", " هنسى كل السجل؟", () => {
           allMessages = [];
           savesosAndRender();
-          showToast("تم مسح السجل بالكامل! 🧹");
+          showToast("نسيت السجل بالكامل! 🧹");
         });
       });
       renderChat();
@@ -12649,7 +12585,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         if (options.length > 5) {
           const filterInput = document.createElement('input');
           filterInput.type = 'text';
-          filterInput.placeholder = 'صفّي الخيارات...';
+          filterInput.placeholder = 'تصفية الخيارات...';
           filterInput.className = 'filter-input';
           filterInput.id = `filter-${sel.id || index}`;
           filterInput.name = `filter-${sel.name || 'field-' + index}`;
@@ -12746,14 +12682,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     let attendanceData = JSON.parse(localStorage.getItem('fajr_attendance')) || [];
     function renderLogs() {
       const list = document.getElementById('log-list');
-      list.innerHTML = attendanceData.map(item => `
-                <tr>
-                    <td>${item.date}</td>
-                    <td>${item.time}</td>
-                    <td><b>${item.name}</b></td>
-                    <td>${item.status}</td>
-                </tr>
-            `).join('');
+      list.innerHTML=attendanceData.map(item=>` <tr><td>${item.date}</td><td>${item.time}</td><td><b>${item.name}</b></td><td>${item.status}</td></tr>`).join('');
     }
     function log() {
       const input = document.getElementById('log-in');
@@ -12770,11 +12699,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       input.value = "";
     }
     function clearData() {
-      openSystemConfirm("حذف السجلات", "سيتم حذف كل السجلات التاريخية، هل أنت متأكد؟", () => {
+      openSystemConfirm("نسيان السجلات", "أنا كدا هنسى كل التسجيلات، هل دا طلبك؟", () => {
         localStorage.removeItem('fajr_attendance');
         attendanceData = [];
         renderLogs();
-        showToast("تم حذف سجلات الحضور بنجاح! 🗑️");
+        showToast("تمام، خلاص نسيت سجلات الحضور بنجاح! 🗑️");
       });
     }
     renderLogs();
@@ -12848,7 +12777,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     }
     function updateQty(index, type) {
-      openSystemPrompt("الكمية:", "أدخل العدد...", (val) => {
+      openSystemPrompt("الكمية:", "أدخال العدد...", (val) => {
         let amount = parseInt(val);
         if (isNaN(amount) || amount <= 0) return;
         const item = inventory[index];
@@ -12864,18 +12793,18 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           totalPrice: (amount * item.price).toFixed(2)
         });
         prosssaveAndRender();
-        showToast("تم تحديث الكمية بنجاح! ✅");
+        showToast(" الكمية إتحدثت بنجاح! ✅");
       });
     }
     function deleteItem(index) {
-      openSystemConfirm("تأكيد الحذف", "حذف الصنف؟", () => {
+      openSystemConfirm("تأكيد النسيان", "نسيان الصنف؟", () => {
         inventory.splice(index, 1);
         prosssaveAndRender();
-        showToast("تم حذف الصنف بنجاح! 🗑️");
+        showToast("تم نسيان الصنف بنجاح! 🗑️");
       });
     }
     function deleteTransaction(index) {
-      openSystemConfirm("تأكيد الحذف", "حذف هذه التسجيلة وإلغاء تأثيرها على المخزن؟", () => {
+      openSystemConfirm("تأكيد النسيان", "نسيان التسجيلة دي وإلغاء تأثيرها على المخزن؟", () => {
         const t = transactions[index];
         const itemIndex = inventory.findIndex(item => item.name === t.itemName);
         if (itemIndex !== -1) {
@@ -12887,7 +12816,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         }
         transactions.splice(index, 1);
         prosssaveAndRender();
-        showToast("تم حذف التسجيلة وتحديث المخزن! 🔄✅");
+        showToast("تم نسيان التسجيلة وتحديث المخزن! 🔄✅");
       });
     }
     function prosssaveAndRender() {
@@ -12915,11 +12844,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
                         <progress value="${progress}" max="100" style="width: 100%; display: block; margin-top: 5px;color:blue;"></progress>
                     </summary>
                     <div>
-                        <fieldset style="padding:10px;border-radius:8px;border:var(--cborder);width:100%;overflow:auto;white-space:wrap;"><legend style="margin:0 5px;padding:0 5px;">ملاحظات</legend>${p.notes || 'لا يوجد'}</fieldset>
+                        <fieldset style="padding:10px;border-radius:8px;border:var(--cborder);width:100%;overflow:auto;white-space:wrap;"><legend style="margin:0 5px;padding:0 5px;">ملاحظات</legend>${p.notes || 'مفيش'}</fieldset>
                         <div style="display:flex;flex-direction:row;justify-content: space-around;margin:15px 0 0;">
                         <button onclick="updateTask(${index}, 1)" class="conf-btn">إنجاز +</button>
                         <button onclick="updateTask(${index}, -1)" class="red-btn">تراجع - </button>
-                        <button onclick="deleteProject(${index})" style="border:var(--cborder);" >حذف ×</button>
+                        <button onclick="deleteProject(${index})" style="border:var(--cborder);" >نسيان ×</button>
                     </div>
                 </details>`;
       }).join('');
@@ -12949,10 +12878,10 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     }
     function deleteProject(index) {
-      openSystemConfirm("تأكيد الحذف", "حذف؟", () => {
+      openSystemConfirm("تأكيد النسيان", "نسيان؟", () => {
         projects.splice(index, 1);
         saveprojradar();
-        showToast("تم حذف المشروع بنجاح! 🗑️");
+        showToast("تم نسيان المشروع بنجاح! 🗑️");
       });
     }
     function saveprojradar() {
@@ -13163,10 +13092,10 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     }
     function removeItem(index) {
-      openSystemConfirm("تأكيد الحذف", "هل تريد حذف هذا العنصر؟", () => {
+      openSystemConfirm("تأكيد النسيان", "هل انسى العنصر دا؟", () => {
         items.splice(index, 1);
         refreshUI();
-        showToast("تم حذف العنصر بنجاح! 🗑️");
+        showToast("تم نسيان العنصر بنجاح! 🗑️");
       });
     }
   }
@@ -13363,15 +13292,15 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       localStorage.setItem('fajr_tools', JSON.stringify(tools));
     }
     function deleteTool(idx) {
-      openSystemConfirm("حذف الأداة", "متأكد هتمسح الأداة دي بكل فروعها؟", () => {
+      openSystemConfirm("نسيان الأداة", "أكيد أنسى الأداة دي بكل فروعها؟", () => {
         tools.splice(idx, 1);
         Trackerrender();
-        showToast("تم حذف الأداة وكل فروعها! 🛠️🗑️");
+        showToast("تم نسيان الأداة وكل فروعها! 🛠️🗑️");
       });
     }
     document.getElementById('toolInput').onkeydown = function (e) { if (e.key === 'Enter' && this.value) { tools.push({ name: this.value, subs: [] }); this.value = ''; Trackerrender(); } };
     function addSubTask(idx) {
-      openSystemPrompt("إضافة فرع جديد", "اكتب اسم الفرع هنا...", (name) => {
+      openSystemPrompt("إضافة فرع جديد", "بنكتب اسم الفرع هنا...", (name) => {
         if (name) {
           tools[idx].subs.push({
             id: Date.now(),
@@ -13442,7 +13371,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           if (document.getElementById('mainVideo').src === videoUrl) {
             document.getElementById('mainVideo').src = "";
           }
-          showToast("تم حذف التسجيل")
+          showToast("تم نسيان التسجيل")
         };
         const typeDiv = document.createElement('div');
         typeDiv.className = "type upload";
@@ -13753,7 +13682,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const sId = parseInt(document.getElementById('metrostartNode').value);
       const endSelect = document.getElementById('metroendNode');
       convertToFajrUI();
-      endSelect.innerHTML = '<option value="">اختر الوجهة</option>';
+      endSelect.innerHTML = '<option value="">يلا نختار الوجهة</option>';
       if (!sId) return;
       const destinations = getPossibleDestinations(sId);
       destinations.forEach(id => {
@@ -13914,7 +13843,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         return;
       }
       let html = `<table border="1" cellpadding="6" style="border-collapse: collapse; width:100%;">
-        <thead><tr><th>الاسم</th><th>النوع</th><th>التفاصيل</th><th>الفترة</th><th>حذف</th></tr></thead><tbody>`;
+        <thead><tr><th>الاسم</th><th>النوع</th><th>التفاصيل</th><th>الفترة</th><th>نسيان</th></tr></thead><tbody>`;
       events.forEach(ev => {
         html += `<tr>
             <td>${STrackescapeHtml(ev.name)}</td>
@@ -13964,7 +13893,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       document.getElementById("STrackdetails").value = "";
       STrackfilterTable();
       STracktoggleReportButton();
-      showToast("✅ تم الحفظ بنجاح يا مؤسس!");
+      showToast("✅ تم الحفظ بنجاح!");
     }
     async function STrackcopyAggregatedReport() {
       let events = STrackloadEvents();
@@ -14229,10 +14158,12 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         }
       }
     }, { passive: false });
+    function downloadDawnOS(){ const htmlContent=document.documentElement.outerHTML; const blob=new Blob([htmlContent],{ type: 'text/html;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='DawnOS.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
   }
   //تعليمات للمستخدم داخل حقل الكتابه
   {
-    const tips = ["نكتب ! للأوامر", "نكتب @ للجهات", "نستخدم # للأدوات", "يلا ندردش...",];
+    const tips = ["نكتب ! للأوامر", "نكتب @ للجهات", "نستخدم # للأدوات", "يلا ندردش...","أهدافنا أكتر",];
     let currentTipIndex = 0;
     const editor = document.getElementById('editor');
     if (editor) {
@@ -14383,7 +14314,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       let sceneName = document.getElementById('sceneSelector').value;
       openSystemPrompt(
         "🎯 اسم الغرفة الهدف",
-        "اكتب اسم المشهد اللي تريد الانتقال إليه...",
+        "يلا نكتب اسم المشهد اللي عايزين الانتقال عليه...",
         (target) => {
           if (target && library.tours[currentTourName][target]) {
             const rect = e.target.getBoundingClientRect();
@@ -14411,7 +14342,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     function toggleMode() { isEditMode = !isEditMode; document.getElementById('modeBtn').innerText = isEditMode ? "وضع التحرير" : "وضع الجولة"; }
     function updateTourSelector() {
       let sel = document.getElementById('tourSelector');
-      sel.innerHTML = '<option value="">اختر جولة</option>';
+      sel.innerHTML = '<option value="">اختار جولة</option>';
       Object.keys(library.tours).forEach(t => {
         let opt = document.createElement('option');
         opt.value = t; opt.innerHTML = t;
@@ -14443,7 +14374,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     }
     function exportTour() {
       if (!currentTourName) {
-        showToast("افتح جولة أولاً!");
+        showToast(" نفتح جولة أولاً!");
         return;
       }
       const tourData = library.tours[currentTourName];
@@ -14479,7 +14410,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           try {
             const data = JSON.parse(event.target.result);
             if (!data.scenes || typeof data.scenes !== 'object') {
-              showToast("الملف مش متوافق! تأكد من إنه ملف جولة فجر.");
+              showToast("الملف مش متوافق! لازم نتأكد من إنه ملف جولة فجر.");
               return;
             }
             let tourName = data.tourName || file.name.replace('.json', '');
@@ -14497,7 +14428,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
             loadTour();
             showToast(`✅ تم استيراد جولة "${tourName}" بنجاح!`);
           } catch (err) {
-            showToast("الملف مش صحيح! تأكد من إنه ملف JSON صالح.");
+            showToast("الملف مش صحيح! لازم نتأكد من إنه ملف JSON صالح.");
             console.error(err);
           }
         };
@@ -14674,7 +14605,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       row.innerHTML = `
         <input type="text" placeholder="اسم الصنف (مثال: شركة أ)" value="${name}" style="flex:2;">
         <input type="text" placeholder="البيانات (مثال: 15, 20, 18, 30)" value="${data}" style="flex:3;">
-        <button class="red-btn" onclick="this.parentElement.remove(); anaprocessData();">حذف</button>
+        <button class="red-btn" onclick="this.parentElement.remove(); anaprocessData();">نسيان</button>
     `;
       row.dataset.color = entityColor;
       container.appendChild(row);
@@ -14804,7 +14735,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
             anaprocessData();
           }
         } catch (err) {
-          showToast(" ملف الـ JSON مش مظبوط، تأكد منه كويس!");
+          showToast(" ملف الـ JSON مش مظبوط، لازم نتأكد منه كويس!");
         }
       };
       reader.readAsText(file);
@@ -14942,7 +14873,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         renderStars(allPosts);
       } catch (error) {
         console.error('خطأ:', error);
-        document.getElementById('display-startext').innerText = 'حدث خطأ أثناء تحميل بيانات اليوم.';
+        document.getElementById('display-startext').innerText = 'حصل خطأ أثناء تحميل بيانات اليوم.';
       }
     }
     function renderStars(posts) {
@@ -14965,10 +14896,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           document.getElementById('contentstarsbox').style.display = "none";
           showAndMove('contentstarsbox');
           displayText.style.opacity = 0;
-          setTimeout(() => {
-            displayText.innerHTML = postText;
-            displayText.style.opacity = 1;
-          }, 150);
+          setTimeout(()=>{ displayText.innerHTML=postText; displayText.style.opacity=1; }, 150);
         });
         galaxy.appendChild(star);
       });
@@ -15079,7 +15007,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const container = document.getElementById('lapmerge-dawnelement');
       container.innerHTML = '';
       if (Object.keys(lapmergeElements).length === 0) {
-        container.innerHTML = '<div style="color: #888; width: 100%; text-align: center; padding: 20px;">المختبر فارغ حالياً! اضغط على زر (+) لإضافة عناصر جديدة 🧪✨</div>';
+        container.innerHTML = '<div style="color: #888; width: 100%; text-align: center; padding: 20px;">المختبر فاضي حالياً! ضغطة على زر (+) لإضافة عناصر جديدة 🧪✨</div>';
         return;
       }
       const searchTerm = document.getElementById('lapmerge-search-box') ? document.getElementById('lapmerge-search-box').value.toLowerCase() : '';
@@ -15094,7 +15022,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         btn.oncontextmenu = (e) => {
           e.preventDefault();
           if (id.length > 5) lapmergeDeleteElement(id);
-          else showToast("العناصر الأساسية لا يمكن حذفها! 😉");
+          else showToast("العناصر الأساسية مقدرش أنساها! 😉");
         };
         if (lapmergeSelected.includes(id)) btn.classList.add('conf-btn');
         container.appendChild(btn);
@@ -15138,7 +15066,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       document.getElementById('lapmerge-mergeresult').textContent = recipeFound;
     }
     function lapmergeDeleteElement(id) {
-      openSystemConfirm("تأكيد الحذف", `حذف "${lapmergeElements[id]}"؟`, () => {
+      openSystemConfirm("تأكيد النسيان", `نسيان "${lapmergeElements[id]}"؟`, () => {
         delete lapmergeElements[id];
         delete lapmergeUserElements[id];
         for (let r in lapmergeRecipes) {
@@ -15274,11 +15202,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
 <div style="margin-bottom: 10px;">نسبة التطابق: <strong>${tashkeelPercentage}%</strong> 🎯</div>
 <div class="flex">
 <div>
-<div style="font-size: 18px; color: #a0a0a0; margin-top: 10px;">النص الأصلي الصحيح:</div>
+<div style="font-size: 18px; color: #a0a0a0; margin-top: 10px;">النص الأصلي الصح:</div>
 <div style="font-size: 24px; color: #4CAF50; letter-spacing: 2px;">${tashkeelCurrentOriginal}</div>
 </div>
 <div>
-<div style="font-size: 18px; color: #a0a0a0; margin-top: 15px;">ما قمت بتعديله:</div>
+<div style="font-size: 18px; color: #a0a0a0; margin-top: 15px;">إقتراحك للتشكيل</div>
 <div style="font-size: 24px; letter-spacing: 2px;">${tashkeelDiffHtml}</div>
 </div>
 </div>
@@ -15503,11 +15431,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         if (f.value.trim()) replies.push(f.value.trim());
       });
       if (!keywordsInput || replies.length === 0) {
-        return showToast("يا هندسة حط دلالة ورد واحد على الأقل! 😅");
+        return showToast("لازم نحط دلالة ورد واحد على الأقل! 😅");
       }
       const keywords = keywordsInput.split(',').map(k => cleanchatbottext(k.trim()));
       if (keywords.some(k => k === "")) {
-        return showToast("الدلالات لا يمكن أن تكون فارغة!");
+        return showToast("الدلالات مينفعش تكون فاضيه!");
       }
       if (editingIndex === -1) {
         rules.push({ keywords, replies });
@@ -15525,7 +15453,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     }
     function resetForm() {
       document.getElementById('botKeywords').value = "";
-      document.getElementById('repliesContainer').innerHTML = '<textarea class="reply-field" placeholder="الرد الأول..."></textarea>';
+      document.getElementById('repliesContainer').innerHTML = '<textarea class="reply-field" name="replay-field" placeholder="الرد الأول..."></textarea>';
     }
     function editRule(index) {
       const rule = rules[index];
@@ -15543,7 +15471,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     }
     function deleteRule(index) {
       openSystemConfirm(
-        "حذف القاعدة",
+        "نسيان القاعدة",
         "أكيد مطلوب إني أنسى القاعدة دي؟",
         () => {
           rules.splice(index, 1);
@@ -15563,10 +15491,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const container = document.getElementById('rulesListContainer');
       container.innerHTML = "";
       document.getElementById('rulesCount').innerText = rules.length;
-      if (rules.length === 0) {
-        container.innerHTML = "<p style='color: #888; text-align: center;'>مفيش قواعد مسجلة حالياً.. اضيف قواعد أو اشحن التغذية الجاهزة!</p>";
-        return;
-      }
+      if (rules.length === 0) { container.innerHTML = "<p style='color: var(--bcolor); text-align: center;'>مفيش قواعد مسجلة حالياً.. لازم نضيف قواعد أو اشحن التغذية الجاهزة!</p>"; return; }
       rules.forEach((rule, index) => {
         const div = document.createElement('div');
         div.className = 'rule-card';
@@ -15577,7 +15502,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
                 </div>
                 <div class="actions-group">
                     <button class="conf-btn" onclick="editRule(${index})">تعديل</button>
-                    <button class="red-btn-sec" onclick="deleteRule(${index})">حذف</button>
+                    <button class="red-btn-sec" onclick="deleteRule(${index})">نسيان</button>
                 </div>
             `;
         container.appendChild(div);
@@ -15596,16 +15521,9 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         let matchedRuleObj = null;
         rule.keywords.forEach(kw => {
           let pos = cleanedUserText.indexOf(kw);
-          if (pos !== -1 && pos < earliestIndex) {
-            earliestIndex = pos;
-            matchedRuleObj = rule;
-          }
+          if (pos !== -1 && pos < earliestIndex) { earliestIndex = pos; matchedRuleObj = rule; }
         });
-        if (matchedRuleObj && earliestIndex !== Infinity) {
-          if (!matchedFound.some(item => item.rule === matchedRuleObj)) {
-            matchedFound.push({ rule: matchedRuleObj, index: earliestIndex });
-          }
-        }
+        if (matchedRuleObj && earliestIndex !== Infinity) { if (!matchedFound.some(item => item.rule === matchedRuleObj)) { matchedFound.push({ rule: matchedRuleObj, index: earliestIndex }); } }
       });
       matchedFound.sort((a, b) => a.index - b.index);
       let finalResponse = "";
@@ -15619,7 +15537,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         if (selectedPhrases.length === 1) {
           finalResponse = selectedPhrases[0];
         } else {
-          let connectors = [" وبالنسبة لسؤالك: ", " وكمان: ", " وعشان تبقى عارف برضه: "];
+          let connectors = [" وبالنسبة لسؤالك: ", " وكمان: ", " وللعلم برضو: "];
           finalResponse = selectedPhrases[0];
           for (let i = 1; i < selectedPhrases.length; i++) {
             let conn = connectors[(i - 1) % connectors.length];
@@ -15627,13 +15545,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           }
         }
         metaText = `تم الرد بترتيب ورود الدلالات في السؤال (${matchedFound.length}) 🧬`;
-      } else {
-        finalResponse = "معلش يا مؤسس، مش لاقي دلالة واضحة في السيستم للنص ده.. اضيف لها دلالة من لوحة التحكم! 🤔";
-        metaText = "بدون مطابقة ❌";
-      }
-      setTimeout(() => {
-        appendMessage(finalResponse, 'bot-msg', metaText);
-      }, 300);
+      } else { finalResponse = "أسفه، مش لاقيه دلالة واضحة للكلام ده.. ممكن نضيف دلالة من لوحة التحكم! 🤔"; metaText = "مفيش مطابقة ❌"; }
+      setTimeout(() => { appendMessage(finalResponse, 'bot-msg', metaText); }, 300);
     }
     function appendMessage(text, className, meta = "") {
       const chatContainer = document.getElementById('chatContainer');
@@ -15663,15 +15576,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       if (newCount > 0) {
         localStorage.setItem('markov_bot_rules', JSON.stringify(rules));
         renderRulesManager();
-        showToast(`✅ تم شحن ${newCount} قاعدة جديدة! (تم تخطي المكرر)`);
-      } else {
-        showToast("ℹ️ كل القواعد موجودة بالفعل، مفيش حاجة جديدة!");
-      }
+        showToast(`✅ تم شحن ${newCount} قاعدة جديدة! (تخطيت المكرر)`);
+      } else { showToast("ℹ️ كل القواعد موجودة فعلا، مفيش حاجة جديدة!"); }
     }
     function exportchatbotData() {
-      if (rules.length === 0) {
-        return showToast("مفيش قواعد للتصدير! 😅");
-      }
+      if (rules.length === 0) { return showToast("مفيش قواعد للتصدير! 😅"); }
       const dataStr = JSON.stringify(rules, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -15689,9 +15598,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       reader.onload = function (e) {
         try {
           const importedRules = JSON.parse(e.target.result);
-          if (!Array.isArray(importedRules) || importedRules.length === 0) {
-            return showToast("❌ الملف غير صالح أو فارغ!");
-          }
+          if (!Array.isArray(importedRules) || importedRules.length === 0) { return showToast("❌ الملف غير صالح أو فارغ!"); }
           let mergedCount = 0;
           let newCount = 0;
           importedRules.forEach(importedRule => {
@@ -15726,11 +15633,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
             matchedRuleObj = rule;
           }
         });
-        if (matchedRuleObj && earliestIndex !== Infinity) {
-          if (!matchedFound.some(item => item.rule === matchedRuleObj)) {
-            matchedFound.push({ rule: matchedRuleObj, index: earliestIndex });
-          }
-        }
+        if (matchedRuleObj && earliestIndex !== Infinity) { if (!matchedFound.some(item => item.rule === matchedRuleObj)) { matchedFound.push({ rule: matchedRuleObj, index: earliestIndex }); } }
       });
       matchedFound.sort((a, b) => a.index - b.index);
       let replyText = "";
@@ -15743,18 +15646,324 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         if (selectedPhrases.length === 1) {
           replyText = `🎯 ${selectedPhrases[0]}`;
         } else {
-          let connectors = [" وبالنسبة لسؤالك: ", " وكمان: ", " وعشان تبقى عارف برضه: "];
+          let connectors = [" وبالنسبة لسؤالك: ", " وكمان: ", " وللعلم برضو: "];
           replyText = `🎯 ${selectedPhrases[0]}`;
           for (let i = 1; i < selectedPhrases.length; i++) {
             let conn = connectors[(i - 1) % connectors.length];
             replyText += "\n\n" + conn + selectedPhrases[i];
           }
         }
-      } else { replyText = "🤔 مفيش قاعدة مطابقة للنص ده.. أضف قاعدة جديدة في لوحة التحكم!"; }
+      } else { replyText = "🤔 مفيش قاعدة مطابقة للنص ده.. لازم إضافه قاعدة جديدة في لوحة التحكم!"; }
       replayDiv.style.display = "none";
       replayDiv.innerHTML = replyText;
       showAndMove('chatbotreplay');
     }
+  }
+  //إقتراحات الأدوات
+  {
+    const intentWords = ["عايز", "محتاج", "افتح", "شغل", "هات", "بدي", "عاوز", "انا"];
+    const negationWords = ["مش", "لا", "بلاش", "غير", "مفيش"];
+    const conjunctionWords = ["بس", "ولكن", "لكن", "و"];
+    const responsesLibrary = {
+      "1": " الأداه دي مكانها في قائمه لما بنكتب  #",
+      "2": " الأمر دا مكانه في قائمه لما بنكتب  !",
+      "3": " الوضع دا مكانه في قائمه لما بنكتب  #",
+      "4": "التطبيق دا موجود في قائمه التطبيقات عند الضغط على الرمز +",
+      "5": "الاداه دي موجوده في محرر النصوص",
+      "6": "موجوده في القائمه اليمني",
+      "7": "موجوده في القائمه اليمني في (تعلم)",
+      "8": "موجوده في القائمه اليمني في (بيانات)",
+      "9": "هتلاقيها موجوده في قائمه المستخدم",
+      "10": "",
+    };
+    const toolsData = [
+      { n: "حساب النص وتحليله", c: ["نص", "تحليل", "كلمات", "احصائيات", "مفردات"], a: "6" },
+      { n: "نقاط النور", c: ["نقاط", "نور", "مكافآت", "رصيد", "تقييم"], a: "2" },
+      { n: "مركز القرارات والتحكم في الردود", c: ["قرارات", "تحكم", "ردود", "مركز", "ادارة"], a: "9" },
+      { n: "مركز تحكم الذاكرة والتخزين", c: ["ذاكرة", "تخزين", "مساحة", "حفظ", "ملفات"], a: "9" },
+      { n: "رفع ملفات وعرضها", c: ["رفع", "ملف", "تحميل", "عرض", "مشاركة"], a: "4" },
+      { n: "توليد محتوى وهمي", c: ["توليد", "محتوى", "وهمي", "عشوائي", "نص"], a: "4" },
+      { n: "لوحه الرسم", c: ["رسم", "لوحة", "قلم", "الوان", "تصميم"], a: "4" },
+      { n: "بناء النماذج وتصديرها", c: ["نماذج", "بناء", "تصدير", "قالب", "تصميم"], a: "4" },
+      { n: "المحرر النصي", c: ["محرر", "نص", "كتابة", "تعديل", "تحرير"], a: "4" },
+      { n: "تسجيل الصوت", c: ["صوت", "تسجيل", "ميكروفون", "سماع", "بودكاست"], a: "4" },
+      { n: "تحقق من أقواس الكود", c: ["اقواس", "كود", "تحقق", "برمجة", "اكواد"], a: "5" },
+      { n: "التحقق من أمان الكود", c: ["امان", "كود", "حماية", "ثغرات", "تحقق"], a: "5" },
+      { n: "العاب وتسليه", c: ["العاب", "تسليه", "ترفيه", "لعب", "متعة"], a: "9" },
+      { n: "ترتيب البيانات تصاعدي وتنازلي", c: ["ترتيب", "بيانات", "تصاعدي", "تنازلي", "فرز"], a: "8" },
+      { n: "معلومات النظام والمتصفح", c: ["نظام", "متصفح", "معلومات", "جهاز", "بيئة"], a: "2" },
+      { n: "الذاكره الكلاميه الدائمه والمؤقته", c: ["ذاكرة", "كلامية", "دائمة", "مؤقتة", "حفظ"], a: "9" },
+      { n: "التدريب الكلامي للردود", c: ["تدريب", "كلامي", "ردود", "ذكاء", "محادثة"], a: "2" },
+      { n: "النص الى كلام", c: ["نص", "كلام", "تحويل", "صوت", "قراءة"], a: "6" },
+      { n: "رسم الخريطه الشجرية", c: ["خريطة", "شجرية", "رسم", "هيكل", "تنظيم"], a: "4" },
+      { n: "التحويل الفرعوني للنص", c: ["فرعوني", "تحويل", "نص", "هيروغليفي", "قديم"], a: "6" },
+      { n: "إنشاء موسيقى ونغمات", c: ["موسيقى", "نغمات", "صوت", "تأليف", "ايقاع"], a: "4" },
+      { n: "كاشف الطابع الشخصي من النص", c: ["طابع", "شخصية", "نص", "تحليل", "اسلوب"], a: "6" },
+      { n: "لعبه فرقعه الأرقام", c: ["فرقعة", "ارقام", "لعبة", "تحدي", "رياضيات"], a: "9" },
+      { n: "لعبه عداد الضغطات", c: ["ضغطات", "عداد", "لعبة", "تحدي", "سرعة"], a: "9" },
+      { n: "لعبه الضغط بالترتيب", c: ["ضغط", "ترتيب", "لعبة", "تحدي", "ارقام"], a: "9" },
+      { n: "حساب التركه", c: ["تركه", "ارث", "ميراث", "ورث", "حساب", "مال"], a: "1" },
+      { n: "ميتا تاج فجر", c: ["ميتا", "tag", "وصف", "كلمات", "seo"], a: "3" },
+      { n: "تغيير إسم ملف وصيغته", c: ["تغيير", "اسم", "صيغة", "ملف", "امتداد"], a: "2" },
+      { n: "مدير حفظ الروابط", c: ["روابط", "حفظ", "مدير", "مفضلة", "مواقع"], a: "4" },
+      { n: "فاتح التابات المنبثقه", c: ["تابات", "منبثقة", "فتح", "نوافذ", "متصفح"], a: "2" },
+      { n: "فاحص اللوغارتم", c: ["لوغارتم", "رياضيات", "حساب", "دوال", "اعداد"], a: "5" },
+      { n: "ملف القوة الشخصيه", c: ["قوة", "شخصية", "ملف", "تقييم", "نقاط"], a: "9" },
+      { n: "حامي الشاشه", c: ["حامي", "شاشة", "حماية", "امان", "قفل"], a: "9" },
+      { n: "دردشه طوارئ", c: ["دردشة", "طوارئ", "ارسال", "جهاز", "قريب"], a: "3" },
+      { n: "سجل الحضور والانصراف", c: ["حضور", "انصراف", "سجل", "موظفين", "وقت"], a: "1" },
+      { n: "سجل العمليات والقيمه المضافه", c: ["عمليات", "قيمة", "مضافة", "سجل", "محاسبة"], a: "1" },
+      { n: "رادار إنجاز المشروعات", c: ["انجاز", "مشروعات", "رادار", "تقدم", "متابعة"], a: "4" },
+      { n: "موزع الميزانيه", c: ["ميزانية", "توزيع", "موازنة", "مال", "مصاريف"], a: "1" },
+      { n: "رسم بياني بالاعمده", c: ["رسم", "بياني", "اعمدة", "احصائيات", "مخطط"], a: "8" },
+      { n: "ميزان اتخاز القرار", c: ["قرار", "ميزان", "اختيار", "تقييم", "موازنة"], a: "1" },
+      { n: "نظام التصنيف", c: ["تصنيف", "ترتيب", "تقييم", "نجوم", "درجات"], a: "1" },
+      { n: "متتبع إنجاز المشروعات", c: ["انجاز", "مشروعات", "متتبع", "تقدم", "مهام"], a: "4" },
+      { n: "تسجيل الشاشه", c: ["تسجيل", "شاشة", "فيديو", "تصوير", "مقطع"], a: "4" },
+      { n: "ضفط النصوص", c: ["ضغط", "نصوص", "تقليل", "حجم", "توفير"], a: "4" },
+      { n: "خريطه أماكن واتجاهات", c: ["خريطة", "اتجاهات", "اماكن", "خرائط", "طرق"], a: "4" },
+      { n: "سجل التقارير والشكاوى", c: ["تقارير", "شكاوى", "سجل", "بلاغ", "متابعة"], a: "1" },
+      { n: "رسم الدوال الجبرية", c: ["رسم", "دوال", "جبرية", "رياضيات", "مخطط"], a: "8" },
+      { n: "شخصيه فجر للذكاء الاصطناعي", c: ["شخصية", "فجر", "ذكاء", "اصطناعي", "محادثة"], a: "1" },
+      { n: "صانع الجولات الإفتراضيه", c: ["جولات", "افتراضية", "سياحة", "خريطة", "اماكن"], a: "4" },
+      { n: "شاشه الشرح", c: ["شرح", "شاشة", "ارشاد", "تعليم", "دليل"], a: "2" },
+      { n: "رسم بياني", c: ["رسم", "بياني", "مخطط", "احصائيات", "رسوم"], a: "8" },
+      { n: "معمل دمج العناصر", c: ["دمج", "عناصر", "معمل", "تجميع", "تركيب"], a: "1" },
+      { n: "اختبار صحة علامات التشكيل", c: ["تشكيل", "علامات", "اختبار", "صحة", "اعراب"], a: "1" },
+      { n: "إداره موارد مجموعه", c: ["ادارة", "موارد", "مجموعة", "فريق", "مشروع"], a: "4" },
+      { n: "محرك بناء روبوت دردشه", c: ["روبوت", "دردشة", "بناء", "محرك", "ذكاء"], a: "4" }
+    ];
+    const mytoolsuggest = document.getElementById("mytoolsuggest");
+    function initsuggestTools() {
+      const container = document.getElementById("suggestedtoolsContainer");
+      container.innerHTML = "";
+      toolsData.forEach((tool, index) => {
+        let btn = document.createElement("button");
+        btn.className = "form-btn";
+        btn.textContent = tool.n;
+        btn.id = `tool-btn-${index}`;
+        btn.onclick = () => {
+          const message = responsesLibrary[tool.a] || "لا مش عارفه بصراحه";
+          showToast(message);
+        };
+        container.appendChild(btn);
+      });
+    }
+    function getsuggestSimilarity(s1, s2) {
+      let longer = s1;
+      let shorter = s2;
+      if (s1.length < s2.length) {
+        longer = s2;
+        shorter = s1;
+      }
+      let longerLength = longer.length;
+      if (longerLength === 0) {
+        return 1.0;
+        mytoolsuggest.style.display = "none";
+      }
+      return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+    }
+    function editDistance(s1, s2) {
+      s1 = s1.toLowerCase();
+      s2 = s2.toLowerCase();
+      let costs = new Array();
+      for (let i = 0; i <= s1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= s2.length; j++) {
+          if (i === 0) {
+            costs[j] = j;
+          } else {
+            if (j > 0) {
+              let newValue = costs[j - 1];
+              if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+                newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+              }
+              costs[j - 1] = lastValue;
+              lastValue = newValue;
+            }
+          }
+        }
+        if (s1.length > 0) {
+          costs[s2.length] = lastValue;
+        }
+      }
+      return costs[s2.length];
+    }
+    function matchesConcept(term, concepts) {
+      return concepts.some(concept => {
+        if (concept.includes(term) || term.includes(concept)) return true;
+        return getsuggestSimilarity(term, concept) >= 0.55;
+      });
+    }
+    function handlesuggestCommand(event) {
+      const inputVal = document.getElementById("myInput").value.toLowerCase().trim();
+      const resultsCountDiv = document.getElementById("suggestsresultsCount");
+      if (!inputVal) {
+        toolsData.forEach((_, i) => document.getElementById(`tool-btn-${i}`).style.display = "none");
+        resultsCountDiv.innerHTML = "";
+        mytoolsuggest.style.display = "none";
+        return;
+      }
+      const rawWords = inputVal.split(/\s+/).filter(t => t.length > 0);
+      let activeSearchTerms = [];
+      let excludedTerms = [];
+      let currentlyNegated = false;
+      for (let i = 0; i < rawWords.length; i++) {
+        let word = rawWords[i];
+        if (conjunctionWords.includes(word)) {
+          currentlyNegated = false;
+          continue;
+        }
+        if (negationWords.includes(word)) {
+          currentlyNegated = true;
+          continue;
+        }
+        if (intentWords.includes(word)) {
+          continue;
+        }
+        if (currentlyNegated) {
+          excludedTerms.push(word);
+        } else {
+          activeSearchTerms.push(word);
+        }
+      }
+      let count = 0;
+      toolsData.forEach((tool, index) => {
+        const btn = document.getElementById(`tool-btn-${index}`);
+        const isMatch = activeSearchTerms.some(term => matchesConcept(term, tool.c));
+        const isExcluded = excludedTerms.some(exTerm => {
+          let nameMatch = tool.n.toLowerCase().includes(exTerm) || getsuggestSimilarity(exTerm, tool.n.toLowerCase()) >= 0.55;
+          let conceptMatch = matchesConcept(exTerm, tool.c);
+          return nameMatch || conceptMatch;
+        });
+        if (activeSearchTerms.length > 0 && isMatch && !isExcluded) {
+          btn.style.display = "inline-block";
+          count++;
+        } else {
+          btn.style.display = "none";
+        }
+      });
+      if (count > 0) {
+        mytoolsuggest.style.display = "none";
+        resultsCountDiv.innerHTML = `اعتقد عندي حاجه قريبه لطلبك لقيتلك ${count} حاجه ممكن تنفع:`;
+        showAndMove('mytoolsuggest');
+      } else {
+        mytoolsuggest.style.display = "none";
+        resultsCountDiv.innerHTML = "مش عارفه بصراحه قصدك اى 🤔";
+      }
+    }
+  }
+  //صانع محاكاه محادثات
+  {
+    let audioCtx;
+    function initAudio() {
+      if (!audioCtx) {audioCtx = new (window.AudioContext || window.webkitAudioContext)();}
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+    function playSentPop() {
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.05);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.05);
+    }
+    function playReceivedPop() {
+      if (!audioCtx) return;
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, now);
+      osc.frequency.setValueAtTime(659.25, now + 0.1);
+      gain.gain.setValueAtTime(0.1, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(now + 0.3);
+    }
+    async function chattypeWriter(text, element, msgContainer) {
+      for (let i = 0; i < text.length; i++) {
+        element.innerHTML += text.charAt(i);
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+        await new Promise(r => setTimeout(r, 35));
+      }
+    }
+    let isRunning = false;
+    async function startSimulation() {
+      document.getElementById('settingsModal').style.display = 'none';
+      switchTab('chatanimationmaker');
+      initAudio();
+      if (isRunning) return;
+      isRunning = true;
+      const rawText = document.getElementById('script-input').value;
+      const lines = rawText.split('\n').filter(line => line.trim() !== '');
+      const msgContainer = document.getElementById('messages');
+      msgContainer.innerHTML = '';
+      let scenario = [];
+      for (let line of lines) {
+        let trimmed = line.trim();
+        if (trimmed.startsWith('#')) {
+          scenario.push({
+            type: 'sent',
+            text: trimmed.substring(1).trim()
+          });
+        } else if (trimmed.startsWith('-')) {
+          scenario.push({
+            type: 'received',
+            text: trimmed.substring(1).trim()
+          });
+        }
+      }
+      for (let i = 0; i < scenario.length; i++) {
+        const item = scenario[i];
+        const div = document.createElement('div');
+        div.className = `msg ${item.type}`;
+        if (item.type === 'received') {
+          div.innerHTML = `<div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+          msgContainer.appendChild(div);
+          msgContainer.scrollTop = msgContainer.scrollHeight;
+          await new Promise(r => setTimeout(r, 1200));
+          div.innerHTML = item.text;
+          playReceivedPop();
+        } else {
+          msgContainer.appendChild(div);
+          await chattypeWriter(item.text, div, msgContainer);
+          playSentPop();
+        }
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+        await new Promise(r => setTimeout(r, 1000));
+      }
+      isRunning = false;
+    }
+    document.getElementById('start-btn').addEventListener('click', startSimulation);
+  }
+  //محرك الاختيارات العشوائيه
+  {
+    document.getElementById('randpicBtn').addEventListener('click', () => {
+      const randpicText = document.getElementById('randpicInput').value;
+      const randpicItems = randpicText.split('\n').map(randpicItem => randpicItem.trim()).filter(randpicItem => randpicItem !== '');
+      const randpicResultDiv = document.getElementById('randpicResult');
+      if (randpicItems.length===0){ randpicResultDiv.innerText='لازم مدخلات الأول!'; return;}
+      let randpicCounter = 0;
+      const randpicInterval = setInterval(() => {
+        const randpicRandomIndex = Math.floor(Math.random() * randpicItems.length);
+        randpicResultDiv.innerText = randpicItems[randpicRandomIndex];
+        randpicCounter++;
+        if (randpicCounter > 15) {
+          clearInterval(randpicInterval);
+          const randpicFinalChoice = randpicItems[Math.floor(Math.random() * randpicItems.length)];
+          randpicResultDiv.innerText = `أنا إخترتلك: ${randpicFinalChoice}`;
+        }
+      }, 70);
+    });
   }
   var UI = {};
   function initUI() {
@@ -15780,9 +15989,10 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     updateCursor();
     loadpagetime();
     pomodoro_init();
+    initsuggestTools();
   }
   window.onload = initUI;
-  document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
+  //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
   (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 48)) { return true; } if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) { return false; } }; })();
   //const functions={}; for (let key in window){ try{ if (typeof window[key]==='function'){ let funcStr=window[key].toString();}} catch (e){}} const scripts=document.querySelectorAll('script'); let allFuncNames=[]; scripts.render=scripts.forEach(script=>{ let matches=script.innerText.match(/function\s+([a-zA-Z0-9_$]+)/g); if (matches){ matches.forEach(m=>{ let fName=m.replace('function', '').trim(); allFuncNames.push(fName);});}}); let duplicateFuncs=allFuncNames.filter((name, index)=>allFuncNames.indexOf(name) !==index); console.log("الدوال المكررة:", [...new Set(duplicateFuncs)]);
 </script>
