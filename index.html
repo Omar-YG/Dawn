@@ -5798,7 +5798,7 @@
         <div id="extresults"></div>
       </div>
     </section>
-    <section id="tasksandroutin" class="tab-content" style="display:block;">
+    <section id="tasksandroutin" class="tab-content">
       <h2>الروتين والمهمات</h2>
       <div class="app-container" style="overflow:auto;">
         <div id="renderDawnroutin">
@@ -16309,7 +16309,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     loadpagetime();
     pomodoro_init();
     initsuggestTools();
-    openNav();
   }
   window.onload = initUI;
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
