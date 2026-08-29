@@ -5798,7 +5798,7 @@
         <div id="extresults"></div>
       </div>
     </section>
-    <section id="tasksandroutin" class="tab-content">
+    <section id="tasksandroutin" class="tab-content" style="display:block;">
       <h2>الروتين والمهمات</h2>
       <div class="app-container" style="overflow:auto;">
         <div id="renderDawnroutin">
@@ -5815,10 +5815,10 @@
             </div>
             <div id="timetodolist" style="overflow:auto;white-space:nowrap;width:100%;"></div>
           </details>
-          <div class="date-picker-container" style="margin-bottom: 15px;">
-            <label for="historyDateInput" style="color: #ccc; margin-left: 8px;">تاريخ اليوم:</label>
+          <div style="margin: 25px auto 15px; display:flex;justify-content:space-between;gap:20px;align-items:center;width:95%;max-width:400px;">
+            <label for="historyDateInput" style="color: var(--bcolor);flex-shrink:0;">تاريخ اليوم:</label>
             <input type="date" id="historyDateInput" onchange="changeHistoryDate(this.value)"
-              style="padding: 8px; border-radius: 5px; background: #333; color: #fff; border: 1px solid #444; outline: none;">
+              style="max-width:200px;">
           </div>
           <div class="dashboard-grid" id="mainGrid"></div>
         </div>
@@ -16309,7 +16309,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     loadpagetime();
     pomodoro_init();
     initsuggestTools();
-    //openNav();
+    openNav();
   }
   window.onload = initUI;
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
