@@ -370,13 +370,13 @@
     align-items: center;
     inset: 0;
     margin: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--mainbg);
     z-index: 9998;
   }
   .overlayclosebn {
     font-size: 2.5em;
     font-weight: bold;
-    color: var(--wcolor);
+    color: var(--bcolor);
     position: absolute;
     top: 10px;
     right: 20px;
@@ -975,7 +975,7 @@
     width: 100%;
     height: 100%;
     cursor: crosshair;
-    background: var(--secbg);
+    border-radius: var(--minradius);
   }
   #draw #controls {
     padding: 5px;
@@ -984,7 +984,7 @@
     left: 0;
     right: 0;
     margin: auto;
-    width: 103px;
+    max-width: 300px;
     overflow: hidden;
     background-color: var(--focusbg);
     border-radius: var(--bigradius);
@@ -997,14 +997,16 @@
     background: var(--secbg);
     padding: var(--spacepadd);
     border-radius: var(--mainradius);
-    font-size: var(--dfont);
+    font-size: var(--bfont);
+    min-width: 50px;
   }
   #draw #colorPicker,
+  #draw #bgColorPicker,
   #draw #clearbtn {
     min-width: 40px;
     max-width: 40px;
     height: 40px;
-    border-radius: var(--mainradius);
+    border-radius: var(--roundradius) !important;
     border: var(--dborder);
     padding: 5px;
     background: var(--secbg);
@@ -1865,7 +1867,8 @@
     background: var(--focusbg);
     border-radius: var(--secradius);
   }
-  #viewerwrapper:focus {
+  #viewerwrapper:focus,
+  #viewerwrapper:focus-within {
     right: 10px;
   }
   .viewer-header {
@@ -3040,7 +3043,7 @@
     max-width: 600px;
     max-height: 70vh;
     border-radius: 18px;
-    box-shadow: 0 0 5px 0 lightgrey;
+    box-shadow: var(--shadow);
   }
   #tour-overlay {
     background: var(--mainbg);
@@ -3768,7 +3771,8 @@
     <span class="overlayclosebn" onclick="mediaoverlayoff()">×</span>
     <div id="mainPlayerContainer">
       <video id="mainVideo" controls></video>
-      <p style="color: var(--wcolor); margin: 10px 0 0 0;" id="videoTitle">لم يتم اختيار فيديو</p>
+      <p style="color: var(--bcolor); margin: 10px auto 0;width:100%;text-align:center;" id="videoTitle">لم يتم اختيار
+        فيديو</p>
     </div>
   </div>
   <div id="settingsModal" onclick="this.style.display='none'">
@@ -4706,8 +4710,23 @@
       <div id="salary-calc-app" class="modaltab">
         <h2> حساب صافي الميزانية </h2>
         <fieldset>
-          <p>الراتب الصافي: المتبقي: <b id="remaining-val" style="color: green;">0</b> ج.م</p>
+          <legend>الراتب الصافي: المتبقي: <b id="remaining-val" style="color: green;">0</b> ج.م</legend>
           <input type="number" id="net-salary" placeholder="أدخل الصافي (مثلاً 15000)" oninput="calcRemaining()">
+        </fieldset>
+        <fieldset>
+          <legend>خطه توزيع الميزانيه</legend>
+          <select id="budget-type" onchange="distributeMoney()">
+            <optgroup label="شخصي">
+              <option value="personal_50">خطة 50-30-20 (متوازنة)</option>
+              <option value="aggressive_save">خطة الطوارئ (تحويش 70%)</option>
+            </optgroup>
+            <optgroup label="تجاري">
+              <option value="business_standard">تشغيل وأرباح (الوضع العادي)</option>
+              <option value="business_growth">نمو سريع (ضخ في التطوير)</option>
+              <option value="freelance">عمل حر (ضرائب وادخار)</option>
+            </optgroup>
+          </select>
+          <div id="distribution-results" style="margin-top: 15px;"></div>
         </fieldset>
         <fieldset>
           <legend>إضافة بند مصروف (إيجار، فواتير، ديون..)</legend>
@@ -5263,7 +5282,7 @@
           </div>
         </div>
       </div>
-      <div id="colorcontainer" class="modaltab" style="max-width:600px;">
+      <div id="colorcontainer" class="modaltab">
         <h2>درجات اللون</h2>
         <details>
           <summary>عرض الألوان المتناسقه</summary>
@@ -5327,6 +5346,7 @@
         <span class="dot"></span>
         <span class="dot"></span>
       </div>
+      <div id="marcoveoutput" class="replay" onclick="stopGeneration()"></div>
       <div id="chatbotreplay" class="replay"></div>
       <div id="mytoolsuggest" class="replay">
         <div id="suggestsresultsCount"></div>
@@ -5378,32 +5398,15 @@
             <option value="numbers">أرقام</option>
             <option value="symbols">رموز</option>
           </select>
-          <button onclick="handleSort()" id="sortBtn" class="conf-btn">ترتيب</button>
+          <button onclick="handleSort()" class="conf-btn"
+            style="border-radius:var(--minradius);padding:var(--mainpadd);">ترتيب</button>
         </center>
       </div>
-      <div id="smart-budget-app" class="replay">
-        <p>خطه توزيع الميزانيه</p>
-        <fieldset>
-          <b>اختيار الخطة:</b>
-          <select id="budget-type" onchange="distributeMoney()">
-            <optgroup label="شخصي">
-              <option value="personal_50">خطة 50-30-20 (متوازنة)</option>
-              <option value="aggressive_save">خطة الطوارئ (تحويش 70%)</option>
-            </optgroup>
-            <optgroup label="تجاري">
-              <option value="business_standard">تشغيل وأرباح (الوضع العادي)</option>
-              <option value="business_growth">نمو سريع (ضخ في التطوير)</option>
-              <option value="freelance">عمل حر (ضرائب وادخار)</option>
-            </optgroup>
-          </select>
-        </fieldset>
-        <div id="distribution-results" style="margin-top: 15px;"></div>
-      </div>
-      <div id="charts-wrapper" class="replay" style="max-height:none;height:210px;"
-        ondblclick="document.getElementById('charts-wrapper').style.display = 'none';">
+      <div id="charts-wrapper" class="replay" style="max-height:none;height:210px;">
+        <p>مثال : المشروبات : 20 | الماكولات : 15</p>
         <div style="overflow-x: auto; white-space: nowrap; padding-bottom: 20px;">
           <div id="charts-container"
-            style="display: inline-flex; align-items: flex-end; gap: 25px; height: 150px; border-bottom: 4px solid #555; padding-bottom: 0;">
+            style="display: inline-flex; align-items: flex-end; gap: 25px; height: 150px; border-bottom: 4px solid var(--gcolor); padding-bottom: 0;">
           </div>
         </div>
       </div>
@@ -5446,13 +5449,13 @@
         <div id="resultsArea"></div>
       </div>
       <div id="sugplace" class="replay">
-        <p>عندك مشوار؟ لو الطريق محفوظ عندي</p>
+        <p>مشوار؟ يلا نختار المكان أو نضيف جديد 🤫</p>
         <button class="conf-btn" style="padding:12px 15px;border-radius:30px;margin:10px 0 0;"
           onclick="onerun('readymetro');opentab('metroplaces')">يلا نحدد المكان</button>
       </div>
       <div id="memorySummary" class="replay"></div>
       <div id="welcome-modal" class="replay" ondblclick="startTour()">
-        أنا فجر! 👋
+        أهلاً، انا فجر! 👋
         <br>
         نظام ذكاء رمزي عربي مصري وخفيفة جداً بقدر أشتغل أوفلاين تماماً ومن غير أي سيرفرات. يعني خصوصيتك محمية 100% لأن
         كل بياناتك بتفضل عندك وبس. 🔒
@@ -5574,15 +5577,14 @@
     </div>
   </main>
   <div id="customMenu" class="context-menu">
-    <div style="display:flex;border-bottom: var(--dborder);margin:0 0 5px;padding:0 0 5px;">
-      <div class="context-menu-item" onclick="handleAction('copy')">نسخ</div>
-      <div class="context-menu-item" onclick="handleAction('cut')">قص</div>
-      <div class="context-menu-item" onclick="handleAction('paste')">لصق</div>
-    </div>
-    <div class="context-menu-item" onclick="handleAction('selectAll')">تحديد الكل</div>
-    <button class="context-menu-item" id="search-btn" onclick="search()">بحث بـ جوجل</button>
-    <button class="context-menu-item" onclick="processAndSpeak()">سماع النص</button>
+    <button class="context-menu-item" id="search-btn" onclick="search()">بحث خارجي</button>
     <button class="context-menu-item" onclick="analyzeText()">تحليل النص</button>
+    <div class="morelist" tabindex="0">
+      <button class="context-menu-item menubtn">تفاعل</button>
+      <button class="context-menu-item detmore" onclick="processSecret();showAndMove('faraohres')">تشفير فرعوني</button>
+      <button class="context-menu-item detmore" onclick="processAndSpeak()">سماع النص</button>
+      <button class="context-menu-item detmore" id="startButton" onclick="startGeneration()">أتكلم بإسلوبك</button>
+    </div>
     <div class="morelist" tabindex="0">
       <button class="context-menu-item menubtn">تعلم</button>
       <button class="context-menu-item detmore" onclick="addToDict()">كلمة في القاموس</button>
@@ -5597,11 +5599,8 @@
       <button class="context-menu-item detmore" onclick="processBulkData()">رسم وتحليل</button>
       <button class="context-menu-item detmore" onclick="GeoGabrarender()">رسم معادلة جبريه</button>
     </div>
-    <div class="context-menu-item" onclick="processSecret();showAndMove('faraohres')">تشفير فرعوني</div>
-    <div class="context-menu-item" onclick="startAnalysis();showAndMove('Humanfy')">تحليل الطابع</div>
-    <div id="toolsContainer" style="display:none;">
-      <button class="start-btn" id="startButton" onclick="startGeneration()"> توليد عشوائي </button>
-      <button class="stop-btn" id="stopButton" onclick="stopGeneration()"> إيقاف التوليد </button>
+    <div class="context-menu-item" onclick="startAnalysis();showAndMove('Humanfy')">الطابع الشخصي</div>
+    <div id="toolsContainer">
     </div>
   </div>
   <div id="nav">
@@ -5651,14 +5650,17 @@
       <h2>لوحة الرسم</h2>
       <div id="draw" class="app-container">
         <div id="controls">
-          <input type="color" id="bgColorPicker" style="display:none;" value="#ffffff">
+          <input type="number" id="strokeRange" value="5">
+          <input type="color" id="bgColorPicker" value="#ffffff" oninput="this.style.backgroundColor = this.value"
+            style="background:#fff;">
           <input type="color" id="colorPicker" value="#000000" oninput="this.style.backgroundColor = this.value"
             style="background:#000;">
-          <button id="clearbtn" onclick="clearWhiteboard()"><svg viewBox="0 0 448 512"
-              style="scale:0.7; fill:rgb(226, 63, 63);">
+          <button id="clearbtn" onclick="clearWhiteboard()">
+            <svg viewBox="0 0 448 512" style="scale:0.7; fill:rgb(226, 63, 63);">
               <path
                 d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z" />
-            </svg></button>
+            </svg>
+          </button>
         </div>
         <div id="whiteboard"> <svg id="drawingarea"></svg> </div>
       </div>
@@ -5813,6 +5815,11 @@
             </div>
             <div id="timetodolist" style="overflow:auto;white-space:nowrap;width:100%;"></div>
           </details>
+          <div class="date-picker-container" style="margin-bottom: 15px;">
+            <label for="historyDateInput" style="color: #ccc; margin-left: 8px;">تاريخ اليوم:</label>
+            <input type="date" id="historyDateInput" onchange="changeHistoryDate(this.value)"
+              style="padding: 8px; border-radius: 5px; background: #333; color: #fff; border: 1px solid #444; outline: none;">
+          </div>
           <div class="dashboard-grid" id="mainGrid"></div>
         </div>
         <button
@@ -6007,18 +6014,15 @@
     function input() {
       updateTypingSpeed();
       checkEditorIdle();
+      sostime();
       UI.mybtnd.className = UI.editor.value.trim() !== "" ? "think" : "face";
       clearTimeout(typingTimer);
       typingTimer = setTimeout(() => {
         handlesuggestCommand(event);
         TextProcessing();
         calculateExpression(event);
-        sostime();
-        getform();
         checkSuggestion();
         processfeel();
-        detectmetro();
-        checkPainwords();
         UI.mybtnd.className = UI.editor.value.trim() !== "" ? "arrow" : "face";
         UI.colorview.style.backgroundColor = UI.editor.value;
         if (UI.colorview.style.backgroundColor !== "") { showAndMove("btncolorbox"); }
@@ -6176,6 +6180,8 @@
       const data = Object.fromEntries(formData.entries());
       localStorage.setItem("userFormData", JSON.stringify(data));
       displayProfileCard();
+      openuser(event, 'Profile');
+      showToast('انا حفظت بياناتك');
     }
     function loadFromLocal() {
       const savedData = localStorage.getItem("userFormData");
@@ -6306,7 +6312,7 @@
       إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه", "صانع محاكاه محادثات"],
       منطق: ["آله حاسبه فورية", "محول الوحدات الرياضيه", "بنك الاسئله والتدريبات", "مشتق القوانين المسجله", "ترتيب البيانات تصاعدي وتنازلي", "محلل القانون", "حساب التركه", "فاحص اللوغارتم", "مكتبه القانون والاحكام", "موزع الميزانيه", "حسابه صافي المرتب", "ميزان اتخاز القرار", "نظام التصنيف", "رسم الدوال الجبرية", "اختبار صحه علامات التشكيل", "معمل دمج العناصر"],
       تطوير: ["تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث", "محرك بناء روبوت دردشه"],
-      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر", "محرك الإختيارات العشوائيه","الرد بالملصقات"],
+      تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر", "محرك الإختيارات العشوائيه", "الرد بالملصقات"],
       وسائط: ["لوحه الرسم", "تسجيل الصوت", "المنبه والمؤقت", "العاب وتسليه", "رسم الخريطه الشجرية", "بلاطات الالوان", "إنشاء موسيقى ونغمات", "لعبه فرقعه الأرقام", "لعبه عداد الضغطات", "لعبه الضغط بالترتيب", "قائمه مشغل الاغاني", "الألوان المتناسقه", "الحصول على اللون", "الحصول على اللون", "لعبه ركض فجر", "تسجيل الشاشه", "الفحص الطبي المبدأي", "مؤشر التحاليل الطبيه", "تسجيل أماكن الالم", "ملف القوة الشخصيه", "حامي الشاشه", "رسم بياني بالاعمده", "روتين المستخدم اليومي", "خريطه أماكن واتجاهات", "صانع الجولات الإفتراضيه", "رسم بياني", "حيوانات فجر الأليفه"]
     };
     function drawFajrRadar() {
@@ -7078,7 +7084,7 @@
   }
   //مركز تحكم الذاكرة والتخزين
   {
-    const friendlyNames = { notionTasks3: "الروتين اليومي", fajr_vault: "مدير الروابط", fajr_universal_categories: "نظام التصنيف (التصنيفات)", device_id: "دردشه الطوارئ", fajr_welcome_seen: "اول رساله إستقبال", my_songs: "نغمات وموسيقى", userMessages: "ذاكره المحادثات", fajr_app_data: "تاريخ استخدام الادوات", rpg_final: "تطور المستخدم", fajr_last_selection: "موقع حساب المواقيت", light: "نقاط النور", pomodoro_state: "ذاكره مؤقت المجهود", fajr_universal_items: "نظام التصنيف (العناصر)", Timer_data: "المؤقت والتنبيهات", forms: "النماذج والجداول", userFormData: "البيانات الشخصيه", fajr_attendance: "سجل الحضور والانصراف", last_played_index: "اخر الموسيقى المشغله", illdata: "سجل اماكن الألم", fajr_projects_v2: "رادار إنجاز المشروعات", lab_elements: "عناصر معمل الدمج", lab_recipes: "مُركبات معمل الدمج", VariableMarkovModel_v5_Final: "تدريب ماركوف", markov_bot_rules: "تدريب الردود الآلية", wiki_galaxy_date: "سجل تاريخ النجوم", wiki_galaxy_posts: "سجل محتوى النجوم", sociInventoryData: "بيانات إداره المجموعه", dashboardData: "بيانات لوحه التقارير", };
+    const friendlyNames = { notionLastDate: "احدث تاريخ في الروتين اليومي", f_dict: "رموز القوانين الرياضيه", f_laws: "الفوانين الرياضيه", f_next: "مشتفات القوانين الرياضيه", fajr_patterns: "التدريب الكلامي للردود", DawnStatusTrackerEvents: "سجل التقارير", notionHistory: "سجل الروتين اليومي", notionTasks3: "الروتين اليومي", fajr_vault: "مدير الروابط", fajr_universal_categories: "نظام التصنيف (التصنيفات)", device_id: "دردشه الطوارئ", fajr_welcome_seen: "اول رساله إستقبال", my_songs: "نغمات وموسيقى", userMessages: "ذاكره المحادثات", fajr_app_data: "تاريخ استخدام الادوات", rpg_final: "تطور المستخدم", fajr_last_selection: "موقع حساب المواقيت", light: "نقاط النور", pomodoro_state: "ذاكره مؤقت المجهود", fajr_universal_items: "نظام التصنيف (العناصر)", Timer_data: "المؤقت والتنبيهات", forms: "النماذج والجداول", userFormData: "البيانات الشخصيه", fajr_attendance: "سجل الحضور والانصراف", last_played_index: "اخر الموسيقى المشغله", illdata: "سجل اماكن الألم", fajr_projects_v2: "رادار إنجاز المشروعات", lab_elements: "عناصر معمل الدمج", lab_recipes: "مُركبات معمل الدمج", VariableMarkovModel_v5_Final: "تدريب ماركوف", markov_bot_rules: "تدريب الردود الآلية", wiki_galaxy_date: "سجل تاريخ النجوم", wiki_galaxy_posts: "سجل محتوى النجوم", sociInventoryData: "بيانات إداره المجموعه", dashboardData: "بيانات لوحه التقارير", };
     function getStorageDetails() {
       let keysMap = {};
       let total = 0;
@@ -9536,8 +9542,8 @@ ${analyticsHTML}
       historyList.innerHTML = history.map((item, index) => `
             <div class="history-card">
                 <div style="flex:1">
-                    <small style="color:var(--dcolor); font-size:0.7rem;">${item.date}</small>
-                    <div style="color:#444; font-size:0.9rem;">${item.type}</div>
+                    <small style="color:var(--bcolor); font-size:0.7rem;">${item.date}</small>
+                    <div style="color:var(bcolor); font-size:0.9rem;">${item.type}</div>
                 </div>
                 <button onclick="removeHistoryItem(${index})" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:1.1rem;">&times;</button>
             </div>
@@ -10379,11 +10385,10 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
     let generationIntervalID = null;
     let currentContextParts = [];
     const MINIMUM_CONTEXTS_TO_GENERATE = 5;
-    const outputArea = document.getElementById("replay");
+    const outputArea = document.getElementById("marcoveoutput");
     const trainingInput = document.getElementById("editor");
     const memoryInfo = document.getElementById("memoryInfo");
     const startButton = document.getElementById("startButton");
-    const stopButton = document.getElementById("stopButton");
     function normalizeArabic(text) {
       text = text.replace(/([.،:؛?!])/g, " $1 ");
       return text
@@ -10425,7 +10430,9 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
           localStorage.removeItem(STORAGE_KEY);
           marcovmemory.clear();
           trainingCount = 0;
+          outputArea.style.display = "none";
           outputArea.innerHTML = `<p style="color: #f44336;">أنا نسيت كل تدريبنا، يلا نبدأ من جديد</p>`;
+          showAndMove('marcoveoutput');
           stopGeneration();
           updateStatus();
           showToast("نسيت التدريب بالكامل! 🧹");
@@ -10469,7 +10476,9 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       train(msg);
       savemarcovMemory();
       trainingInput.value = "";
-      outputArea.innerHTML += `<p style="color: #4caf50; border-right: 3px solid #4caf50; padding-right: 10px;">تمام كدا! انا حفظت التدريب الجديد ووصلنا : ${marcovmemory.size}</p>`;
+      outputArea.style.display = "none";
+      outputArea.innerHTML += `<p style="color:var(--bcolor); border-right: 3px solid #4caf50; padding-right: 10px;">تمام كدا! انا حفظت التدريب الجديد </p>`;
+      showAndMove('marcoveoutput');
     }
     function selectWord(map) {
       let candidates = [...map.entries()];
@@ -10529,6 +10538,7 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       }
     }
     function startGeneration() {
+      onerun('loadmarkovMemory');
       if (marcovmemory.size < MINIMUM_CONTEXTS_TO_GENERATE) {
         showToast(
           ` لسة أنا متعلمتش كفاية علشان أقدر انتج كلام مفهوم. لازم أتعلم ${MINIMUM_CONTEXTS_TO_GENERATE} سياق على الأقل. إحنا حالياً وصلنا: ${marcovmemory.size}`
@@ -10540,9 +10550,11 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       if (rawInput) {
         const clean = normalizeArabic(rawInput);
         currentContextParts = clean.split(/\s+/).filter((w) => w.length > 0);
+        outputArea.style.display = "none";
         outputArea.innerHTML += `<hr><p style="color: #4a90e2; ">[بدأت التوليد] </p>${currentContextParts.join(
           " "
         )}`;
+        showAndMove('marcoveoutput');
       } else {
         const keys = [...marcovmemory.keys()].filter(
           (k) => k.split(" ").length === 3
@@ -10551,14 +10563,15 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
         const randomContext =
           keys[randomIndex] || "__start__ __start__ __start__";
         currentContextParts = randomContext.split(" ");
+        outputArea.style.display = "none";
         outputArea.innerHTML += `<p style="color: #4a90e2; ">[بدأت التوليد من نقطة عشوائية]</p>`;
+        showToast('ضغطه واحده على رسالتي علشان اسكت');
+        showAndMove('marcoveoutput');
       }
       while (currentContextParts.length < 2) {
         currentContextParts.unshift("__start__");
       }
-      trainingInput.style.display = "none";
       startButton.style.display = "none";
-      stopButton.style.display = "inline-block";
       generationIntervalID = setInterval(generateContinuous, 100);
     }
     function stopGeneration() {
@@ -10570,12 +10583,10 @@ data-full="${encodeURIComponent(item.fullText || item.text)}">
       }
       trainingInput.style.display = "block";
       startButton.style.display = "inline-block";
-      stopButton.style.display = "none";
     }
     function updateStatus() {
       memoryInfo.textContent = ` عدد روابط التعلم المحفوظة: ${marcovmemory.size}`;
       if (marcovmemory.size >= MINIMUM_CONTEXTS_TO_GENERATE) {
-        startButton.textContent = "نبدأ إنتاج";
         startButton.classList.add("ready");
       } else {
         startButton.textContent = `باقي ${MINIMUM_CONTEXTS_TO_GENERATE - marcovmemory.size
@@ -11004,7 +11015,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "تصنيف المواد", d: "تصنيف الموارد وإحصائها", run: "onerun('refreshUI');opentab('universal-classifier-app')" },
         { n: "فحص لوغاريتم", d: "تحليل الداله لفحص قوتها", run: "opentab('DawnLogarithm')" },
         { n: "بنك الأسئله", d: "إنشاء أسئله وتدريبات", run: "onerun('examreadygo');showAndMove('quesbtncontainer')" },
-        { n: "تقسيم الميزانيه", d: "تقسيم الميزانيه حسب النسب", run: "showAndMove('smart-budget-app')" },
         { n: "دمج العناصر", d: "إنشاء ودمج المركبات", run: "onerun('lapmergeRender');opentab('labmergego')" },
         { n: "تدريب التشكيل", d: "تقييم تشكيل الجمل العربية", run: "onerun('tashkeelInitGame');opentab('tashkeeltab')" },
         { n: "ملصقات فجر", d: "انشاء وتعديل ملصقات الردود", run: "opentab('mystickeraddtab')" }
@@ -11014,6 +11024,8 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { n: "المؤسس", d: "رسالة إلى المؤسس", run: "window.open('https://wa.me/+201095404569', '_blank')" },
         { n: "رسالة طارئة", d: "رساله طارئة الى اقرب جهاز", run: "opentab('SOSCHat')" },
         { n: "الرد المخصص", d: "الدردشه مع مكتبه مخصصه", run: "generateReply()" },
+        { n: "مجسم بشري", d: "تحديد موقع الالم عندك", run: "showAndMove('checkpain');" },
+        { n: "خريطه الأماكن", d: "إضافه أماكن وطرقاتها", run: "showAndMove('sugplace')" },
       ],
       "!": [
         { n: "تحديث النظام", d: "جلب آخر تحديثات النظام", run: "refreshApp()" },
@@ -11629,7 +11641,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       ).filter((b) => b.dataset.value === val);
       if (selectedElements.length === allOfThisNum.length) {
         score += selectedElements.length * 10;
-        UI.score.innerText = score;
+        if (UI.Game3score) {
+          UI.Game3score.innerText = score;
+        } else if (UI.score) {
+          UI.score.innerText = score;
+        }
         selectedElements.forEach((e) => e.classList.add("hidden"));
         selectedNum = null;
         selectedElements = [];
@@ -13000,7 +13016,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       ]
     };
     function distributeMoney() {
-      const amount = parseFloat(document.getElementById('myInput').value) || 0;
+      const amount = parseFloat(document.getElementById('net-salary').value) || 0;
       const planKey = document.getElementById('budget-type').value;
       const container = document.getElementById('distribution-results');
       if (amount <= 0) return;
@@ -13008,9 +13024,9 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       container.innerHTML = selectedPlan.map(item => {
         const share = (amount * item.p).toFixed(2);
         return `
-                    <div style="background: ${item.c}; border: 1px solid #000; padding: 12px; margin-bottom: 8px; border-radius: 4px;">
-                        <span style="font-weight: bold;">${item.label} (${item.p * 100}%):</span>
-                        <span style="float: left; font-size: 1.1em;">${Number(share).toLocaleString()} ج.م</span>
+                    <div style="background: ${item.c}; border: var(--cborder); padding: var(--mainpadd); margin: 4px; border-radius:var(--minradius);">
+                        <span style="font-weight: bold;color:#444;">${item.label} (${item.p * 100}%):</span>
+                        <span style="float: left; font-size: 1.1em;color:#444;">${Number(share).toLocaleString()} ج.م</span>
                     </div>
                 `;
       }).join('');
@@ -13075,10 +13091,10 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         const height = (d.val / maxVal) * 100;
         return `
                     <div style="flex: 0 0 50px; background: linear-gradient(to top, #00c6ff, #0072ff); height: calc(${height}% - 20px); position: relative; border-radius: 5px 5px 0 0; border: 1px solid #fff;">
-                        <span style="position: absolute; top: -15px; width: 100%; text-align: center; color: #fff; font-size: 11px; font-weight: bold;">
+                        <span style="position: absolute; top: -15px; width: 100%; text-align: center; color:var(--bcolor); font-size: 11px; font-weight: bold;">
                             ${d.val}
                         </span>
-                        <div style="position: absolute; bottom: -25px; width: 100%; text-align: center; color: #00c6ff; font-size: 12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis;">
+                        <div style="position: absolute; bottom: -25px; width: 100%; text-align: center; color:var(--bcolor); font-size: 12px; font-weight: bold; overflow: hidden; text-overflow: ellipsis;">
                             ${d.label}
                         </div>
                     </div>
@@ -13136,7 +13152,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       grid.innerHTML = items.map((item, index) => `
                 <div style="border: var(--dborder); padding: 12px; border-radius: 10px; background: var(--secbg); position: relative; box-shadow: 2px 2px 5px rgba(0,0,0,0.05);">
                     <button onclick="removeItem(${index})" style="position: absolute; left: 8px; top: 8px; color: #ff4444; border: none; background: none; cursor: pointer; font-size: 16px;">×</button>
-                    <strong style="display: block; color: #1a1a2e; margin-bottom: 8px;">${item.name}</strong>
+                    <strong style="display: block; color: var(--bcolor); margin-bottom: 8px;">${item.name}</strong>
                     <span style="font-size: 11px; background: #e0e0e0; color: #333; padding: 3px 8px; border-radius: 20px;">${item.cat}</span>
                 </div>
             `).join('');
@@ -13144,7 +13160,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const stats = {};
       items.forEach(i => stats[i.cat] = (stats[i.cat] || 0) + 1);
       document.getElementById('categories-breakdown').innerHTML = Object.entries(stats).map(([cat, count]) => `
-                <div style="background: #f0f4f8; border: 1px solid #d1d9e6; padding: 8px 12px; border-radius: 6px; font-size: 12px; color: #2d3436;">
+                <div style="background:var(--focusbg); border: var(--dborder); padding: 8px 12px; border-radius: 6px; font-size: 12px; color: var(--bcolor);">
                     ${cat}: <b>${count}</b>
                 </div>
             `).join('');
@@ -13526,6 +13542,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         { t: "تخطيط مهام الغد", d: false }
       ]
     };
+    const today = new Date().toISOString().split('T')[0];
+    const dateInput = document.getElementById('historyDateInput');
+    if (dateInput) {
+      dateInput.value = today;
+    }
     function renderDawnroutin() {
       const grid = document.getElementById('mainGrid');
       grid.innerHTML = '';
@@ -13550,14 +13571,29 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
             `;
         grid.appendChild(section);
       });
-      localStorage.setItem('notionTasks3', JSON.stringify(tasks));
     }
     function toggle(id, idx) {
+      const selectedDate = dateInput ? dateInput.value : today;
       tasks[id][idx].d = !tasks[id][idx].d;
+      if (selectedDate === today) {
+        localStorage.setItem('notionTasks3', JSON.stringify(tasks));
+      } else {
+        let history = JSON.parse(localStorage.getItem('notionHistory')) || {};
+        history[selectedDate] = tasks;
+        localStorage.setItem('notionHistory', JSON.stringify(history));
+      }
       renderDawnroutin();
     }
     function remove(id, idx) {
+      const selectedDate = dateInput ? dateInput.value : today;
       tasks[id].splice(idx, 1);
+      if (selectedDate === today) {
+        localStorage.setItem('notionTasks3', JSON.stringify(tasks));
+      } else {
+        let history = JSON.parse(localStorage.getItem('notionHistory')) || {};
+        history[selectedDate] = tasks;
+        localStorage.setItem('notionHistory', JSON.stringify(history));
+      }
       renderDawnroutin();
     }
     function showInp(id) {
@@ -13566,12 +13602,57 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     }
     function handleKey(e, id) {
       if (e.key === 'Enter' && e.target.value.trim()) {
-        tasks[id].push({ t: e.target.value, d: false });
+        const selectedDate = dateInput ? dateInput.value : today;
+        tasks[id].push({ t: e.target.value.trim(), d: false });
         e.target.value = '';
         e.target.style.display = 'none';
+        if (selectedDate === today) {
+          localStorage.setItem('notionTasks3', JSON.stringify(tasks));
+        } else {
+          let history = JSON.parse(localStorage.getItem('notionHistory')) || {};
+          history[selectedDate] = tasks;
+          localStorage.setItem('notionHistory', JSON.stringify(history));
+        }
         renderDawnroutin();
       }
     }
+    function checkDailyReset() {
+      const lastSavedDate = localStorage.getItem('notionLastDate');
+      if (lastSavedDate && lastSavedDate !== today) {
+        let history = JSON.parse(localStorage.getItem('notionHistory')) || {};
+        history[lastSavedDate] = tasks;
+        localStorage.setItem('notionHistory', JSON.stringify(history));
+        Object.keys(tasks).forEach(cat => {
+          tasks[cat].forEach(item => item.d = false);
+        });
+        localStorage.setItem('notionTasks3', JSON.stringify(tasks));
+      }
+      localStorage.setItem('notionLastDate', today);
+    }
+    function changeHistoryDate(selectedDate) {
+      if (!selectedDate) return;
+      let history = JSON.parse(localStorage.getItem('notionHistory')) || {};
+      if (selectedDate === today) {
+        let savedToday = localStorage.getItem('notionTasks3');
+        if (savedToday) {
+          tasks = JSON.parse(savedToday);
+        }
+      } else {
+        if (!history[selectedDate]) {
+          let baseTasks = JSON.parse(localStorage.getItem('notionTasks3')) || tasks;
+          let freshCopy = JSON.parse(JSON.stringify(baseTasks));
+          Object.keys(freshCopy).forEach(cat => {
+            freshCopy[cat].forEach(item => item.d = false);
+          });
+          history[selectedDate] = freshCopy;
+          localStorage.setItem('notionHistory', JSON.stringify(history));
+        }
+        tasks = JSON.parse(JSON.stringify(history[selectedDate]));
+      }
+      renderDawnroutin();
+    }
+    checkDailyReset();
+    renderDawnroutin();
   }
   //محركات البحث
   {
@@ -13802,7 +13883,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         const node = getNodeById(id);
         let html = `<li>${node.n}`;
         if (node.c) {
-          html += ` <span style="font-size: 0.8em; color: #555;"> - ${node.c}</span>`;
+          html += ` <span style="font-size: 0.8em; color: var(--gcolor);"> - ${node.c}</span>`;
         }
         html += `</li>`;
         metropathList.innerHTML += html;
@@ -15742,7 +15823,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
   }
   //إقتراحات الأدوات
   {
-    const intentWords = ["عايز", "محتاج", "افتح", "شغل", "هات", "بدي", "عاوز", "انا"];
+    const intentWords = ["عايز", "محتاج", "افتح", "هات", "بدي", "عاوز"];
     const negationWords = ["مش", "لا", "بلاش", "غير", "مفيش"];
     const conjunctionWords = ["بس", "ولكن", "لكن", "و"];
     const responsesLibrary = {
@@ -15758,13 +15839,13 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       "10": "",
     };
     const toolsData = [
-      { n: "حساب النص وتحليله", c: ["نص", "تحليل", "كلمات", "احصائيات", "مفردات"], a: "6" },
+      { n: "حساب النص وتحليله", c: ["تحليل", "كلمات", "احصائيات", "مفردات"], a: "6" },
       { n: "نقاط النور", c: ["نقاط", "نور", "مكافآت", "رصيد", "تقييم"], a: "2" },
       { n: "مركز القرارات والتحكم في الردود", c: ["قرارات", "تحكم", "ردود", "مركز", "ادارة"], a: "9" },
       { n: "مركز تحكم الذاكرة والتخزين", c: ["ذاكرة", "تخزين", "مساحة", "حفظ", "ملفات"], a: "9" },
       { n: "رفع ملفات وعرضها", c: ["رفع", "ملف", "تحميل", "عرض", "مشاركة"], a: "4" },
       { n: "توليد محتوى وهمي", c: ["توليد", "محتوى", "وهمي", "عشوائي", "نص"], a: "4" },
-      { n: "لوحه الرسم", c: ["رسم", "لوحة", "قلم", "الوان", "تصميم"], a: "4" },
+      { n: "لوحه الرسم", c: ["رسم", "لوحة", "قلم", "الوان", "تصميم", "تلوين"], a: "4" },
       { n: "بناء النماذج وتصديرها", c: ["نماذج", "بناء", "تصدير", "قالب", "تصميم"], a: "4" },
       { n: "المحرر النصي", c: ["محرر", "نص", "كتابة", "تعديل", "تحرير"], a: "4" },
       { n: "تسجيل الصوت", c: ["صوت", "تسجيل", "ميكروفون", "سماع", "بودكاست"], a: "4" },
@@ -15805,12 +15886,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       { n: "خريطه أماكن واتجاهات", c: ["خريطة", "اتجاهات", "اماكن", "خرائط", "طرق"], a: "4" },
       { n: "سجل التقارير والشكاوى", c: ["تقارير", "شكاوى", "سجل", "بلاغ", "متابعة"], a: "1" },
       { n: "رسم الدوال الجبرية", c: ["رسم", "دوال", "جبرية", "رياضيات", "مخطط"], a: "8" },
-      { n: "شخصيه فجر للذكاء الاصطناعي", c: ["شخصية", "فجر", "ذكاء", "اصطناعي", "محادثة"], a: "1" },
       { n: "صانع الجولات الإفتراضيه", c: ["جولات", "افتراضية", "سياحة", "خريطة", "اماكن"], a: "4" },
       { n: "شاشه الشرح", c: ["شرح", "شاشة", "ارشاد", "تعليم", "دليل"], a: "2" },
       { n: "رسم بياني", c: ["رسم", "بياني", "مخطط", "احصائيات", "رسوم"], a: "8" },
       { n: "معمل دمج العناصر", c: ["دمج", "عناصر", "معمل", "تجميع", "تركيب"], a: "1" },
-      { n: "اختبار صحة علامات التشكيل", c: ["تشكيل", "علامات", "اختبار", "صحة", "اعراب"], a: "1" },
+      { n: "اختبار صحة علامات التشكيل", c: ["تشكيل", "علامات", "اختبار", "اعراب", "تدريب", "امتحان"], a: "1" },
       { n: "إداره موارد مجموعه", c: ["ادارة", "موارد", "مجموعة", "فريق", "مشروع"], a: "4" },
       { n: "محرك بناء روبوت دردشه", c: ["روبوت", "دردشة", "بناء", "محرك", "ذكاء"], a: "4" }
     ];
@@ -15888,6 +15968,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       let activeSearchTerms = [];
       let excludedTerms = [];
       let currentlyNegated = false;
+      let hasIntent = false;
       for (let i = 0; i < rawWords.length; i++) {
         let word = rawWords[i];
         if (conjunctionWords.includes(word)) {
@@ -15899,6 +15980,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
           continue;
         }
         if (intentWords.includes(word)) {
+          hasIntent = true;
           continue;
         }
         if (currentlyNegated) {
@@ -15910,7 +15992,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       let count = 0;
       toolsData.forEach((tool, index) => {
         const btn = document.getElementById(`tool-btn-${index}`);
-        const isMatch = activeSearchTerms.some(term => matchesConcept(term, tool.c));
+        const isMatch = hasIntent && activeSearchTerms.some(term => matchesConcept(term, tool.c));
         const isExcluded = excludedTerms.some(exTerm => {
           let nameMatch = tool.n.toLowerCase().includes(exTerm) || getsuggestSimilarity(exTerm, tool.n.toLowerCase()) >= 0.55;
           let conceptMatch = matchesConcept(exTerm, tool.c);
@@ -15929,7 +16011,11 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
         showAndMove('mytoolsuggest');
       } else {
         mytoolsuggest.style.display = "none";
-        resultsCountDiv.innerHTML = "مش عارفه بصراحه قصدك اى 🤔";
+        if (hasIntent) {
+          resultsCountDiv.innerHTML = "مش عارفه بصراحه قصدك اى 🤔";
+        } else {
+          resultsCountDiv.innerHTML = "";
+        }
       }
     }
   }
@@ -16223,6 +16309,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     loadpagetime();
     pomodoro_init();
     initsuggestTools();
+    //openNav();
   }
   window.onload = initUI;
   //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { matches.forEach((c, i) => console.log(`${i + 1}: ${c.trim()}`)); console.log(` إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); } else { return; } });
