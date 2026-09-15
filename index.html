@@ -3940,6 +3940,36 @@
     min-width: 120px;
     white-space: nowrap;
   }
+  #main-preview-frame {
+    width: 100%;
+    height: 40vh;
+    background: var(--focusbg);
+    border: none;
+    border-radius: var(--minradius);
+  }
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    max-height: 40vh;
+    overflow: auto;
+  }
+  .extcard {
+    background: var(--focusbg);
+    border: var(--dborder);
+    padding: var(--spadd);
+    border-radius: var(--minradius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .extcard h4 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--bcolor);
+    word-break: break-all;
+  }
   @media screen and (max-width: 1024px) and (min-width: 601px) {
     #nav {
       width: 80vw;
@@ -4641,6 +4671,13 @@
                 </svg>
                 <b>دائره المنطق</b>
               </div>
+              <div data-id="23" class="app" onclick="switchTab('extentionsbuild');onerun('initcodeextentionDB')">
+                <svg viewBox="0 0 448 512" title="dice-d6">
+                  <path
+                    d="M422.19 109.95L256.21 9.07c-19.91-12.1-44.52-12.1-64.43 0L25.81 109.95c-5.32 3.23-5.29 11.27.06 14.46L224 242.55l198.14-118.14c5.35-3.19 5.38-11.22.05-14.46zm13.84 44.63L240 271.46v223.82c0 12.88 13.39 20.91 24.05 14.43l152.16-92.48c19.68-11.96 31.79-33.94 31.79-57.7v-197.7c0-6.41-6.64-10.43-11.97-7.25zM0 161.83v197.7c0 23.77 12.11 45.74 31.79 57.7l152.16 92.47c10.67 6.48 24.05-1.54 24.05-14.43V271.46L11.97 154.58C6.64 151.4 0 155.42 0 161.83z" />
+                </svg>
+                <b>مكتبة الإضافات</b>
+              </div>
             </div>
             <div class="divider"></div>
             <div class="search-container">
@@ -4734,6 +4771,16 @@
               <div id="checkboxGroup"></div>
             </details>
           </div>
+        </div>
+      </div>
+      <h2>إنشاء وتحرير الإضافات</h2>
+      <div id="extintion-container" class="modaltab">
+        <div class="flex" style="flex-direction:column;">
+          <input type="hidden" id="snippet-id">
+          <input type="text" id="snippet-title" placeholder="عنوان الأداة">
+          <textarea id="snippet-code" style="min-height:290px;" placeholder="الصق الكود هنا..."></textarea>
+          <button class="conf-btn" onclick="saveSnippet()"> تحديث وحفظ الأداة</button>
+          <p style="font-size: var(--mfont);text-align:center;"> ( يجب مراعاه الا تكون الاداه تحتوي alert,confirm,prompt او اي صلاحيه من صلاحيات المتصفح أو مكتبات خارجيه )</p>
         </div>
       </div>
       <div id="formdata-container" class="modaltab">
@@ -6181,7 +6228,8 @@
         <br>
         نظام ذكاء رمزي عربي مصري وخفيفة جداً بقدر أشتغل أوفلاين تماماً ومن غير أي سيرفرات. يعني خصوصيتك محمية 100% لأن
         كل بياناتك بتفضل عندك وبس. 🔒
-        مصممة عشان أكون قلعتك الرقمية بـ +120 قدرة في واجهة واحدة سَلِسة ومجانية مدى الحياة، وكمان بيحصل ليا كل يوم تحسينات
+        مصممة عشان أكون قلعتك الرقمية بـ +120 قدرة في واجهة واحدة سَلِسة ومجانية مدى الحياة، وكمان بيحصل ليا كل يوم
+        تحسينات
         وتحديثات تخليني اذكى وأسرع، يلا بينا 🤫 ضغطتين على رسالتي
         علشان نبدء
       </div>
@@ -6413,7 +6461,7 @@
         <button class="conf-btn optionbtn" onclick="opentab('treemaptab');">تحديث الهيكل</button>
       </div>
     </section>
-    <section id="formbuildertab" class="tab-content" style="display:block;">
+    <section id="formbuildertab" class="tab-content">
       <h2>جداول ونماذج</h2>
       <div class="app-container" style="overflow:auto;">
         <div id="analytics-panel"></div>
@@ -6811,6 +6859,19 @@
         </div>
       </div>
     </section>
+    <section id="extentionsbuild" class="tab-content">
+      <h2>مكتبة الإضافات</h2>
+      <div class="app-container" style="overflow:auto;">
+        <div class="sandbox-container">
+          <fieldset>
+            <legend id="current-preview-title">شاشه المعاينه والتشغيل</legend>
+            <iframe id="main-preview-frame" sandbox="allow-scripts"></iframe>
+          </fieldset>
+          <div id="snippets-grid" class="grid-container"></div>
+        </div>
+        <button class="conf-btn optionbtn" onclick="opentab('extintion-container')">إضافه أداه</button>
+      </div>
+    </section>
   </div>
   <div id="snackbar"></div>
 </body>
@@ -7173,7 +7234,7 @@
       معالجة: ["محرك المدخلات الرئيسية", "حساب النص وتحليله", "التصحيح النصي للفرانكو ولوحه المفاتيح", "كاشف اللغات البرمجيه", "معالجه النصوص لتنظيفها للنظام", "إستخراج البيانات الرقميه من النص", "تحديد الجمل الهامه", "الذاكره الكلاميه الدائمه والمؤقته", "التدريب الكلامي للردود", "مساعد إعرابي", "النص الى كلام", "تدريب ماركوف", "كاشف المشاعر وتفاعل باللون", "كاشف الطابع الشخصي من النص", "الإملاء والتصحيح", "ضفط النصوص", "تأثير وترتيب الرسائل", "معالجه النصوص الضخمه", "إقتراح الأدوات", "ردود طبيعيه"],
       إنتاجية: ["صوره المستخدم", "حفظ نموذج معلومات المستخدم", "القائمه اليمنى المخصصة", "تبويبات المستخدم", "اعدادات التحكم في النوافذ والتبويبات", "تنظيم الادوات حسب مرات الاستخدام", "تصفيه الأنتاج داخل الذاكره", "مركز تحكم الذاكرة والتخزين", "رفع ملفات وعرضها", "توليد محتوى وهمي", "بناء النماذج وتصديرها", "المحرر النصي", "تغيير إسم ملف وصيغته (ليس تحويلها)", "مدير حفظ الروابط", "فاتح التابات المنبثقه", "سجل الحضور والانصراف", "سجل العمليات والقيمه المضافه", "رادار إنجاز المشروعات", "متتبع إنجاز المشروعات", "بومودورا فجر", "سجل التقارير والشكاوى", "إداره موارد مجموعه", "صانع محاكاه محادثات", "مساعد الكتابه"],
       منطق: ["آله حاسبه فورية", "محول الوحدات الرياضيه", "بنك الاسئله والتدريبات", "مشتق القوانين المسجله", "ترتيب البيانات تصاعدي وتنازلي", "محلل القانون", "حساب التركه", "فاحص اللوغارتم", "مكتبه القانون والاحكام", "موزع الميزانيه", "حسابه صافي المرتب", "ميزان اتخاز القرار", "نظام التصنيف", "رسم الدوال الجبرية", "اختبار صحه علامات التشكيل", "معمل دمج العناصر", "دائره المنطق"],
-      تطوير: ["تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث", "محرك بناء روبوت دردشه", "(خاص بالتواصل بين المستخدم والاداره) إرسال البيانات للسيرفر", "فهرس روابط محليه", "اقتراح وصفات"],
+      تطوير: ["محرر الإضافات", "تحقق من أقواس الكود", "التحقق من أمان الكود", "تشفير الملفات", "التحويل الفرعوني للنص", "قائمه الأوامر والاختصارات", "ميتا تاج فجر", "معلومات النظام والمتصفح", "تفعيل الدوال مره واحده", "محركات البحث", "محرك بناء روبوت دردشه", "(خاص بالتواصل بين المستخدم والاداره) إرسال البيانات للسيرفر", "فهرس روابط محليه", "اقتراح وصفات"],
       تفاعل: ["رادار قائمة قدرات فجر", "الترحيب وتغيير الخلفية حسب الوقت", "الوقت والتاريخ", "التاريخ الكامل", "مواعيد اليوم حسب الصلاه", "نقاط النور", "وضع شاشه الطورائ", "مركز القرارات والتحكم في الردود", "إقتراح الادوات من النص", "الردود الشخصيه بإسلوب النداء", "دردشه طوارئ (إرسال لأقرب جهاز)", "المؤشر والقوائم المنسدله", "الترحيب والتعريف بالنظام", "اعدادات جانبيه", "تعليمات للمستخدم داخل حقل الكتابه", "شخصيه فجر للذكاء الاصطناعي", "كلمة المؤسس", "شاشه الشرح", "شاشه التحميل", "كاشف الصح والخطأ في الافعال", "التغذيه اليوميه (احداث - موايد - وفيات)", "مقدار صبر فجر", "محرك الإختيارات العشوائيه", "الرد بالملصقات", "مده العلاقه بين النظام والمستخدم"],
       وسائط: ["لوحه الرسم", "تسجيل الصوت", "المنبه والمؤقت", "العاب وتسليه", "رسم الخريطه الشجريه", "بلاطات الالوان", "إنشاء موسيقى ونغمات", "لعبه فرقعه الأرقام", "لعبه عداد الضغطات", "لعبه الضغط بالترتيب", "قائمه مشغل الاغاني", "الألوان المتناسقه", "الحصول على اللون", "لعبه ركض فجر", "تسجيل الشاشه", "الفحص الطبي المبدأي", "مؤشر التحاليل الطبيه", "تسجيل أماكن الالم", "ملف القوة الشخصيه", "حامي الشاشه", "رسم بياني بالاعمده", "روتين المستخدم اليومي", "خريطه أماكن واتجاهات", "صانع الجولات الإفتراضيه", "رسم بياني", "حيوانات فجر الأليفه", "الراوي لكتابه ومشاركه القصص", "محرر الصور", "لعبه ترتيب الأرقام"]
     };
@@ -7953,7 +8014,7 @@
   }
   //مركز تحكم الذاكرة والتخزين
   {
-    const friendlyNames = { "last_played_index": "أخر ما تم تشغيله", "questionsBank": "بنك الاسئلة", "illdata": "سجل المرض", "rawyele_data": "الراوي", "userMessages": "ذاكرة المحادثات المحفوظة", "fajr_patterns": "أنماط التدريب الكلامي", "myDict": "قاموس الإملاء الشخصي", "fajr_tools": "بيانات متتبع إنجاز المشروعات", "hr_laws": "مكتبة القوانين والأحكام", "f_dict": "رموز القوانين الرياضية", "f_laws": "القوانين الرياضية المحفوظة", "f_next": "العداد التالي لمعرفات القوانين", "VariableMarkovModel_v5_Final": "تدريب نموذج ماركوف", "markov_bot_rules": "قواعد الردود الآلية (روبوت الدردشة)", "userFormData": "بيانات المستخدم الشخصية", "rpg_final": "تطور المستخدم (المستوى، النقاط، القدرات)", "light": "نقاط النور (رصيد المستخدم)", "fajr_sleep_key": "رمز قفل الشاشة (مشفر)", "device_id": "معرف الجهاز في دردشة الطوارئ", "fajr_vault": "مدير الروابط (الملفات والروابط المحفوظة)", "fajr_projects_v2": "رادار إنجاز المشروعات", "fajr_app_data": "سجل استخدام الأدوات (ترتيب الأيقونات)", "Timer_data": "المهام والتنبيهات (المؤقت والمنبه)", "notionTasks3": "الروتين اليومي (المهام في الأقسام الخمسة)", "notionHistory": "أرشيف الروتين اليومي حسب التاريخ", "notionLastDate": "آخر تاريخ لحفظ الروتين", "forms": "النماذج المخصصة (تعريف الحقول)", "fajr_inv_items": "أصناف المخزن (إدارة الموارد)", "fajr_inv_trans": "سجل عمليات المخزن (شراء/بيع)", "fajr_attendance": "سجل الحضور والانصراف", "DawnStatusTrackerEvents": "سجل التقارير والشكاوى (أحداث المتتبع)", "my_songs": "النغمات الموسيقية المحفوظة", "fajr_welcome_seen": "حالة ترحيب فجر", "myCustomModes": "الأوضاع المخصصة لقدرات فجر", "fajr_last_selection": "آخر موقع للمواقيت", "fajr_custom_data": "إحداثيات مخصصة للصلاة", "pomodoro_state": "حالة مؤقت بومودورو", "wiki_galaxy_date": "تاريخ تحديث نجوم اليوم", "wiki_galaxy_posts": "محتوى نجوم اليوم المخبأ", "tourLib": "مكتبة الجولات الإفتراضية", "lab_elements": "عناصر معمل الدمج", "lab_recipes": "تركيبات معمل الدمج", "fajr_universal_categories": "تصنيفات النظام العالمي", "fajr_universal_items": "عناصر النظام العالمي", "chat_master": "سجل دردشة الطوارئ", "sociInventoryData": "بيانات إدارة موارد المجموعة", "metromapNodes": "عقد خريطة المترو (المحطات)", "metromapEdges": "روابط خريطة المترو (الخطوط بين المحطات)", };
+    const friendlyNames = { "fajr_relationship": "مستوى العلاقه مع فجر", "last_played_index": "أخر ما تم تشغيله", "questionsBank": "بنك الاسئلة", "illdata": "سجل المرض", "rawyele_data": "الراوي", "userMessages": "ذاكرة المحادثات المحفوظة", "fajr_patterns": "أنماط التدريب الكلامي", "myDict": "قاموس الإملاء الشخصي", "fajr_tools": "بيانات متتبع إنجاز المشروعات", "hr_laws": "مكتبة القوانين والأحكام", "f_dict": "رموز القوانين الرياضية", "f_laws": "القوانين الرياضية المحفوظة", "f_next": "العداد التالي لمعرفات القوانين", "VariableMarkovModel_v5_Final": "تدريب نموذج ماركوف", "markov_bot_rules": "قواعد الردود الآلية (روبوت الدردشة)", "userFormData": "بيانات المستخدم الشخصية", "rpg_final": "تطور المستخدم (المستوى، النقاط، القدرات)", "light": "نقاط النور (رصيد المستخدم)", "fajr_sleep_key": "رمز قفل الشاشة (مشفر)", "device_id": "معرف الجهاز في دردشة الطوارئ", "fajr_vault": "مدير الروابط (الملفات والروابط المحفوظة)", "fajr_projects_v2": "رادار إنجاز المشروعات", "fajr_app_data": "سجل استخدام الأدوات (ترتيب الأيقونات)", "Timer_data": "المهام والتنبيهات (المؤقت والمنبه)", "notionTasks3": "الروتين اليومي (المهام في الأقسام الخمسة)", "notionHistory": "أرشيف الروتين اليومي حسب التاريخ", "notionLastDate": "آخر تاريخ لحفظ الروتين", "forms": "النماذج المخصصة (تعريف الحقول)", "fajr_inv_items": "أصناف المخزن (إدارة الموارد)", "fajr_inv_trans": "سجل عمليات المخزن (شراء/بيع)", "fajr_attendance": "سجل الحضور والانصراف", "DawnStatusTrackerEvents": "سجل التقارير والشكاوى (أحداث المتتبع)", "my_songs": "النغمات الموسيقية المحفوظة", "fajr_welcome_seen": "حالة ترحيب فجر", "myCustomModes": "الأوضاع المخصصة لقدرات فجر", "fajr_last_selection": "آخر موقع للمواقيت", "fajr_custom_data": "إحداثيات مخصصة للصلاة", "pomodoro_state": "حالة مؤقت بومودورو", "wiki_galaxy_date": "تاريخ تحديث نجوم اليوم", "wiki_galaxy_posts": "محتوى نجوم اليوم المخبأ", "tourLib": "مكتبة الجولات الإفتراضية", "lab_elements": "عناصر معمل الدمج", "lab_recipes": "تركيبات معمل الدمج", "fajr_universal_categories": "تصنيفات النظام العالمي", "fajr_universal_items": "عناصر النظام العالمي", "chat_master": "سجل دردشة الطوارئ", "sociInventoryData": "بيانات إدارة موارد المجموعة", "metromapNodes": "عقد خريطة المترو (المحطات)", "metromapEdges": "روابط خريطة المترو (الخطوط بين المحطات)", };
     function getStorageDetails() {
       let keysMap = {};
       let total = 0;
@@ -18407,7 +18468,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     const circutBoard = document.getElementById('circutBoard');
     const circutCellEls = {};
     const CIRCUT_ARROWS = ['→', '↓', '←', '↑'];
-    const CIRCUT_ARROW_VECS=[ { r: 0, c: 1}, { r: 1, c: 0}, { r: 0, c: -1}, { r: -1, c: 0} ];
+    const CIRCUT_ARROW_VECS = [{ r: 0, c: 1 }, { r: 1, c: 0 }, { r: 0, c: -1 }, { r: -1, c: 0 }];
     function circutBuildBoard() {
       circutBoard.style.gridTemplateColumns = `repeat(${circutState.cols}, 52px)`;
       circutBoard.style.gridTemplateRows = `repeat(${circutState.rows}, 52px)`;
@@ -18430,7 +18491,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     document.querySelectorAll('.circutTool[data-type]').forEach(btn => {
       btn.addEventListener('pointerdown', () => {
         const t = btn.dataset.type;
-        if (circutState.selectedType===t){ circutState.selectedType=null; btn.classList.remove('conf-btn');}
+        if (circutState.selectedType === t) { circutState.selectedType = null; btn.classList.remove('conf-btn'); }
         else {
           circutState.selectedType = t;
           circutState.simMode = false;
@@ -18467,7 +18528,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       const key = `${r},${c}`;
       if (circutState.simMode) {
         const cell = circutState.cells[key];
-        if (cell && cell.type==='SWITCH'){ cell.on=!cell.on; circutRender();}
+        if (cell && cell.type === 'SWITCH') { cell.on = !cell.on; circutRender(); }
         return;
       }
       if (!circutState.selectedType) return;
@@ -18497,7 +18558,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       if (expanded) circutBuildBoard();
     }
     function circutGetNeighbors(r, c) {
-      return [ { r: r - 1, c},{ r: r + 1, c}, { r, c: c - 1},{ r, c: c + 1} ].filter(n=>n.r >=0 && n.r < circutState.rows && n.c >=0 && n.c < circutState.cols);
+      return [{ r: r - 1, c }, { r: r + 1, c }, { r, c: c - 1 }, { r, c: c + 1 }].filter(n => n.r >= 0 && n.r < circutState.rows && n.c >= 0 && n.c < circutState.cols);
     }
     function circutSimulate() {
       const values = {};
@@ -18530,7 +18591,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
             if (cell.type === 'OR') out = activeCount >= 1;
             if (cell.type === 'NOT') out = activeCount === 0;
           }
-          if (values[key] !==out){ values[key]=out; changed=true;}
+          if (values[key] !== out) { values[key] = out; changed = true; }
         });
         if (!changed) break;
       }
@@ -18566,13 +18627,13 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       });
       const statusEl = document.getElementById('circutStatus');
       const bulbs = Object.entries(circutState.cells).filter(([k, c]) => c.type === 'BULB');
-      if (bulbs.length===0){ statusEl.textContent='لا توجد لمبات';}
-      else{ statusEl.innerHTML=bulbs.map(([k])=>{ const on=values[k]; return `💡 ${on ? 'يعمل' : 'مطفأ'}`;}).join(' | ');}
+      if (bulbs.length === 0) { statusEl.textContent = 'لا توجد لمبات'; }
+      else { statusEl.innerHTML = bulbs.map(([k]) => { const on = values[k]; return `💡 ${on ? 'يعمل' : 'مطفأ'}`; }).join(' | '); }
     }
   }
   //اقتراح وصفات
   {
-    const ingredientsLib={ 1: "بيض", 2: "طماطم", 3: "بصل", 4: "زيت", 5: "مكرونة", 6: "ثوم", 7: "جبنة", 8: "ملح", 9: "فلفل أخضر", 10: "ليمون"};
+    const ingredientsLib = { 1: "بيض", 2: "طماطم", 3: "بصل", 4: "زيت", 5: "مكرونة", 6: "ثوم", 7: "جبنة", 8: "ملح", 9: "فلفل أخضر", 10: "ليمون" };
     const recipesLib = [
       { id: 1, name: "بيض بالطماطم السريع", items: [1, 2, 4] },
       { id: 2, name: "شكشوكة أصلية", items: [1, 2, 3, 4, 8] },
@@ -18598,21 +18659,21 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       resultsArea.appendChild(card);
     });
     function toggleIngredient(id, btnElement) {
-      if (selectedIds.includes(id)){ selectedIds=selectedIds.filter(item=>item !==id); btnElement.classList.remove('conf-btn');}
-      else{ selectedIds.push(id); btnElement.classList.add('conf-btn');}
+      if (selectedIds.includes(id)) { selectedIds = selectedIds.filter(item => item !== id); btnElement.classList.remove('conf-btn'); }
+      else { selectedIds.push(id); btnElement.classList.add('conf-btn'); }
       updateRecipes();
     }
     function updateRecipes() {
       recipesLib.forEach(recipe => {
         const card = document.getElementById(`recipe-card-${recipe.id}`);
-        if (selectedIds.length===0){ card.style.display='none'; return;}
+        if (selectedIds.length === 0) { card.style.display = 'none'; return; }
         let hasAnyMatch = recipe.items.some(itemId => selectedIds.includes(itemId));
         let hasExtraItem = selectedIds.some(itemId => !recipe.items.includes(itemId));
         if (hasAnyMatch && !hasExtraItem) {
           let missingIds = recipe.items.filter(itemId => !selectedIds.includes(itemId));
           let missingNames = missingIds.map(id => ingredientsLib[id]);
           let missingText = missingNames.length > 0 ? missingNames.join(' - ') : "كل حاجه جاهزة! 🚀";
-          card.innerHTML=` <h3 style="margin: 0 0 8px 0; color: var(--bcolor);">🍽️ ${recipe.name}</h3><p class="red-btn-sec"><strong>المكونات الناقصة:</strong>(${missingText})</p>`;
+          card.innerHTML = ` <h3 style="margin: 0 0 8px 0; color: var(--bcolor);">🍽️ ${recipe.name}</h3><p class="red-btn-sec"><strong>المكونات الناقصة:</strong>(${missingText})</p>`;
           card.style.display = 'block';
         } else {
           card.style.display = 'none';
@@ -18666,7 +18727,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       });
     }
     function handleTileClick(pos, el) {
-      if (selectedTile===null){ selectedTile={ pos, el}; el.classList.add('selected');}
+      if (selectedTile === null) { selectedTile = { pos, el }; el.classList.add('selected'); }
       else {
         let temp = tiles[selectedTile.pos];
         tiles[selectedTile.pos] = tiles[pos];
@@ -18677,7 +18738,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     }
     function randomizernum() {
-      for (let i=tiles.length - 1; i >0; i--){ const j=Math.floor(Math.random() * (i + 1)); [tiles[i], tiles[j]]=[tiles[j], tiles[i]];}
+      for (let i = tiles.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[tiles[i], tiles[j]] = [tiles[j], tiles[i]]; }
       renderBoard();
     };
     function checkWin() {
@@ -18707,6 +18768,113 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     } else { absenceEl.textContent = ""; absenceEl.style.display = "none"; }
     data.last = now;
     localStorage.setItem(key, JSON.stringify(data));
+  }
+  //محرر الإضافات
+  {
+    let db;
+    const DB_NAME = "DawnOS_Sandbox_DB";
+    const STORE_NAME = "snippets";
+    function initcodeextentionDB() {
+      const request = indexedDB.open(DB_NAME, 1);
+      request.onsuccess = e => {
+        db = e.target.result;
+        loadSnippets();
+      };
+      request.onupgradeneeded = e => {
+        let database = e.target.result;
+        if (!database.objectStoreNames.contains(STORE_NAME)) {
+          database.createObjectStore(STORE_NAME, { keyPath: "id", autoIncrement: true });
+        }
+      };
+    }
+    function saveSnippet() {
+      const idField = document.getElementById("snippet-id").value;
+      const title = document.getElementById("snippet-title").value.trim() || "أداة بدون عنوان";
+      const code = document.getElementById("snippet-code").value;
+      if (!code) return;
+      const transaction = db.transaction([STORE_NAME], "readwrite");
+      const store = transaction.objectStore(STORE_NAME);
+      const snippetData = { title, code, updatedAt: new Date().toLocaleTimeString() };
+      if (idField) {
+        snippetData.id = Number(idField);
+        store.put(snippetData);
+      } else {
+        store.add(snippetData);
+      }
+      transaction.oncomplete = () => {
+        clearForm();
+        loadSnippets();
+        closemodal();
+      };
+    }
+    function loadSnippets() {
+      const grid = document.getElementById("snippets-grid");
+      grid.innerHTML = "";
+      const transaction = db.transaction([STORE_NAME], "readonly");
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.openCursor();
+      request.onsuccess = e => {
+        const cursor = e.target.result;
+        if (cursor) {
+          const item = cursor.value;
+          const card = document.createElement("div");
+          card.className = "extcard";
+          card.innerHTML = `
+                    <h4>🛠️ ${escapeHtml(item.title)}</h4>
+                    <pre class="hidden-code" style="display: none;">${escapeHtml(item.code)}</pre>
+                    <div class="flexno">
+                        <button class="conf-btn" onclick="runSnippet(this, '${escapeJs(item.title)}')">تشغيل</button>
+                        <button onclick="opentab('extintion-container');editSnippet(${item.id})">تعديل</button>
+                        <button class="red-btn" onclick="deleteSnippet(${item.id})">حذف</button>
+                    </div>
+                `;
+          grid.appendChild(card);
+          cursor.continue();
+        }
+      };
+    }
+    function runSnippet(button, title) {
+      const card = button.closest('.extcard');
+      const code = card.querySelector('.hidden-code').textContent;
+      document.getElementById("current-preview-title").innerText = `🖥️ معاينة: ${title}`;
+      document.getElementById("main-preview-frame").srcdoc = code;
+    }
+    function editSnippet(id) {
+      const transaction = db.transaction([STORE_NAME], "readonly");
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.get(id);
+      request.onsuccess = e => {
+        const item = e.target.result;
+        if (item) {
+          document.getElementById("snippet-id").value = item.id;
+          document.getElementById("snippet-title").value = item.title;
+          document.getElementById("snippet-code").value = item.code;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+    }
+    function deleteSnippet(id) {
+    openSystemConfirm(
+        "حذف أداة ⚠️",
+        " اكيد هنمسح الأداة دي نهائياً؟",
+        () => {
+            const transaction = db.transaction([STORE_NAME], "readwrite");
+            transaction.objectStore(STORE_NAME).delete(id);
+            transaction.oncomplete = loadSnippets;
+        }
+    );
+}
+    function clearForm() {
+      document.getElementById("snippet-id").value = "";
+      document.getElementById("snippet-title").value = "";
+      document.getElementById("snippet-code").value = "";
+    }
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+    function escapeJs(str) {
+      return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
   }
   var UI = {};
   function initUI() {
