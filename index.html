@@ -100,6 +100,7 @@
   #richeditor:empty::before {
     color: #f0f0f0;
   }
+  body.dark-mode #add {border:2px solid #fff;}
   body.dark-mode #add,
   body.dark-mode #playlisticon {
     fill: #fff;
@@ -784,7 +785,7 @@
   }
   #add {
     fill: var(--dcolor);
-    border: 2px solid;
+    border: 2px solid var(--dcolor);
     border-radius: 50%;
     position: absolute;
     width: 35px;
@@ -2188,6 +2189,8 @@
     width: 15px;
     height: 15px;
     border: 2px solid var(--dcolor);
+    outline:1px solid #fff;
+    box-shadow:var(--shadow);
     border-radius: 50%;
     pointer-events: none;
     z-index: 10000;
@@ -4772,9 +4775,9 @@
             </details>
           </div>
         </div>
-      </div>
-      <h2>إنشاء وتحرير الإضافات</h2>
+      </div>     
       <div id="extintion-container" class="modaltab">
+        <h2>إنشاء وتحرير الإضافات</h2>
         <div class="flex" style="flex-direction:column;">
           <input type="hidden" id="snippet-id">
           <input type="text" id="snippet-title" placeholder="عنوان الأداة">
