@@ -2189,19 +2189,19 @@
     width: 15px;
     height: 15px;
     border: 2px solid var(--dcolor);
-    outline:1px solid #fff;
+    outline:2px solid #fff;
     box-shadow:var(--shadow);
     border-radius: 50%;
     pointer-events: none;
     z-index: 10000;
     translate: -50% -50%;
-    background: rgba(255, 255, 255, 0.4);
+    background: var(--secbg);
     backdrop-filter: blur(4px);
     transition: width 0.2s, height 0.2s, transform 0.2s, background 0.3s, border-radius 0.2s, border-style 0.2s;
   }
   body:active #fajr-cursor {
     transform: scale(0.7);
-    background: #28a745;
+    background: var(--dcolor);
     border-color: var(--wcolor);
   }
   body:has(a:hover, button:hover, .dropdown-trigger:hover) #fajr-cursor {
@@ -5240,7 +5240,7 @@
             </center>
             <ul class="data-section flex">
               <li>الإصدار : سكون</li>
-              <li> النواه : 1.8.5</li>
+              <li> النواه : 1.8.6</li>
               <li>القدرات : <span id="totalAbilitiesCount">0</span></li>
             </ul>
           </fieldset>
@@ -18905,7 +18905,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     pomodoro_init();
   }
   window.onload = initUI;
-  document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { let output = []; matches.forEach((c, i) => output.push(`${i + 1}: ${c.replace(/\/\/\s*/, '').trim()}`)); output.push(`إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); console.log(output.join('\n')); } });
+  //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { let output = []; matches.forEach((c, i) => output.push(`${i + 1}: ${c.replace(/\/\/\s*/, '').trim()}`)); output.push(`إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); console.log(output.join('\n')); } });
   (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 48)) { return true; } if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) { return false; } }; })();
   //const s=document.querySelectorAll('script');let f={};s.forEach((sc,i)=>{sc.innerText.split('\n').forEach((l,li)=>{let m=l.match(/(?:function\s+([a-zA-Z0-9_$]+)|([a-zA-Z0-9_$]+)\s*[:=]\s*function)/g);if(m){m.forEach(x=>{let n=x.replace('function','').replace('=','').replace(':','').trim();if(n){if(!f[n])f[n]={c:0,l:[]};f[n].c++;f[n].l.push(`سكريبت #${i+1} - سطر ${li+1}`);}});}});});console.log("=== الدوال المكررة ===");for(let [k,v] of Object.entries(f)){if(v.c>1)console.log(`الدالة: "${k}" | تكررت: ${v.c} مرات | الأماكن:`,v.l);}
 </script>
