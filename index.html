@@ -6934,6 +6934,129 @@
 </script>
 <script>
   { }
+  //اعدادات جانبيه
+  {
+    function closeAllDropdowns() { document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active')); }
+    const container = document.getElementById('contentContainer');
+    container.addEventListener('dblclick', (e) => {
+      const target = e.target.closest('.replay');
+      if (target) {
+        target.style.display = 'none';
+      }
+    });
+    container.addEventListener('contextmenu', (e) => {
+      const target = e.target.closest('.replay');
+      if (target) {
+        e.preventDefault();
+        const textToCopy = target.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          showToast('تم نسخ النص !');
+        });
+      }
+    });
+    function startanimation() { requestAnimationFrame(downrunupdate); }
+    function openSystemPrompt(title, placeholder, onConfirm) {
+      const modal = document.getElementById('settingsModal');
+      const tab = document.getElementById('promptTab');
+      document.querySelectorAll('.modaltab').forEach(t => t.style.display = 'none');
+      tab.style.display = 'block';
+      document.getElementById('prompt-title').innerText = title;
+      const input = document.getElementById('prompt-input');
+      input.value = '';
+      input.placeholder = placeholder;
+      modal.style.display = 'flex';
+      const confirmBtn = document.getElementById('prompt-confirm-btn');
+      confirmBtn.onclick = () => {
+        const val = input.value;
+        modal.style.display = 'none';
+        if (onConfirm) onConfirm(val);
+      };
+    }
+    function openSystemConfirm(title, message, onYes) {
+      const modal = document.getElementById('settingsModal');
+      document.querySelectorAll('.modaltab').forEach(t => t.style.display = 'none');
+      const tab = document.getElementById('confirmTab');
+      tab.style.display = 'block';
+      document.getElementById('confirm-title').innerText = title;
+      document.getElementById('confirm-msg').innerText = message;
+      document.getElementById('confirm-yes').onclick = () => {
+        modal.style.display = 'none';
+        onYes();
+      };
+      modal.style.display = 'flex';
+    }
+    const cursor = document.getElementById('fajr-cursor');
+    window.addEventListener('mousemove', () => {
+      if (cursor.style.display !== 'block') {
+        cursor.style.display = 'block';
+      }
+    });
+    window.addEventListener('touchstart', () => {
+      if (cursor.style.display !== 'none') {
+        cursor.style.display = 'none';
+      }
+    }, { passive: true });
+    const channel = new BroadcastChannel('fgr_os_channel'); channel.postMessage('hello'); channel.onmessage = (event) => { if (event.data === 'hello') { window.close(); } };
+    document.getElementById('editor').addEventListener('keydown', (e) => { if (e.key === 'Enter') { document.getElementById('mybtn').click(); } });
+    function readyallwork() { onerun('renderButtons'); onerun('linkbtn'); onerun('loadProjects'); onerun('readyfiles'); onerun('renderChips'); }
+    function refreshApp() {
+      const url = window.location.origin + window.location.pathname;
+      const randomVersion = new Date().getTime();
+      window.location.href = `${url}?v=${randomVersion}`;
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll('input').forEach(input => {
+        input.setAttribute('autocomplete', 'off');
+        input.setAttribute('autocorrect', 'off');
+        input.setAttribute('spellcheck', 'false');
+        input.setAttribute('readonly', 'true');
+        input.addEventListener('focus', function () { this.removeAttribute('readonly'); });
+        input.addEventListener('blur', function () { this.setAttribute('readonly', 'true'); });
+      });
+    });
+    document.addEventListener('wheel', (e) => {
+      const scrollable = e.target.closest('*');
+      if (scrollable) {
+        const hasHorizontalScroll = scrollable.scrollWidth > scrollable.clientWidth;
+        const style = window.getComputedStyle(scrollable);
+        const overflowX = style.getPropertyValue('overflow-x');
+        if (hasHorizontalScroll && (overflowX === 'auto' || overflowX === 'scroll')) {
+          if (e.deltaY !== 0) {
+            scrollable.scrollBy({
+              left: e.deltaY,
+              behavior: 'auto'
+            });
+            e.preventDefault();
+          }
+        }
+      }
+    }, { passive: false });
+    function downloadDawnOS() {
+      const htmlContent = document.documentElement.outerHTML; const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'DawnOS.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+  }
+  //تأثير وترتيب الرسائل
+  {
+    function showAndMove(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.style.display === 'block') return;
+      const indicator = document.getElementById('typing-indicator');
+      const container = document.getElementById('contentContainer');
+      if (indicator) {
+        container.appendChild(indicator);
+        indicator.style.display = 'block';
+      }
+      setTimeout(() => {
+        if (el.style.display !== 'block') {
+          container.appendChild(el);
+          el.style.display = 'block';
+          container.scrollTop = container.scrollHeight;
+        }
+        if (indicator) indicator.style.display = 'none';
+      }, 1500);
+    }
+  }
   //محرك المدخلات الرئيسية
   {
     let typingTimer;
@@ -15214,129 +15337,6 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
       }
     };
   }
-  //تأثير وترتيب الرسائل
-  {
-    function showAndMove(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (el.style.display === 'block') return;
-      const indicator = document.getElementById('typing-indicator');
-      const container = document.getElementById('contentContainer');
-      if (indicator) {
-        container.appendChild(indicator);
-        indicator.style.display = 'block';
-      }
-      setTimeout(() => {
-        if (el.style.display !== 'block') {
-          container.appendChild(el);
-          el.style.display = 'block';
-          container.scrollTop = container.scrollHeight;
-        }
-        if (indicator) indicator.style.display = 'none';
-      }, 1500);
-    }
-  }
-  //اعدادات جانبيه
-  {
-    function closeAllDropdowns() { document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('active')); }
-    const container = document.getElementById('contentContainer');
-    container.addEventListener('dblclick', (e) => {
-      const target = e.target.closest('.replay');
-      if (target) {
-        target.style.display = 'none';
-      }
-    });
-    container.addEventListener('contextmenu', (e) => {
-      const target = e.target.closest('.replay');
-      if (target) {
-        e.preventDefault();
-        const textToCopy = target.innerText;
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          showToast('تم نسخ النص !');
-        });
-      }
-    });
-    function startanimation() { requestAnimationFrame(downrunupdate); }
-    function openSystemPrompt(title, placeholder, onConfirm) {
-      const modal = document.getElementById('settingsModal');
-      const tab = document.getElementById('promptTab');
-      document.querySelectorAll('.modaltab').forEach(t => t.style.display = 'none');
-      tab.style.display = 'block';
-      document.getElementById('prompt-title').innerText = title;
-      const input = document.getElementById('prompt-input');
-      input.value = '';
-      input.placeholder = placeholder;
-      modal.style.display = 'flex';
-      const confirmBtn = document.getElementById('prompt-confirm-btn');
-      confirmBtn.onclick = () => {
-        const val = input.value;
-        modal.style.display = 'none';
-        if (onConfirm) onConfirm(val);
-      };
-    }
-    function openSystemConfirm(title, message, onYes) {
-      const modal = document.getElementById('settingsModal');
-      document.querySelectorAll('.modaltab').forEach(t => t.style.display = 'none');
-      const tab = document.getElementById('confirmTab');
-      tab.style.display = 'block';
-      document.getElementById('confirm-title').innerText = title;
-      document.getElementById('confirm-msg').innerText = message;
-      document.getElementById('confirm-yes').onclick = () => {
-        modal.style.display = 'none';
-        onYes();
-      };
-      modal.style.display = 'flex';
-    }
-    const cursor = document.getElementById('fajr-cursor');
-    window.addEventListener('mousemove', () => {
-      if (cursor.style.display !== 'block') {
-        cursor.style.display = 'block';
-      }
-    });
-    window.addEventListener('touchstart', () => {
-      if (cursor.style.display !== 'none') {
-        cursor.style.display = 'none';
-      }
-    }, { passive: true });
-    const channel = new BroadcastChannel('fgr_os_channel'); channel.postMessage('hello'); channel.onmessage = (event) => { if (event.data === 'hello') { window.close(); } };
-    document.getElementById('editor').addEventListener('keydown', (e) => { if (e.key === 'Enter') { document.getElementById('mybtn').click(); } });
-    function readyallwork() { onerun('renderButtons'); onerun('linkbtn'); onerun('loadProjects'); onerun('readyfiles'); onerun('renderChips'); }
-    function refreshApp() {
-      const url = window.location.origin + window.location.pathname;
-      const randomVersion = new Date().getTime();
-      window.location.href = `${url}?v=${randomVersion}`;
-    }
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll('input').forEach(input => {
-        input.setAttribute('autocomplete', 'off');
-        input.setAttribute('autocorrect', 'off');
-        input.setAttribute('spellcheck', 'false');
-        input.setAttribute('readonly', 'true');
-        input.addEventListener('focus', function () { this.removeAttribute('readonly'); });
-        input.addEventListener('blur', function () { this.setAttribute('readonly', 'true'); });
-      });
-    });
-    document.addEventListener('wheel', (e) => {
-      const scrollable = e.target.closest('*');
-      if (scrollable) {
-        const hasHorizontalScroll = scrollable.scrollWidth > scrollable.clientWidth;
-        const style = window.getComputedStyle(scrollable);
-        const overflowX = style.getPropertyValue('overflow-x');
-        if (hasHorizontalScroll && (overflowX === 'auto' || overflowX === 'scroll')) {
-          if (e.deltaY !== 0) {
-            scrollable.scrollBy({
-              left: e.deltaY,
-              behavior: 'auto'
-            });
-            e.preventDefault();
-          }
-        }
-      }
-    }, { passive: false });
-    function downloadDawnOS() {
-      const htmlContent = document.documentElement.outerHTML; const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'DawnOS.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
-    }
-  }
   //تعليمات للمستخدم داخل حقل الكتابه
   {
     const tips = ["نكتب ! للأوامر", "نكتب @ للجهات", "نستخدم # للأدوات", "يلا ندردش...", "أهدافنا أكتر",];
@@ -18905,7 +18905,7 @@ ${childCount > 0 ? `<span class="count-badge">${childCount}</span>` : ""}
     pomodoro_init();
   }
   window.onload = initUI;
-  //document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { let output = []; matches.forEach((c, i) => output.push(`${i + 1}: ${c.replace(/\/\/\s*/, '').trim()}`)); output.push(`إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); console.log(output.join('\n')); } });
+  document.querySelectorAll('script').forEach(s => { let matches = s.textContent.match(/(?<=}\s*)\/\/[^\n]*\s*(?={)/g); if (matches) { let output = []; matches.forEach((c, i) => output.push(`${i + 1}: ${c.replace(/\/\/\s*/, '').trim()}`)); output.push(`إجمالي قدرات النظام ${matches.length} تحت السيطرة [نظام فجر لدعم المستخدم العربي]`); console.log(output.join('\n')); } });
   (function () { document.addEventListener('contextmenu', e => e.preventDefault()); document.onkeydown = e => { if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 48)) { return true; } if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) { return false; } }; })();
   //const s=document.querySelectorAll('script');let f={};s.forEach((sc,i)=>{sc.innerText.split('\n').forEach((l,li)=>{let m=l.match(/(?:function\s+([a-zA-Z0-9_$]+)|([a-zA-Z0-9_$]+)\s*[:=]\s*function)/g);if(m){m.forEach(x=>{let n=x.replace('function','').replace('=','').replace(':','').trim();if(n){if(!f[n])f[n]={c:0,l:[]};f[n].c++;f[n].l.push(`سكريبت #${i+1} - سطر ${li+1}`);}});}});});console.log("=== الدوال المكررة ===");for(let [k,v] of Object.entries(f)){if(v.c>1)console.log(`الدالة: "${k}" | تكررت: ${v.c} مرات | الأماكن:`,v.l);}
 </script>
