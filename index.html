@@ -11,7 +11,7 @@
     content="microphone=(self), camera=(), geolocation=(), sync-xhr=(), display-capture=(), usb=(), serial=(), payment=(), hid=()">
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'self'; worker-src 'self' blob:; media-src 'self' blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src * data: blob:; connect-src 'self' https://ar.wikipedia.org https://cdn.jsdelivr.net blob: data:; frame-src 'self' blob:; object-src 'none'; upgrade-insecure-requests;">
-  <link rel="canonical" href="https://fgros.vercel.app/">
+  <link rel="canonical" href="https://fgr-os.github.io/Dawn/">
   <meta name="author" content="المؤسس">
   <meta name="theme-color" content="#3498db">
   <meta name="mobile-web-app-capable" content="yes">
@@ -24,7 +24,7 @@
   <meta property="og:title" content="فجر | مستقبل الأنظمة العربية على الويب">
   <meta property="og:description"
     content="فجر: نظام تشغيل خفيف، سريع، ومفتوح المصدر. تجربة ويب سلسة تجمع بين البساطة والأداء الفائق.">
-  <meta property="og:url" content="https://fgros.vercel.app/">
+  <meta property="og:url" content="https://fgr-os.github.io/Dawn/">
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='none'/%3E%3Ccircle cx='50' cy='50' r='32' stroke='%23007bff' stroke-width='10' fill='none'/%3E%3C/svg%3E">
   <script
@@ -1736,14 +1736,6 @@
   .hidden {
     display: none !important;
   }
-  .main-btn {
-    background: var(--dcolor);
-    color: var(--wcolor);
-    border: none;
-    padding: 10px 25px;
-    border-radius: var(--minradius);
-    cursor: pointer;
-  }
   input.edit-input {
     border: 1px solid var(--dcolor);
     border-radius: var(--minradius);
@@ -2517,7 +2509,7 @@
   #renderDawnroutin input[type="checkbox"] {
     appearance: none;
     width: 16px;
-    height: 16px;
+    max-height: 16px;
     border: 1.5px solid #d3d1cb;
     border-radius: 3px;
     cursor: pointer;
@@ -3998,10 +3990,13 @@
       border-radius: 0;
     }
     .modal-content {
-      bottom: 0;
-      width: 100vw;
+      top:none;
+      bottom: 1vh;
+      width: 98vw;
+      left:1vw;
+      right:1vw;
       min-width: auto;
-      border-radius: var(--mainradius) var(--mainradius) 0 0;
+      border-radius: var(--mainradius);
       max-height: 95vh;
       position: absolute;
     }
@@ -4077,6 +4072,22 @@
     #editor:focus~#userProfilePic {
       display: none;
     }
+    .tab-content>.app-container {
+    bottom: 0;
+    right:0;
+    left:0;
+    border-radius:0;
+    padding: var(--secpadd);
+  }
+  .modal-content {
+    padding: 65px 7.5px 7.5px;
+  }
+  .modaltab {
+    width: 100%;
+    max-width: 750px;
+    border-radius:20px;
+    padding: var(--secpadd);
+  }
   }
   @media (pointer: coarse) {
     #fajr-cursor {
@@ -6067,7 +6078,7 @@
           <textarea id="treetextInput"
             placeholder="القسم الرئيسي &#10; - الفرع الاول &#10; -- الفرع الاول القسم 2 &#10; - الفرع الثاني"></textarea>
           <div class="ui-controls">
-            <button class="main-btn" onclick="generate()">تحديث</button>
+            <button class="conf-btn" onclick="generate()">تحديث</button>
             <label id="viewTogglem"><input style="display:none" type="checkbox" id="viewToggle" onchange="updateView()">
               وضع العرض التقديمي </label>
           </div>
@@ -6585,7 +6596,7 @@
           </div>
           <div class="dashboard-grid" id="mainGrid"></div>
         </div>
-        <button class="conf-btn optionbtn" onclick="opentab('treemaptab');">+ تنبيه جديد </button>
+        <button class="conf-btn optionbtn" onclick="opentab('timer-container');">+ تنبيه جديد </button>
       </div>
     </section>
     <section id="ProgressTracker" class="tab-content">
